@@ -1,20 +1,20 @@
 # Legacy Gap Report
 
-## Чего не хватает относительно фреймворка
-- Нет продуктового кода/данных/фикстур — задачи db-schema/business-logic/UI не опираются на факты.
-- Не приложены задекларированные CSV (`plans_2026.csv`, `zip_rating_map_2026.csv`, `fpl_2026.csv`, `slcsp_2026.csv`) и доп. ТЗ (`docs/tech-spec-ru.md`, `tech-addendum-1-ru.md`, `data-templates-ru.md`, `inputs-required-ru.md`).
-- Отсутствует проверка окружения: runner CLI, PyYAML, доступ к git worktree, права на запись — оркестратор не валидирует и падает/зависает.
-- Нет автоматических тестов/CI, нет lint/format, нет health-checkов для логов/отчётов.
-- Частичная редакция секретов: нестандартные токены могут попасть в логи/бандл.
+## What is missing relative to the framework
+- There is no product code, data, or fixtures, so the db-schema, business-logic, and UI tasks are not grounded in facts.
+- The declared CSVs are not attached (`plans_2026.csv`, `zip_rating_map_2026.csv`, `fpl_2026.csv`, `slcsp_2026.csv`), nor are the extra specs (`docs/tech-spec.md`, `tech-addendum-1.md`, `data-templates.md`, `inputs-required.md`).
+- There is no environment check: runner CLI, PyYAML, git worktree access, write permissions. The orchestrator does not validate and then fails or hangs.
+- There are no automated tests or CI, no lint/format, and no health checks for logs or reports.
+- Secret redaction is partial: nonstandard tokens can end up in logs or the bundle.
 
-## Качество процесса
-- DoD: не зафиксирован; нет критериев готовности артефактов/релиза.
-- Review: шаблоны есть (`framework/review/*`), но реальных ревью/результатов нет.
-- Tests: отсутствуют автотесты и pipeline; тест-план не заполнялся.
-- Observability: только файловые логи оркестратора; нет метрик/оповещений/ретеншена.
+## Process quality
+- DoD: not recorded; there are no readiness criteria for artifacts or a release.
+- Review: templates exist (`framework/review/*`), but there are no real reviews or results.
+- Tests: no automated tests and no pipeline; the test plan was never filled in.
+- Observability: only the orchestrator's file logs; no metrics, alerts, or retention.
 
-## Риски при миграции
-- Запуск на машинах без runner CLI/прав записи приведёт к падению пайплайна.
-- Возможные утечки секретов при публикации отчётов (редакция покрывает не все паттерны).
-- Коллизии worktree/веток при повторных запусках без очистки.
-- Недетерминированные результаты из-за отсутствия тестов и исходных данных.
+## Migration risks
+- Running on machines without a runner CLI or write permission will crash the pipeline.
+- Secrets can leak when reports are published (redaction does not cover every pattern).
+- Worktree and branch collisions on repeat runs if nothing is cleaned up.
+- Nondeterministic results because tests and source data are missing.

@@ -1,40 +1,40 @@
-# Улучшения шаблонов задач для автономного режима
+# Task Template Improvements for Autonomous Mode
 
-## Текущие проблемы с task definitions
+## Current problems with task definitions
 
-Изучая существующие `framework/tasks/*.md`, я вижу:
+Looking at the existing `framework/tasks/*.md`, I see:
 
-### ✅ Что уже хорошо:
-- Детальные описания функциональности
-- Чёткие технические требования
-- Ссылки на документацию
-- Примеры кода
+### ✅ What is already good:
+- Detailed descriptions of functionality
+- Clear technical requirements
+- Links to documentation
+- Code examples
 
-### ❌ Что вызывает вопросы у Claude Code:
+### ❌ What makes Claude Code ask questions:
 
-1. **Неоднозначные формулировки**
-   - "Реализуй аутентификацию" — какую? OAuth, JWT, сессии?
-   - "Оптимизируй производительность" — какие метрики успеха?
+1. **Ambiguous wording**
+   - "Implement authentication" — which kind? OAuth, JWT, sessions?
+   - "Optimize performance" — what are the success metrics?
 
-2. **Отсутствие decision framework**
-   - Нет приоритетов при выборе между подходами
-   - Не указано, что делать если библиотека/API недоступна
+2. **No decision framework**
+   - No priorities when choosing between approaches
+   - Nothing says what to do if a library or API is unavailable
 
-3. **Нет явного time budget**
-   - Неясно, это задача на 30 минут или 3 часа
-   - Не определены обязательные vs опциональные части
+3. **No explicit time budget**
+   - Unclear whether this is a 30-minute task or a 3-hour task
+   - Required vs optional parts are not defined
 
-4. **Отсутствие fallback strategies**
-   - Что делать если тесты не проходят?
-   - Как поступить если зависимость не устанавливается?
+4. **No fallback strategies**
+   - What to do if tests fail?
+   - What to do if a dependency will not install?
 
-## Предлагаемая структура task definition
+## Proposed task definition structure
 
-### Шаблон новой структуры
+### Template for the new structure
 
 ```markdown
 ---
-# Метаданные задачи
+# Task metadata
 task_id: db-schema
 phase: main
 execution_mode: autonomous
@@ -43,23 +43,23 @@ priority: high
 dependencies: []
 ---
 
-# [Task ID] Название задачи
+# [Task ID] Task title
 
 ## 🤖 AUTONOMOUS MODE PROTOCOL
-[см. 01-autonomous-mode-protocol.md]
+[see 01-autonomous-mode-protocol.md]
 
 ---
 
 ## 📋 TASK OVERVIEW
 
-**Goal**: [Одно предложение — что нужно сделать]
+**Goal**: [One sentence — what needs to be done]
 
-**Success Criteria**: [Чёткие, измеримые критерии]
-- [ ] Критерий 1
-- [ ] Критерий 2
-- [ ] Критерий 3
+**Success Criteria**: [Clear, measurable criteria]
+- [ ] Criterion 1
+- [ ] Criterion 2
+- [ ] Criterion 3
 
-**Out of Scope**: [Что НЕ входит в эту задачу]
+**Out of Scope**: [What is NOT part of this task]
 - Item 1
 - Item 2
 
@@ -105,17 +105,17 @@ IF (approach B is innovative but risky):
 
 ### Functional Requirements
 
-[Детальное описание функциональности]
+[Detailed description of the functionality]
 
-**Must Have** (обязательно в пределах time budget):
+**Must Have** (required within the time budget):
 - Requirement 1
 - Requirement 2
 
-**Should Have** (если остаётся время):
+**Should Have** (if time remains):
 - Requirement 3
 - Requirement 4
 
-**Nice to Have** (только если budget > 80% выполнено):
+**Nice to Have** (only if more than 80% of the budget is done):
 - Requirement 5
 
 ### Technical Requirements
@@ -295,11 +295,11 @@ When task is done, ensure `framework/docs/handoff.md` contains:
 [Actual task details begin here...]
 ```
 
-## Пример реального улучшения
+## Example of a real improvement
 
-Возьмём существующую задачу `framework/tasks/db-schema.md` и покажем как улучшить:
+Take the existing task `framework/tasks/db-schema.md` and see how to improve it:
 
-### ❌ БЫЛО (гипотетический пример проблемной задачи)
+### ❌ BEFORE (a hypothetical example of a problematic task)
 
 ```markdown
 # Database Schema
@@ -312,13 +312,13 @@ Requirements:
 - Data models
 ```
 
-**Проблемы**:
-- Неясно какая БД (PostgreSQL? MySQL? SQLite?)
-- Какая аутентификация? (JWT? сессии?)
-- Нет decision framework для выбора типов полей
-- Нет fallback если БД недоступна
+**Problems**:
+- Unclear which database (PostgreSQL? MySQL? SQLite?)
+- Which authentication? (JWT? sessions?)
+- No decision framework for choosing field types
+- No fallback if the database is unavailable
 
-### ✅ СТАЛО
+### ✅ AFTER
 
 ```markdown
 ---
@@ -415,19 +415,19 @@ INSTEAD:
 - [ ] Comments explain all non-obvious choices
 ```
 
-## Преимущества новой структуры
+## Advantages of the new structure
 
-1. **Нулевая неоднозначность** — все решения предопределены
-2. **Чёткий time budget** — агент знает сколько времени тратить
-3. **Fallback на каждый риск** — нет "застревания"
-4. **Самопроверка** — checklist перед завершением
-5. **Стандартизация** — все задачи в едином формате
+1. **Zero ambiguity** — every decision is predetermined
+2. **Clear time budget** — the agent knows how much time to spend
+3. **A fallback for every risk** — no "getting stuck"
+4. **Self-check** — a checklist before finishing
+5. **Standardization** — every task uses the same format
 
-## Как применить к существующим задачам
+## How to apply this to existing tasks
 
-### Быстрый способ (без рефакторинга)
+### Quick way (no refactor)
 
-Добавить в начало каждого `framework/tasks/*.md`:
+Add this at the top of every `framework/tasks/*.md`:
 
 ```markdown
 [Prepend this to existing task content]
@@ -449,24 +449,24 @@ When uncertain, use these defaults:
 [... existing task content below ...]
 ```
 
-### Полный рефакторинг (рекомендуется)
+### Full refactor (recommended)
 
-1. Проанализировать каждую задачу на неоднозначности
-2. Добавить decision framework для каждой развилки
-3. Определить Must/Should/Nice-to-have приоритеты
-4. Описать fallback для каждого блокера
-5. Установить realistic time budget
+1. Analyze each task for ambiguities
+2. Add a decision framework for every fork
+3. Define Must/Should/Nice-to-have priorities
+4. Describe a fallback for every blocker
+5. Set a realistic time budget
 
-## Метрики улучшения
+## Improvement metrics
 
-Задача улучшена качественно, если:
+A task is qualitatively improved if:
 
-- ✅ Можно дать 3 людям независимо — получат похожий результат
-- ✅ Нет вопросов типа "а какую библиотеку использовать?"
-- ✅ Есть fallback на каждый пункт "что если X не работает?"
-- ✅ Время выполнения предсказуемо (± 20% от budget)
+- ✅ You can give it to 3 people independently — they get a similar result
+- ✅ There are no questions like "which library should I use?"
+- ✅ There is a fallback for every "what if X does not work?"
+- ✅ Execution time is predictable (± 20% of the budget)
 
 ---
 
-**Статус**: Готов к применению
-**Следующий шаг**: Создать примеры (см. `examples/task-autonomous-example.md`)
+**Status**: Ready to apply
+**Next step**: Create examples (see `examples/task-autonomous-example.md`)

@@ -1,21 +1,21 @@
-# Баг‑репорт
+# Bug report
 
-## Баг 1
-- Заголовок:
+## Bug 1
+- Title:
 - Severity:
-- Окружение:
-- Шаги воспроизведения:
-- Ожидаемо:
-- Фактически:
-- Логи/Скриншоты:
-- Примечания:
+- Environment:
+- Steps to reproduce:
+- Expected:
+- Actual:
+- Logs/screenshots:
+- Notes:
 
-## Баг 2
-- Заголовок:
+## Bug 2
+- Title:
 - Severity:
-- Окружение:
-- Шаги воспроизведения:
-- Ожидаемо:
-- Фактически:
-- Логи/Скриншоты:
-- Примечания:
+- Environment:
+- Steps to reproduce:
+- Expected:
+- Actual:
+- Logs/screenshots:
+- Notes:

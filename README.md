@@ -1,151 +1,151 @@
 # Devframework
-![Version](https://img.shields.io/badge/version-2026.10.08.1-blue)
+![Version](https://img.shields.io/badge/version-2026.10.08.2-blue)
 Local scaffold for orchestrating parallel tasks with git worktrees.
 
-## Что это такое и для чего
+## What this is and what it is for
 
-### Проблема
+### The problem
 
-Когда вы работаете с Cursor Agent (модель Grok) над разработкой проекта, возникают сложности:
+When you work with Cursor Agent (the Grok model) on a project, several difficulties come up:
 
-1. **Одна задача за раз** — AI может работать только над одной задачей, пока вы ждёте. Если нужно сделать дизайн БД, бизнес-логику, UI и review — это займёт 8+ часов последовательной работы.
+1. **One task at a time** — the AI can work on only one task while you wait. If you need a database design, business logic, a UI, and a review, that is 8+ hours of sequential work.
 
-2. **Конфликты в Git** — если запустить несколько AI одновременно в одной ветке, они будут конфликтовать друг с другом, перезаписывая файлы.
+2. **Git conflicts** — if several AIs run at once on the same branch, they conflict with each other and overwrite files.
 
-3. **Нужен надзор** — AI постоянно задают вопросы ("какую библиотеку использовать?", "как назвать функцию?"), требуя вашего участия каждые 5-10 минут.
+3. **Constant supervision** — the AIs keep asking questions ("which library should I use?", "what should this function be called?"), which pulls you in every 5–10 minutes.
 
-4. **Теряется контекст** — когда вы переключаетесь между задачами, AI теряет контекст предыдущей работы.
+4. **Lost context** — when you switch between tasks, the AI loses the context of the previous work.
 
-### Решение
+### The solution
 
-**Devframework** — это система оркестрации, которая позволяет:
+**Devframework** is an orchestration system that lets you:
 
-✅ **Запускать несколько AI параллельно** — 4 задачи одновременно вместо последовательно (2.5 часа вместо 8)
+✅ **Run several AIs in parallel** — 4 tasks at once instead of one after another (2.5 hours instead of 8)
 
-✅ **Изолировать работу через Git worktrees** — каждый AI работает в своём изолированном пространстве без конфликтов
+✅ **Isolate work with Git worktrees** — each AI works in its own isolated space, without conflicts
 
-✅ **Работать автономно** — AI не задают вопросы, а принимают решения по заданным правилам
+✅ **Work autonomously** — the AIs do not ask questions; they decide according to the given rules
 
-✅ **Автоматически делать review** — отдельный AI проверяет результаты других
+✅ **Review automatically** — a separate AI checks the results of the others
 
-✅ **Сохранять контекст** — вся работа логируется, документируется, передаётся между агентами
+✅ **Keep the context** — all work is logged, documented, and passed between agents
 
-### Как это работает (простыми словами)
+### How it works (in plain language)
 
-Представьте **строительную бригаду**:
+Picture a **construction crew**:
 
-1. **Прораб (Orchestrator)** — читает план работ и распределяет задачи по бригадам
-2. **Бригады (AI Workers)** — каждая работает на своём участке (worktree), не мешая другим
-3. **Мастер-приёмщик (Review Agent)** — проверяет качество работы после завершения
-4. **Журнал работ (Logs)** — всё фиксируется: кто, что, когда сделал
+1. **Foreman (Orchestrator)** — reads the work plan and assigns tasks to the crews
+2. **Crews (AI Workers)** — each works on its own site (worktree) without getting in the way of the others
+3. **Acceptance lead (Review Agent)** — checks the quality of the work after it is finished
+4. **Work log (Logs)** — everything is recorded: who did what, and when
 
-**В коде это выглядит так:**
+**In code it looks like this:**
 
 ```
-Ваш проект (main)
-  ├─ worktree-1: AI #1 делает дизайн БД
-  ├─ worktree-2: AI #2 пишет бизнес-логику
-  ├─ worktree-3: AI #3 делает UI компоненты
-  └─ worktree-4: AI #4 проверяет код (review)
+Your project (main)
+  ├─ worktree-1: AI #1 designs the database
+  ├─ worktree-2: AI #2 writes the business logic
+  ├─ worktree-3: AI #3 builds the UI components
+  └─ worktree-4: AI #4 reviews the code
 
-После завершения:
-  → Все изменения мержатся в main
-  → Review результаты записываются в framework/review/
-  → Логи сохраняются в framework/logs/
+After completion:
+  → All changes are merged into main
+  → Review results are written to framework/review/
+  → Logs are saved in framework/logs/
 ```
 
-### Ключевые концепты
+### Key concepts
 
-| Термин | Объяснение для новичков |
+| Term | Explanation for newcomers |
 |--------|-------------------------|
-| **Orchestrator** | "Диспетчер" — Python-скрипт, который читает конфиг с задачами и запускает AI-агентов параллельно |
-| **Git Worktree** | "Изолированная копия" — отдельная рабочая директория с той же историей Git, позволяет работать в разных ветках одновременно |
-| **Task** | "Задача" — .md файл с описанием того, что должен сделать AI (например, "Спроектировать схему БД") |
-| **Runner** | "Исполнитель" — Cursor Agent на модели Grok (`cursor` для задач, `cursor-interactive` для интервью) |
-| **Phase** | "Этап" — main (разработка), review (проверка), post (улучшение фреймворка), legacy (миграция старого проекта) |
-| **Handoff** | "Передача контекста" — документ, в котором AI описывает что сделал и почему, для следующего AI |
+| **Orchestrator** | "Dispatcher" — a Python script that reads the task config and starts AI agents in parallel |
+| **Git Worktree** | "Isolated copy" — a separate working directory with the same Git history, so you can work on different branches at the same time |
+| **Task** | "Assignment" — a .md file that describes what the AI should do (for example, "Design the database schema") |
+| **Runner** | "Executor" — Cursor Agent on the Grok model (`cursor` for tasks, `cursor-interactive` for interviews) |
+| **Phase** | "Stage" — main (development), review (checking), post (framework improvement), legacy (migrating an old project) |
+| **Handoff** | "Context handoff" — a document in which the AI describes what it did and why, for the next AI |
 
-### Кому это нужно
+### Who it is for
 
-✅ **Разработчикам**, использующим AI-ассистентов и желающим ускорить разработку в 3-4 раза
+✅ **Developers** who use AI assistants and want to speed development up by 3–4 times
 
-✅ **Tech Lead'ам**, управляющим несколькими AI-агентами как командой
+✅ **Tech leads** who manage several AI agents as a team
 
-✅ **Командам**, мигрирующим legacy-проекты с помощью AI (безопасно, с анализом рисков)
+✅ **Teams** migrating legacy projects with AI (safely, with a risk analysis)
 
-✅ **DevOps/Platform Engineers**, автоматизирующим процессы разработки
+✅ **DevOps/Platform Engineers** who automate development processes
 
-### Что внутри репозитория
+### What is inside the repository
 
 ```
 devframework/
-├── framework/                    # Основной фреймворк
-│   ├── orchestrator/             # Оркестратор (запускатор задач)
-│   │   ├── orchestrator.py       # Главный скрипт
-│   │   └── orchestrator.json     # Конфиг: какие задачи, какие AI
-│   ├── tasks/                    # Шаблоны задач для AI
-│   │   ├── db-schema.md          # "Спроектируй БД"
-│   │   ├── business-logic.md     # "Реализуй логику"
-│   │   └── ui.md                 # "Сделай UI"
-│   ├── docs/                     # Выходные документы (handoff, спеки)
-│   ├── review/                   # Результаты code review
-│   ├── migration/                # Анализ и миграция legacy-кода
-│   └── logs/                     # Логи выполнения
-├── .cursor/rules/                # Правило Cursor: следовать AGENTS.md, оставаться на Grok
-├── AGENTS.md                     # Протокол, который Cursor читает сам
-├── install-fr.sh               # Установщик для новых проектов
-└── README.md                     # Этот файл
+├── framework/                    # Core framework
+│   ├── orchestrator/             # Orchestrator (task launcher)
+│   │   ├── orchestrator.py       # Main script
+│   │   └── orchestrator.json     # Config: which tasks, which AIs
+│   ├── tasks/                    # Task templates for the AI
+│   │   ├── db-schema.md          # "Design the database"
+│   │   ├── business-logic.md     # "Implement the logic"
+│   │   └── ui.md                 # "Build the UI"
+│   ├── docs/                     # Output documents (handoffs, specs)
+│   ├── review/                   # Code review results
+│   ├── migration/                # Legacy-code analysis and migration
+│   └── logs/                     # Execution logs
+├── .cursor/rules/                # Cursor rule: follow AGENTS.md and stay on Grok
+├── AGENTS.md                     # Protocol that Cursor reads on its own
+├── install-fr.sh               # Installer for new projects
+└── README.md                     # This file
 ```
 
-Папка `claude-code/` — архив заметок upstream-версии (Codex / Claude Code). Рабочий агент этого форка — Cursor + Grok.
+The `claude-code/` folder is an archive of notes from the upstream version (Codex / Claude Code). The working agent of this fork is Cursor + Grok.
 
 ### Cursor + Grok
 
-DevFramework запускает [Cursor Agent CLI](https://cursor.com/docs/cli/using) (`agent`) с моделью **Grok 4.7**.
+DevFramework runs the [Cursor Agent CLI](https://cursor.com/docs/cli/using) (`agent`) with the **Grok 4.7** model.
 
-- Интерактивное интервью: `./cursor`, затем «start».
-- Параллельные задачи: `agent -p --force --trust --model grok-4.7` через `framework/tools/cursor-runner.sh`.
-- Контекст проекта: `AGENTS.md` и `.cursor/rules/devframework.mdc` (Cursor подхватывает оба).
-- Другая модель Grok: `FRAMEWORK_CURSOR_MODEL=grok-4.5` (или `grok-4.6`).
+- Interactive interview: `./cursor`, then "start".
+- Parallel tasks: `agent -p --force --trust --model grok-4.7` through `framework/tools/cursor-runner.sh`.
+- Project context: `AGENTS.md` and `.cursor/rules/devframework.mdc` (Cursor picks up both).
+- Another Grok model: `FRAMEWORK_CURSOR_MODEL=grok-4.5` (or `grok-4.6`).
 
-Установка CLI и вход:
+Install the CLI and sign in:
 
 ```bash
 curl https://cursor.com/install -fsS | bash
 agent login
 ```
 
-Для оркестратора без TTY достаточно `CURSOR_API_KEY`.
+For an orchestrator without a TTY, `CURSOR_API_KEY` is enough.
 
-### Быстрый старт за 3 шага
+### Quick start in 3 steps
 
-**1. Клонируйте репозиторий:**
+**1. Clone the repository:**
 ```bash
 git clone https://github.com/MazZzDaI/devframework.git
 cd devframework
 ```
 
-**2. Инициализируйте проект:**
+**2. Initialize the project:**
 ```bash
 git init
 git add .
 git commit -m "init"
 ```
 
-**3. Запустите установщик:**
+**3. Run the installer:**
 ```bash
 ./install-fr.sh
 ```
 
-Orchestrator автоматически:
-- Создаст worktrees для параллельных задач
-- Запустит AI-агентов по заданиям из `framework/tasks/`
-- Соберёт результаты и создаст review
- - После миграции (legacy) автоматически перейдёт к интервью (discovery)
+The orchestrator automatically:
+- Creates worktrees for the parallel tasks
+- Starts AI agents from the assignments in `framework/tasks/`
+- Collects the results and creates a review
+ - After a migration (legacy), moves on to the interview (discovery) automatically
 
-### Агент
+### Agent
 
-Поддерживаемый исполнитель — **Cursor Agent на Grok**. Оркестратор поднимает его в изолированных Git worktrees. Модель по умолчанию — `grok-4.7`; переопределение — `FRAMEWORK_CURSOR_MODEL`.
+The supported executor is **Cursor Agent on Grok**. The orchestrator starts it in isolated Git worktrees. The default model is `grok-4.7`; override it with `FRAMEWORK_CURSOR_MODEL`.
 
 ---
 
@@ -220,7 +220,7 @@ Auto-detection (when running the orchestrator manually):
 ### A) New project (clean host)
 1) `./install-fr.sh`
 2) Run `./cursor` and say **"start"** to begin discovery.
-3) Discovery interview → ТЗ/план/тест‑план.
+3) Discovery interview → tech spec / plan / test plan.
    - Pause command: type `/pause` to stop and resume later.
 4) User reviews outputs and confirms start of development.
 5) Start development:
@@ -234,7 +234,7 @@ Auto-detection (when running the orchestrator manually):
 1) `./install-fr.sh`
 2) Run `./cursor` and say **"start"**:
    - Legacy analysis runs first (read-only).
-   - Затем discovery интервью в Cursor Agent (Grok).
+   - Then a discovery interview in Cursor Agent (Grok).
    - Pause command: type `/pause` to stop and resume later.
 3) Review migration artifacts:
    - `framework/migration/legacy-snapshot.md`

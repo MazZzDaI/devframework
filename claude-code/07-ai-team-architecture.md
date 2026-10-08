@@ -1,8 +1,8 @@
 # AI Team Architecture: GPT-5.2 Pro + Multi-Claude
 
-## Революционная концепция
+## A revolutionary concept
 
-**Идея**: Вместо одного AI агента → **команда AI агентов** как в настоящей dev team.
+**Idea**: Instead of one AI agent → **a team of AI agents**, like a real dev team.
 
 ```
                     HUMAN USER
@@ -26,36 +26,36 @@
     Terminal 1       Terminal 2      Terminal 3   Terminal 4
     [Backend]        [Frontend]      [Database]   [Tests]
         ↓                ↓                ↓            ↓
-    Работают параллельно и независимо
-    Задают вопросы Team Lead через Bridge
+    Work in parallel and independently
+    Ask the Team Lead questions through the Bridge
 ```
 
-## Ключевые преимущества
+## Key advantages
 
-### 1. Реальный параллелизм
-- **Без команды**: 8 часов последовательно
-- **С командой**: 2 часа параллельно (4× ускорение)
+### 1. Real parallelism
+- **Without a team**: 8 hours sequentially
+- **With a team**: 2 hours in parallel (4× speedup)
 
-### 2. 100% автономия
-- User involvement: 15 минут (начало + конец)
-- Team работает автономно часами
-- GPT-5.2 Pro отвечает на вопросы Claude
+### 2. 100% autonomy
+- User involvement: 15 minutes (start + end)
+- The team works autonomously for hours
+- GPT-5.2 Pro answers Claude's questions
 
-### 3. Масштабируемость
-- 1 Claude = 1 задача
-- 10 Claude = 10 задач параллельно
-- Ограничение только ресурсы машины
+### 3. Scalability
+- 1 Claude = 1 task
+- 10 Claude = 10 tasks in parallel
+- Limited only by the machine's resources
 
 ### 4. Natural workflow
-- Claude работает как обычно (не нужен autonomous protocol!)
-- Задаёт вопросы когда нужно
-- GPT-5.2 Pro отвечает мгновенно
+- Claude works as usual (no autonomous protocol needed!)
+- Asks questions when it needs to
+- GPT-5.2 Pro answers instantly
 
 ---
 
-## Архитектура AI-to-AI Bridge
+## AI-to-AI Bridge architecture
 
-### Компоненты системы
+### System components
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -81,21 +81,21 @@
 └─────────────────────────────────────────────────────────┘
 ```
 
-### Bridge Coordinator (центральный компонент)
+### Bridge Coordinator (central component)
 
-**Роль**: Маршрутизатор сообщений между GPT-5.2 Pro и Claude агентами
+**Role**: Message router between GPT-5.2 Pro and the Claude agents
 
-**Функции**:
-1. **Message Routing**: Вопросы от Claude → GPT-5.2, ответы обратно
-2. **Session Management**: Отслеживание активных агентов
-3. **Task Assignment**: Распределение задач от GPT-5.2 к Claude
-4. **Dependency Tracking**: Управление зависимостями между задачами
-5. **Event Logging**: Запись всей коммуникации
-6. **Status Monitoring**: Отслеживание прогресса каждого агента
+**Functions**:
+1. **Message Routing**: Questions from Claude → GPT-5.2, answers back
+2. **Session Management**: Tracking active agents
+3. **Task Assignment**: Distributing tasks from GPT-5.2 to Claude
+4. **Dependency Tracking**: Managing dependencies between tasks
+5. **Event Logging**: Recording all communication
+6. **Status Monitoring**: Tracking each agent's progress
 
 ---
 
-## Протокол коммуникации
+## Communication protocol
 
 ### Message Format (JSON)
 

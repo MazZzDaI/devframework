@@ -1,27 +1,27 @@
-# Протокол автономного режима для Claude Code
+# Autonomous Mode Protocol for Claude Code
 
-## Суть проблемы
+## The core problem
 
-Claude Code биологически склонен к интерактивности:
-- Инструмент `AskUserQuestion` встроен в его core behavior
-- System prompt поощряет "ask when uncertain"
-- Философия "don't guess, ask" вшита на уровне модели
+Claude Code is built to be interactive:
+- The `AskUserQuestion` tool is built into its core behavior
+- The system prompt encourages "ask when uncertain"
+- The "don't guess, ask" philosophy is baked in at the model level
 
-**Задача**: Перепрограммировать поведение через внешний контекст, а не изменением модели.
+**Task**: Reprogram that behavior through external context, not by changing the model.
 
-## Решение: Explicit Autonomous Mode Instructions
+## Solution: Explicit Autonomous Mode Instructions
 
-### Принцип работы
+### How it works
 
-Добавляем в начало КАЖДОЙ задачи специальный блок инструкций, который:
+Add a special instruction block at the start of EVERY task that:
 
-1. **Переопределяет default behavior** — явно запрещает вопросы
-2. **Даёт правила принятия решений** — что делать при неоднозначности
-3. **Устанавливает time budget** — сколько времени на задачу
-4. **Описывает fallback strategy** — что делать при блокерах
-5. **Требует документирования** — все решения в handoff.md
+1. **Overrides default behavior** — explicitly forbids questions
+2. **Gives decision rules** — what to do when something is ambiguous
+3. **Sets a time budget** — how long the task should take
+4. **Describes a fallback strategy** — what to do when blocked
+5. **Requires documentation** — every decision goes into handoff.md
 
-### Шаблон метапромпта
+### Metaprompt template
 
 ```markdown
 ---
@@ -150,38 +150,38 @@ IF (architectural uncertainty):
 [... actual task description follows ...]
 ```
 
-## Как это работает психологически
+## Why this works on the model
 
-1. **Explicit override** — "You are in AUTONOMOUS mode" создаёт новый контекст
-2. **CRITICAL RULES** — жирный шрифт и caps привлекают внимание модели
-3. **Decision framework** — даёт алгоритм вместо "спроси пользователя"
-4. **Examples (IF/THEN)** — конкретные сценарии вместо абстрактных правил
-5. **Forbidden vs Encouraged** — чёткие границы поведения
-6. **Time pressure** — создаёт urgency для завершения
+1. **Explicit override** — "You are in AUTONOMOUS mode" creates a new context
+2. **CRITICAL RULES** — bold text and caps draw the model's attention
+3. **Decision framework** — gives an algorithm instead of "ask the user"
+4. **Examples (IF/THEN)** — concrete scenarios instead of abstract rules
+5. **Forbidden vs Encouraged** — clear boundaries for behavior
+6. **Time pressure** — creates urgency to finish
 
-## Адаптация под задачу
+## Adapting it to the task
 
-### Для простых задач (< 30 мин)
+### For simple tasks (< 30 min)
 ```markdown
 TIME_BUDGET: 30 minutes
 FALLBACK_STRATEGY: simplify_and_complete
 ```
 
-### Для сложных задач (> 2 часа)
+### For complex tasks (> 2 hours)
 ```markdown
 TIME_BUDGET: 120 minutes
 CHECKPOINT_INTERVAL: 30 minutes
 FALLBACK_STRATEGY: document_and_escalate
 ```
 
-### Для экспериментальных задач
+### For experimental tasks
 ```markdown
 TIME_BUDGET: 60 minutes
 RISK_TOLERANCE: high
 FALLBACK_STRATEGY: document_experiments
 ```
 
-### Для критичных задач
+### For critical tasks
 ```markdown
 TIME_BUDGET: 90 minutes
 RISK_TOLERANCE: low
@@ -189,19 +189,19 @@ VALIDATION_REQUIRED: run tests after each step
 FALLBACK_STRATEGY: revert_and_document
 ```
 
-## Метрики успеха
+## Success metrics
 
-Автономный режим работает, если:
+Autonomous mode is working if:
 
-1. ✅ Задача завершена в пределах time budget
-2. ✅ Ноль использований AskUserQuestion
-3. ✅ Все решения задокументированы в handoff.md
-4. ✅ Код следует паттернам репозитория
-5. ✅ Функциональность работает (тесты проходят)
+1. ✅ The task finished within the time budget
+2. ✅ Zero uses of AskUserQuestion
+3. ✅ Every decision is documented in handoff.md
+4. ✅ The code follows repository patterns
+5. ✅ The functionality works (tests pass)
 
-## Интеграция с orchestrator
+## Integration with the orchestrator
 
-Orchestrator может проверять метрики:
+The orchestrator can check the metrics:
 
 ```python
 def validate_autonomous_execution(task_id):
@@ -217,16 +217,16 @@ def validate_autonomous_execution(task_id):
         logger.warning(f"Task {task_id} violated autonomous protocol: {violations}")
 ```
 
-## Следующие шаги
+## Next steps
 
-1. Взять один task definition (например, `framework/tasks/db-schema.md`)
-2. Добавить этот метапромпт в начало
-3. Запустить через orchestrator с `claude-code`
-4. Проверить логи на AskUserQuestion calls
-5. Прочитать handoff.md на качество документации решений
-6. Итеративно улучшать протокол
+1. Take one task definition (for example, `framework/tasks/db-schema.md`)
+2. Add this metaprompt at the top
+3. Run it through the orchestrator with `claude-code`
+4. Check the logs for AskUserQuestion calls
+5. Read handoff.md for the quality of the decision documentation
+6. Improve the protocol iteratively
 
 ---
 
-**Статус**: Готов к тестированию
-**Требует**: Модификации task definitions (см. 02-task-template-improvements.md)
+**Status**: Ready for testing
+**Requires**: Changes to task definitions (see 02-task-template-improvements.md)

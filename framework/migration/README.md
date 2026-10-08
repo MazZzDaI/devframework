@@ -1,33 +1,33 @@
 # Legacy Migration (safe-mode)
 
-Цель: вернуть legacy‑проект на рельсы фреймворка без риска сломать существующий код.
-Вся миграция изолирована и проходит в режиме read‑only до явного одобрения человека.
+Goal: put a legacy project back on the framework rails without risking the existing code.
+The whole migration is isolated and stays read-only until a person explicitly approves it.
 
-## Принципы безопасности
-- Анализ — только чтение (без правок кода).
-- Все изменения — в отдельной ветке и worktree.
-- Обязательная точка одобрения (approval gate).
-- Возможность отката: main не трогаем до явного merge.
- - Ветка миграции создаётся автоматически как `legacy-migration-<run_id>`.
+## Safety principles
+- Analysis is read-only (no code edits).
+- All changes happen on a separate branch and worktree.
+- An approval gate is required.
+- Rollback is possible: main is left untouched until an explicit merge.
+ - The migration branch is created automatically as `legacy-migration-<run_id>`.
 
-## Выходные артефакты
-- `framework/migration/legacy-snapshot.md` — объективная картина проекта
-- `framework/migration/legacy-tech-spec.md` — обратное ТЗ из кода
-- `framework/migration/legacy-gap-report.md` — чего не хватает относительно фреймворка
-- `framework/migration/legacy-risk-assessment.md` — риски и критичные зоны
-- `framework/migration/legacy-migration-plan.md` — поэтапный план миграции
-- `framework/migration/legacy-migration-proposal.md` — предложение к одобрению
-- `framework/migration/approval.md` — решение человека
-- `framework/migration/rollback-plan.md` — план отката
+## Output artifacts
+- `framework/migration/legacy-snapshot.md` — an objective picture of the project
+- `framework/migration/legacy-tech-spec.md` — a reverse spec derived from the code
+- `framework/migration/legacy-gap-report.md` — what is missing relative to the framework
+- `framework/migration/legacy-risk-assessment.md` — risks and critical areas
+- `framework/migration/legacy-migration-plan.md` — a staged migration plan
+- `framework/migration/legacy-migration-proposal.md` — a proposal for approval
+- `framework/migration/approval.md` — the human decision
+- `framework/migration/rollback-plan.md` — the rollback plan
 
-## Этапы
-1) **Legacy Audit (read‑only)**
-2) **Reverse Spec (read‑only)**
-3) **Gap + Risk (read‑only)**
-4) **Migration Plan (read‑only)**
+## Stages
+1) **Legacy Audit (read-only)**
+2) **Reverse Spec (read-only)**
+3) **Gap + Risk (read-only)**
+4) **Migration Plan (read-only)**
 5) **Approval Gate (human)**
 6) **Apply in branch**
 7) **Review + Tests**
 8) **Merge (manual)**
 
-Подробные шаги: `framework/migration/runbook.md`.
+Detailed steps: `framework/migration/runbook.md`.

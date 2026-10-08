@@ -1,8 +1,8 @@
-# Модификации orchestrator.py для автономного режима
+# Modifications to orchestrator.py for Autonomous Mode
 
-## Текущая архитектура
+## Current architecture
 
-Изучая `framework/orchestrator/orchestrator.py` (~540 строк), вижу:
+Looking at `framework/orchestrator/orchestrator.py` (~540 lines), I see:
 
 ```python
 class Orchestrator:
@@ -18,42 +18,42 @@ class Orchestrator:
         # Monitor and log
 ```
 
-**Что работает хорошо**:
-- ✅ Поддержка multiple runners (codex, claude-code, aider)
+**What works well**:
+- ✅ Support for multiple runners (codex, claude-code, aider)
 - ✅ Task dependencies
 - ✅ JSONL event logging
 - ✅ Worktree isolation
 
-**Что нужно добавить для автономности**:
-- ❌ Нет параметра `execution_mode` в task definition
-- ❌ Нет injection метапромпта в команду запуска
-- ❌ Нет мониторинга прогресса (watchdog)
-- ❌ Нет автоэскалации при зависании
-- ❌ Нет валидации autonomous mode compliance
+**What needs to be added for autonomy**:
+- ❌ No `execution_mode` parameter in the task definition
+- ❌ No metaprompt injection into the launch command
+- ❌ No progress monitoring (watchdog)
+- ❌ No automatic escalation when a task hangs
+- ❌ No validation of autonomous mode compliance
 
-## Уровни изменений
+## Levels of change
 
-### Уровень 0: Без изменений orchestrator (только task definitions)
+### Level 0: No orchestrator changes (task definitions only)
 
-**Подход**: Добавить метапромпт прямо в `framework/tasks/*.md`
+**Approach**: Add the metaprompt directly in `framework/tasks/*.md`
 
-**Плюсы**:
-- Нулевые изменения в коде
-- Работает уже сейчас
-- Обратно совместимо
+**Pros**:
+- Zero code changes
+- Works right now
+- Backward compatible
 
-**Минусы**:
-- Дублирование метапромпта в каждой задаче
-- Нельзя переключать режим динамически
-- Нет валидации compliance
+**Cons**:
+- The metaprompt is duplicated in every task
+- You cannot switch the mode dynamically
+- No compliance validation
 
-**Рекомендация**: Начать с этого уровня для быстрого прототипа
+**Recommendation**: Start at this level for a quick prototype
 
 ---
 
-### Уровень 1: Минимальные изменения (execution_mode в конфиге)
+### Level 1: Minimal changes (execution_mode in the config)
 
-#### Изменения в orchestrator.json
+#### Changes to orchestrator.json
 
 ```json
 {
@@ -85,7 +85,7 @@ class Orchestrator:
 }
 ```
 
-#### Изменения в orchestrator.py
+#### Changes to orchestrator.py
 
 ```python
 class Orchestrator:
@@ -125,20 +125,20 @@ class Orchestrator:
         return str(temp_path)
 ```
 
-**Плюсы**:
-- Централизованный protocol (одно место редактирования)
-- Легко включить/выключить per-task
-- Динамическая подстановка параметров (time_budget)
+**Pros**:
+- Centralized protocol (one place to edit)
+- Easy to turn on or off per task
+- Dynamic substitution of parameters (time_budget)
 
-**Минусы**:
-- Нужно модифицировать orchestrator.py
-- Temporary files (но это не критично)
+**Cons**:
+- orchestrator.py has to be modified
+- Temporary files (but that is not critical)
 
 ---
 
-### Уровень 2: Полная поддержка (+ watchdog + validation)
+### Level 2: Full support (+ watchdog + validation)
 
-#### Дополнительные поля в конфиге
+#### Additional fields in the config
 
 ```json
 {
@@ -162,7 +162,7 @@ class Orchestrator:
 }
 ```
 
-#### Watchdog для мониторинга прогресса
+#### Watchdog for progress monitoring
 
 ```python
 class TaskWatchdog:
@@ -276,7 +276,7 @@ class Orchestrator:
             time.sleep(30)  # Check every 30 seconds
 ```
 
-#### Валидация autonomous mode compliance
+#### Validation of autonomous mode compliance
 
 ```python
 class AutonomousValidator:
@@ -362,21 +362,21 @@ class Orchestrator:
         })
 ```
 
-**Плюсы**:
-- Полный контроль над выполнением
-- Автоматическое обнаружение проблем
-- Метрики качества autonomous mode
-- Возможность эскалации
+**Pros**:
+- Full control over execution
+- Automatic problem detection
+- Quality metrics for autonomous mode
+- Ability to escalate
 
-**Минусы**:
-- Больше кода для поддержки
-- Более сложная конфигурация
+**Cons**:
+- More code to maintain
+- More complex configuration
 
 ---
 
-### Уровень 3: Гибридный пайплайн (Claude + Codex)
+### Level 3: Hybrid pipeline (Claude + Codex)
 
-#### Концепция
+#### Concept
 
 ```
 Task Definition
@@ -395,7 +395,7 @@ IF interactive:
   → Allow AskUserQuestion
 ```
 
-#### Конфигурация
+#### Configuration
 
 ```json
 {
@@ -421,7 +421,7 @@ IF interactive:
 }
 ```
 
-#### Реализация
+#### Implementation
 
 ```python
 class Orchestrator:
@@ -457,33 +457,33 @@ class Orchestrator:
 
 ---
 
-## Рекомендуемый план внедрения
+## Recommended rollout plan
 
-### Фаза 1: Прототип (Уровень 0)
-- Добавить метапромпт в 1-2 task definitions
-- Запустить вручную, проверить поведение
-- Собрать метрики (AskUserQuestion usage, completion time)
+### Phase 1: Prototype (Level 0)
+- Add the metaprompt to 1-2 task definitions
+- Run it manually and check the behavior
+- Collect metrics (AskUserQuestion usage, completion time)
 
-### Фаза 2: Базовая интеграция (Уровень 1)
-- Добавить `execution_mode` и `time_budget` в orchestrator.json
-- Реализовать `_inject_autonomous_protocol()` в orchestrator.py
-- Протестировать на 5-10 задачах
+### Phase 2: Basic integration (Level 1)
+- Add `execution_mode` and `time_budget` to orchestrator.json
+- Implement `_inject_autonomous_protocol()` in orchestrator.py
+- Test it on 5-10 tasks
 
-### Фаза 3: Продакшн (Уровень 2)
-- Добавить watchdog для мониторинга
-- Добавить валидацию compliance
-- Собирать метрики для оптимизации
+### Phase 3: Production (Level 2)
+- Add a watchdog for monitoring
+- Add compliance validation
+- Collect metrics for optimization
 
-### Фаза 4: Оптимизация (Уровень 3)
-- Гибридные стратегии (Claude + Codex)
-- Machine learning для выбора runner по типу задачи
-- Автоматическая оптимизация time budgets
+### Phase 4: Optimization (Level 3)
+- Hybrid strategies (Claude + Codex)
+- Machine learning to pick a runner by task type
+- Automatic optimization of time budgets
 
 ---
 
-## Обратная совместимость
+## Backward compatibility
 
-Все изменения опциональны:
+All changes are optional:
 
 ```json
 // Old config (still works)
@@ -513,17 +513,17 @@ class Orchestrator:
 
 ---
 
-## Метрики для отслеживания
+## Metrics to track
 
-После внедрения собирать:
+After rollout, collect:
 
-1. **Autonomous compliance rate** — % задач без AskUserQuestion
-2. **Time budget accuracy** — фактическое vs запланированное время
-3. **Watchdog triggers** — как часто задачи застревают
+1. **Autonomous compliance rate** — % of tasks with no AskUserQuestion
+2. **Time budget accuracy** — actual vs planned time
+3. **Watchdog triggers** — how often tasks get stuck
 4. **Runner effectiveness** — Claude vs Codex success rate
-5. **Task retry rate** — сколько задач нужно переделывать
+5. **Task retry rate** — how many tasks have to be redone
 
-Хранить в `framework/logs/metrics.jsonl`:
+Store them in `framework/logs/metrics.jsonl`:
 
 ```jsonl
 {"task_id": "db-schema", "runner": "claude-code", "mode": "autonomous", "asked_questions": 0, "time_actual": 42, "time_budget": 45, "compliant": true}
@@ -532,8 +532,8 @@ class Orchestrator:
 
 ---
 
-**Статус**: Готов к имплементации
-**Рекомендация**: Начать с Уровня 1, постепенно добавлять фичи
-**Файлы для изменения**:
+**Status**: Ready to implement
+**Recommendation**: Start at Level 1 and add features gradually
+**Files to change**:
 - `framework/orchestrator/orchestrator.py`
 - `framework/orchestrator/orchestrator.json`

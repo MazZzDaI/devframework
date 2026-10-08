@@ -1,21 +1,21 @@
-# Brief для независимого ревью
+# Brief for independent review
 
-## Объект ревью
+## Review subject
 - Commit: 
 - Branch: 
 
-## Контекст
-- Цель ревью: найти ошибки, риски, регрессии
-- Модель/агент для ревью: 
+## Context
+- Review goal: find bugs, risks, and regressions
+- Model/agent for the review: 
 
-## Как запускать
-- Проверить README
-- Запустить тесты:
+## How to run
+- Check the README
+- Run the tests:
   - 
 
-## Что важно проверить
-- Бизнес‑логика и сценарии
-- Версионность данных
-- UI‑флоу (ключевые экраны)
-- Безопасность (RLS/шифрование/логирование)
- - Соответствие `framework/review/handoff.md`
+## What to check
+- Business logic and scenarios
+- Data versioning
+- UI flows (key screens)
+- Security (RLS/encryption/logging)
+ - Alignment with `framework/review/handoff.md`

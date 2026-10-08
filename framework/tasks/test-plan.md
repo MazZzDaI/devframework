@@ -1,23 +1,23 @@
 # Task: Test Plan (independent)
 
 ## Goal
-Сформировать независимый план тестирования на основе ТЗ и DoD.
+Write an independent test plan from the spec and the definition of done.
 
 ## Inputs
-- `framework/docs/definition-of-done-ru.md`
-- `framework/docs/orchestrator-plan-ru.md`
-- `docs/tech-spec-ru.md` (если есть)
+- `framework/docs/definition-of-done.md`
+- `framework/docs/orchestrator-plan.md`
+- `docs/tech-spec.md` (if present)
 - `framework/review/review-brief.md`
-- `framework/review/handoff.md` (если есть)
+- `framework/review/handoff.md` (if present)
 
 ## Outputs
-- `framework/review/test-plan.md` (по шаблону из `framework/review/`)
+- `framework/review/test-plan.md` (using the template in `framework/review/`)
 
 ## Rules
-- Не менять код.
-- Указывать типы тестов (unit/integration/e2e/manual).
-- Явно фиксировать пробелы, если данных/спека нет.
+- Do not change code.
+- State the test types (unit/integration/e2e/manual).
+- Explicitly record gaps when data or a spec is missing.
 
 ## Done When
-- План тестирования покрывает критичные флоу и риски.
-- План читаем и пригоден для независимого выполнения.
+- The test plan covers the critical flows and risks.
+- The plan is readable and can be executed independently.

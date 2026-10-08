@@ -1,7 +1,7 @@
 # Task: Legacy Migration Plan (read-only)
 
 ## Goal
-Сформировать план миграции без изменения кода.
+Write a migration plan without changing code.
 
 ## Inputs
 - `framework/migration/legacy-gap-report.md`
@@ -13,8 +13,8 @@
 - `framework/migration/rollback-plan.md`
 
 ## Rules
-- Не менять код.
-- План должен быть поэтапным и безопасным.
+- Do not change code.
+- The plan must be staged and safe.
 
 ## Done When
-- План и proposal готовы.
+- The plan and the proposal are ready.

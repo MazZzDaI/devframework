@@ -1,46 +1,46 @@
 # Discovery Interview Log
 
-- Q1: Как одним предложением описать главную цель продукта для ваших пользователей?
-  - A1: Цель фреймворка — создание полной версии технического задания, чтобы агент мог полностью автономно сделать весь цикл разработки; фреймворк задаёт вопросы и формирует всё необходимое, рассчитан на неквалифицированных пользователей, умеющих описать продукт простыми словами.
-- Q2: Кто основные типы пользователей/ролей, для кого будет применяться этот фреймворк? Опиши каждую роль в 1–2 предложениях.
-  - A2: Единственная роль — автор/владелец идеи продукта; он же продуктовый владелец, аналитик и бизнес-спонсор, но не разработчик. Он хорошо понимает ценность и пользовательские флоу, но слабо отвечает на технические вопросы.
-- Q3: Какой конечный результат он хочет получить после прохождения фреймворка?
-  - A3: Готовое приложение, которое он может проверить на соответствие ожиданиям; агент должен работать автономно (планирование, разработка, тестирование) без уточнений по мелочам.
-- Q4: Какой минимальный уровень взаимодействия с агентом он готов терпеть после большого интервью?
-  - A4: Идеал — полностью автономная работа без дальнейших вопросов; если по ходу возникнут неизбежные уточнения, их терпит, но рассчитывает на редкие и обоснованные случаи.
-- Q5: Какие ключевые пользовательские сценарии он хочет видеть?
-  - A5: Единственный сценарий — запустить фреймворк, пройти вопросы до отметки «достаточно», получить сгенерированное ТЗ, дать финальное разрешение, уйти отдыхать; фреймворк сам делает разработку/тесты/релиз и шлёт алерт о завершении или о необходимости редких уточнений.
-- Q6: Как должно выглядеть финальное уведомление о завершении работы?
-  - A6: Достаточно ответа прямо в текущем канале (чат или терминал), тем же тоном, что и сейчас: коротко «работа завершена, посмотри»; если нужно уточнение — задать вопрос тут же. Канал, язык, вложения или кнопки значения не имеют.
-- Q7: Какие главные болячки фреймворка нужно исправить в первую очередь, чтобы считать улучшение успешным?
-  - A7: Пока рано сформулировать; реальные болячки проявятся при применении фреймворка на живых хост‑проектах, тогда и станет понятно, что чинить.
-- Q8: Что будет означать «успешно улучшили фреймворк» (критерии/метрики готовности)?
-  - A8: В любом хост‑проекте (пустом или с legacy) фреймворк сам проведёт опрос, подготовит полноценное ТЗ, запустит агента, который выполнит разработку/тестирование/сборку приложения, и корректно завершит работу, уведомив пользователя. Такой end-to-end проход считается успехом первой итерации.
-- Q9: Какие виды хост‑проектов нужно поддержать первыми и есть ли приоритет по стеку/ПААС?
-  - A9: Подход задуман как общий: классический цикл «сбор требований → ТЗ → план → параллельные задачи → оркестратор». Должен одинаково работать для любых хост‑проектов (веб, мобильные, книги и др.), без привязки к стеку/ПААС; для простых проектов ожидается применимость «из коробки».
-- Q10: Нужны ли обязательные ручные стоп‑точки/апрувы в процессе или ожидается полный авто‑проход?
-  - A10: Ожидается полностью автономная работа. Стоп‑точки появляются только при нештатных ситуациях (недостаток информации, требуются доступы и т.п.); агент сам должен определить критерии, когда притормозить и спросить.
-- Q11: Какие артефакты должны формироваться автоматически по завершении и в каком формате их потреблять?
-  - A11: Базовый список артефактов уже стандартный для разработки; агент сам должен определить обязательный набор и строить вопросы/ТЗ исходя из него. Пользователь согласен с таким подходом.
-- Q12: Требования к работе с доступами/секретами (хранение, каналы, шифрование/редакция)?
-  - A12: Разработка идёт без кредов, пока они реально не нужны. При необходимости агент делает стоп‑точку и просит их. Секреты кладём в env‑файл; предоставляются доступы для деплоя в нужные сервисы (секреты, edge‑functions и т.п.), дальше деплой по их правилам. Требование безопасности — критично (подразумевается минимизация/редакция секретов в логах).
-- Q13: Какие формы логирования и отчётности нужны (что логировать, что редактировать, в каком виде смотреть)?
-  - A13: Нужны все логирующие артефакты, позволяющие эффективно отлавливать и чинить ошибки. Агент сам формирует нужные логи, баг‑репорты и отчёты (шаги оркестратора, тест‑результаты и т.д.) в подходящих форматах, чтобы по ним можно было анализировать и исправлять баги.
-- Q14: Технологические предпочтения/ограничения по умолчанию?
-  - A14: Базовый стек: React + Node.js + Supabase; Stripe для платежей; Tailwind. Допустимы утилиты на Python. Для WordPress проектов — PHP и сопутствующий стек. Пока фокус на этом наборе, расширение возможно позже.
-- Q15: Требования к скорости/доступности (SLO) на первом этапе?
-  - A15: На этапе MVP ключевое требование — полная работоспособность без ошибок и прохождение всех тестов. Цели по скорости/доступности пока не ставятся; оптимизация пойдёт после стабильной работы.
-- Q16: Где разворачивать готовые приложения и сколько окружений нужно по умолчанию?
-  - A16: Два основных варианта деплоя: Vercel или Netlify. (Стек — React/Node/Supabase/Stripe). О окружениях явно не указано, можно предложить стандарт dev/staging/prod.
-- Q17: Какие внешние интеграции считать базовыми помимо Supabase и Stripe?
-  - A17: Пока только Supabase и Stripe; дополнительно может понадобиться отправка алертов по email через Amazon SES. Остальное не добавлять на этом этапе.
-- Q18: Какие данные нужны от пользователя до старта (анкеты, CSV, макеты) или собирать по ходу?
-  - A18: Агент сам определяет полный объём/формат необходимых данных и спрашивает по мере нужды; пользователь ожидает, что ему скажут, что предоставить для старта.
-- Q19: Формат итогового ТЗ и плана: один файл или несколько? На каком языке?
-  - A19: Нужен один обзорный файл с идеей и оглавлением, ссылающийся на детальные файлы. Структура должна быть понятна и достаточна, чтобы агент мог автономно работать. (Язык не уточнён явно; по контексту — можно оставить на русском.)
-- Q20: Требования к структуре параллельных задач для оркестратора?
-  - A20: Достаточно карты задач, предложенной в `orchestrator-plan-ru.md`; дополнительных требований нет.
-- Q21: Нужен ли отдельный независимый тест‑план/ревью-флоу для самого фреймворка или хватает текущих шаблонов?
-  - A21: Такой поток уже предусмотрен: фреймворк должен сам себя анализировать (framework-review), собирать баг‑репорты от хост‑проектов в центральный репозиторий и улучшать себя. Шаблоны есть в repo; нужно использовать и следовать им.
+- Q1: How would you describe the product's main goal for your users in one sentence?
+  - A1: The framework's goal is to produce a complete technical specification so that an agent can carry out the entire development cycle fully autonomously; the framework asks questions and produces everything required, and it is designed for non-technical users who can describe a product in plain language.
+- Q2: Who are the main user types or roles this framework will be used for? Describe each role in 1–2 sentences.
+  - A2: The only role is the author and owner of the product idea; they are also the product owner, analyst, and business sponsor, but not a developer. They understand the value and the user flows well, but are weak at answering technical questions.
+- Q3: What end result do they want after going through the framework?
+  - A3: A finished application they can check against their expectations; the agent must work autonomously (planning, development, testing) without clarifying minor details.
+- Q4: What is the minimum level of interaction with the agent they are willing to tolerate after the long interview?
+  - A4: The ideal is fully autonomous work with no further questions; if unavoidable clarifications arise along the way, they will tolerate them, but they count on those cases being rare and justified.
+- Q5: Which key user scenarios do they want to see?
+  - A5: The only scenario is to start the framework, go through the questions until it marks them "enough", receive the generated spec, give final approval, and go rest; the framework itself does the development, tests, and release and sends an alert when it is finished or when a rare clarification is needed.
+- Q6: What should the final completion notification look like?
+  - A6: A reply right in the current channel (chat or terminal) is enough, in the same tone as now: a short "the work is done, take a look"; if a clarification is needed, ask the question right there. The channel, language, attachments, or buttons do not matter.
+- Q7: Which main pain points of the framework need to be fixed first for an improvement to count as successful?
+  - A7: It is too early to formulate them; the real pain points will show up when the framework is applied to live host projects, and then it will become clear what to fix.
+- Q8: What will "we successfully improved the framework" mean (readiness criteria or metrics)?
+  - A8: In any host project (empty or with legacy) the framework itself runs the interview, prepares a complete spec, launches an agent that carries out development, testing, and the application build, and finishes correctly, notifying the user. That end-to-end pass counts as success for the first iteration.
+- Q9: Which kinds of host projects should be supported first, and is there a priority by stack or PaaS?
+  - A9: The approach is intended to be general: the classic cycle "gather requirements → spec → plan → parallel tasks → orchestrator". It should work the same way for any host projects (web, mobile, books, and others), with no tie to a stack or PaaS; for simple projects, out-of-the-box applicability is expected.
+- Q10: Are mandatory manual stop points or approvals required in the process, or is a fully automatic pass expected?
+  - A10: Fully autonomous work is expected. Stop points appear only in abnormal situations (not enough information, access is required, and similar); the agent itself must decide the criteria for when to slow down and ask.
+- Q11: Which artifacts should be produced automatically on completion, and in what format should they be consumed?
+  - A11: The baseline list of artifacts is already standard for development; the agent itself must determine the required set and build the questions and the spec from it. The user agrees with this approach.
+- Q12: Requirements for handling access and secrets (storage, channels, encryption/redaction)?
+  - A12: Development proceeds without credentials until they are actually needed. When they are needed, the agent makes a stop point and asks for them. Secrets go in an env file; access is provided for deploying to the required services (secrets, edge functions, and similar), and deployment then follows their rules. The security requirement is critical (minimizing and redacting secrets in logs is implied).
+- Q13: Which forms of logging and reporting are needed (what to log, what to redact, and in what form to review them)?
+  - A13: Every logging artifact that makes it possible to catch and fix errors effectively is needed. The agent itself produces the required logs, bug reports, and reports (orchestrator steps, test results, and so on) in suitable formats, so that bugs can be analyzed and fixed from them.
+- Q14: Default technology preferences or constraints?
+  - A14: Base stack: React + Node.js + Supabase; Stripe for payments; Tailwind. Python utilities are allowed. For WordPress projects, PHP and the accompanying stack. For now the focus is on this set; expansion is possible later.
+- Q15: Speed and availability requirements (SLO) for the first stage?
+  - A15: At the MVP stage the key requirement is full operation with no errors and passing every test. Speed and availability targets are not set yet; optimization will come after stable operation.
+- Q16: Where should finished applications be deployed, and how many environments are needed by default?
+  - A16: Two main deployment options: Vercel or Netlify. (The stack is React/Node/Supabase/Stripe.) Environments were not stated explicitly; the standard dev/staging/prod set can be proposed.
+- Q17: Which external integrations should be treated as baseline besides Supabase and Stripe?
+  - A17: Only Supabase and Stripe for now; sending email alerts through Amazon SES may also be needed. Do not add anything else at this stage.
+- Q18: What data is needed from the user before the start (questionnaires, CSVs, mockups), or should it be collected along the way?
+  - A18: The agent itself determines the full volume and format of the required data and asks as the need arises; the user expects to be told what to provide in order to start.
+- Q19: Format of the final spec and plan: one file or several? In which language?
+  - A19: One overview file is needed, with the idea and a table of contents, linking to the detailed files. The structure must be clear and sufficient for the agent to work autonomously. (The project language is English.)
+- Q20: Requirements for the structure of parallel tasks for the orchestrator?
+  - A20: The task map proposed in `orchestrator-plan.md` is sufficient; there are no additional requirements.
+- Q21: Is a separate independent test plan or review flow needed for the framework itself, or are the current templates enough?
+  - A21: That flow is already provided for: the framework must analyze itself (framework-review), collect bug reports from host projects into a central repository, and improve itself. The templates are in the repo; they should be used and followed.
 
-Примечание: фреймворк обязан логировать все вопросы и ответы в этом файле.
+Note: the framework must log every question and answer in this file.

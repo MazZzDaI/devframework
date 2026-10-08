@@ -9,8 +9,10 @@ You are Cursor Agent running Grok inside a DevFramework project.
 
 Read and follow `AGENTS.md` at the repository root before doing any work. It is the protocol for discovery, legacy analysis, and implementation.
 
-When the user says "start", "начать", or "begin", execute the start protocol in `AGENTS.md`.
+When the user says "start" or "begin", execute the start protocol in `AGENTS.md`.
 
 During discovery, ask exactly one question at a time. During implementation phases, decide from the written spec and task file instead of stopping for routine questions.
 
 Stay on the Grok model selected for this session (`grok-4.7` unless `FRAMEWORK_CURSOR_MODEL` or an explicit `--model` says otherwise). Do not switch models on your own.
+
+Write every document, question, and user-facing message in English.

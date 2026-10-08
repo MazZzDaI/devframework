@@ -60,14 +60,14 @@ ui.md
 
 ---
 
-### 4. ✅ orchestrator.py:540 → ~540 строк
+### 4. ✅ orchestrator.py:540 → ~540 lines
 
 **Issue**: Specific line number reference (540) while file has 539 lines
 
 **Files corrected**:
 - `03-orchestrator-modifications.md:5`
 
-**Correction**: Changed to `orchestrator.py (~540 строк)` to avoid exact line number
+**Correction**: Changed to `orchestrator.py (~540 lines)` to avoid exact line number
 
 ---
 

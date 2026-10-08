@@ -1,69 +1,69 @@
-Вот обновленный и структурированный документ. Я упаковал ваш паттерн в формат системного фреймворка, который можно использовать как «мастер-инструкцию» для оркестратора или как стандарт для вашей команды/курса.
+Here is the updated, structured document. I packaged your pattern as a system framework you can use as a master instruction for the orchestrator, or as a standard for your team or course.
 
 ---
 
 # Framework: Agentic Workflow Design Pattern (AWDP)
 
-Этот документ описывает методологию проектирования, разработки и деплоя систем, где архитектура первична, а реализация делегирована рою агентов под управлением оркестратора.
+This document describes a methodology for designing, developing, and deploying systems in which the architecture comes first and implementation is delegated to a swarm of agents under an orchestrator.
 
 ---
 
-## 1. Фаза стратегического планирования (Discovery)
+## 1. Strategic planning phase (Discovery)
 
-* **User Flow & JTBD Map:** Формирование карты пути пользователя. Каждый шаг привязан к конкретной работе, которую пользователь хочет выполнить (**Jobs to be Done**).
-* **Квесты (Milestones):** Определение точек прогресса («дорожная карта внутри приложения»), которые подтверждают успешное завершение этапов цикла.
+* **User Flow & JTBD Map:** Build the user journey map. Each step is tied to a specific job the user wants done (**Jobs to be Done**).
+* **Quests (Milestones):** Define the progress points (an in-app roadmap) that confirm successful completion of the cycle stages.
 
-## 2. Архитектурное моделирование (System Architecture)
+## 2. Architectural modeling (System Architecture)
 
-* **Разделение сценариев:**
-* **Main Flow:** Регулярные операционные циклы (Core UX).
-* **Side Flows:** Вспомогательные, одноразовые сценарии (настройки, миграции, онбординг).
+* **Scenario split:**
+* **Main Flow:** Regular operational cycles (Core UX).
+* **Side Flows:** Supporting, one-off scenarios (settings, migrations, onboarding).
 
 
-* **Сценарная карта (Dialogue Scenes):** Проектирование взаимодействия как последовательности сцен. Каждая сцена — это изолированный контекст диалога или интерфейса.
-* **Wizard-структура:** Описание последовательных шагов для сложных процессов, где выход из одного шага является входом для другого.
+* **Scenario map (Dialogue Scenes):** Design the interaction as a sequence of scenes. Each scene is an isolated dialogue or interface context.
+* **Wizard structure:** Describe the sequential steps of complex processes, where the output of one step is the input of the next.
 
-## 3. Спецификация Сцен (Scene Definition)
+## 3. Scene specification (Scene Definition)
 
-Каждая сцена описывается как технический объект:
+Each scene is described as a technical object:
 
-* **UI Elements:** Набор элементов интерфейса, необходимых для решения задачи.
-* **State Machine (FSM):** Машина состояний — список данных, их типы и возможные переходы (состояния).
-* **Subsystem Integration:** Привязка к конкретной подсистеме бизнес-логики (что именно делает бэкэнд в этой сцене).
+* **UI Elements:** The set of interface elements required to complete the task.
+* **State Machine (FSM):** A state machine: the list of data, their types, and the possible transitions (states).
+* **Subsystem Integration:** A binding to a specific business-logic subsystem (what the backend actually does in this scene).
 
-## 4. Формализация (Data Schema)
+## 4. Formalization (Data Schema)
 
-* **Единый формат:** Все описания выше конвертируются в машиночитаемый формат (**YAML/JSON**).
-* **Тезаурус:** Создание документа с четкими определениями понятий, концепций и правил (Glossary), чтобы исключить разную трактовку терминов агентами.
-* **Interface Contract:** Жесткое описание интерфейсов обмена данными между фронтендом, бэкендом и внешними сервисами (базы данных, платежные шлюзы, ИИ-модели).
+* **Single format:** All of the descriptions above are converted into a machine-readable format (**YAML/JSON**).
+* **Thesaurus:** Create a document with clear definitions of concepts, ideas, and rules (Glossary), so agents do not interpret the same terms differently.
+* **Interface Contract:** A strict description of the data-exchange interfaces between the frontend, the backend, and external services (databases, payment gateways, AI models).
 
-## 5. Валидация и Декомпозиция (Pre-flight)
+## 5. Validation and decomposition (Pre-flight)
 
-* **Валидатор готовности:** Специализированный агент/модуль проверяет набор документов на полноту и отсутствие логических противоречий перед запуском разработки.
-* **Security Layer:** Отдельный аудит безопасности (права доступа, защита данных, устойчивость к инъекциям).
-* **Orchestration Input:** Декомпозиция архитектуры на параллельные, независимые задачи (Backlog) для передачи оркестратору.
+* **Readiness validator:** A specialized agent or module checks the document set for completeness and for the absence of logical contradictions before development starts.
+* **Security Layer:** A separate security audit (access rights, data protection, resistance to injection).
+* **Orchestration Input:** Decompose the architecture into parallel, independent tasks (Backlog) to hand to the orchestrator.
 
-## 6. Цикл разработки и оркестрации (Execution)
+## 6. Development and orchestration cycle (Execution)
 
-* **Рой агентов:** Оркестратор запускает агентов (на базе Codex, Claude или других моделей) в изолированных терминалах.
-* **Chat Bridges:** Создание мостов связи между агентами для синхронизации решений на базе мастер-документа.
-* **Live Documentation:** Любое принятое в процессе разработки решение немедленно фиксируется в проектной документации (автоматическое обновление спецификаций).
+* **Agent swarm:** The orchestrator launches agents (based on Codex, Claude, or other models) in isolated terminals.
+* **Chat Bridges:** Create communication bridges between agents so they can sync decisions against the master document.
+* **Live Documentation:** Any decision accepted during development is recorded in the project documentation immediately (specifications are updated automatically).
 
-## 7. Тестирование и Демонстрация (QA & Delivery)
+## 7. Testing and demonstration (QA & Delivery)
 
-* **Test Coverage Plan:** План покрытия тестами на основе сценариев из п. 2.
-* **Emulation:** Запуск системы на наборах синтетических данных для поиска граничных ошибок.
-* **Iterative Refinement:** Если версия принята — формируется ТЗ на следующую итерацию. Если нет — возврат к исправлению багов в текущем цикле.
-
----
-
-### Примечание по инструментарию:
-
-* **Front-end:** Элементы интерфейса и логика взаимодействия.
-* **Back-end:** Модульная структура бизнес-логики.
-* **External Services:** Базы данных, API, AI-провайдеры.
-* **Memory Framework:** Система промежуточной памяти для сохранения контекста между сессиями проектирования.
+* **Test Coverage Plan:** A test-coverage plan based on the scenarios from section 2.
+* **Emulation:** Run the system on sets of synthetic data to find boundary errors.
+* **Iterative Refinement:** If the version is accepted, a specification for the next iteration is written. If it is not, return to fixing bugs in the current cycle.
 
 ---
 
-**Что скажете? Какие корректировки внесем в этот флоу?**
+### Tooling note:
+
+* **Front-end:** Interface elements and interaction logic.
+* **Back-end:** The modular structure of the business logic.
+* **External Services:** Databases, APIs, AI providers.
+* **Memory Framework:** An intermediate memory system that preserves context between design sessions.
+
+---
+
+**What do you think? What adjustments should we make to this flow?**

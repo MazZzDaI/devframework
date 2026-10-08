@@ -1,19 +1,19 @@
 # Legacy Migration Plan
 
-## Стратегия
-- Self-dogfood: привести сам фреймворк к требованиям фреймворка, минимально меняя API; добавить предсказуемость (preflight), тестируемость и артефакты данных/ТЗ.
+## Strategy
+- Self-dogfood: bring the framework itself up to the framework's requirements, changing the API as little as possible; add predictability (preflight), testability, and data/spec artifacts.
 
-## Этапы
-1) Stabilize: очистить/нормализовать пути worktree, добавить preflight-проверки окружения (python, git, runner CLI, права на запись в `framework/logs`, свободные worktree/ветки), расширить редакцию секретов в export-report.
-2) Complete facts: заполнить `legacy-tech-spec`, `legacy-gap-report`, `legacy-migration-plan`, `approval`; приложить недостающие доки/шаблоны данных (пустые или sample CSV) и описать контракт; задокументировать DoD/Review/Tests/Observability в README.
-3) Validate & ship: добавить базовый CI (lint + smoke `python -m py_compile`/`python -m compileall` + dry-run orchestrator), собрать новый `framework.zip`, прогнать фазы `legacy` и `post`, опционально опубликовать отчёт.
+## Stages
+1) Stabilize: clean up and normalize worktree paths, add environment preflight checks (python, git, runner CLI, write access to `framework/logs`, free worktrees/branches), and expand secret redaction in export-report.
+2) Complete the facts: fill in `legacy-tech-spec`, `legacy-gap-report`, `legacy-migration-plan`, and `approval`; attach the missing docs and data templates (empty or sample CSVs) and describe the contract; document DoD/Review/Tests/Observability in the README.
+3) Validate and ship: add a basic CI (lint plus smoke `python -m py_compile` / `python -m compileall` plus an orchestrator dry-run), build a new `framework.zip`, run the `legacy` and `post` phases, and optionally publish the report.
 
-## Минимальные изменения (safe‑path)
-- Не менять внешнее CLI API оркестратора; добавить только preflight и расширенную редакцию секретов.
-- Положить sample CSV/док‑заглушки вместо реальных данных.
-- Включить runner fallback (при отсутствии CLI запускать с `FRAMEWORK_RUNNER_NOOP=1`) через ENV, не патча оркестратор жёстко.
+## Minimal changes (safe path)
+- Do not change the orchestrator's external CLI API; add only preflight and broader secret redaction.
+- Drop in sample CSV and doc stubs instead of real data.
+- Enable a runner fallback (when the CLI is missing, start with `FRAMEWORK_RUNNER_NOOP=1`) through an environment variable, without hard-patching the orchestrator.
 
-## Валидация
-- `python3 framework/orchestrator/orchestrator.py --config framework/orchestrator/orchestrator.json --phase legacy --dry-run` (проверка зависимостей/префлайта).
-- `python3 -m compileall framework` и `python3 scripts/package-framework.py` без ошибок.
-- Прогон `--phase main` и `--phase post` в чистом хосте, артефакты в `framework/docs/orchestrator-run-summary.md`, `framework/framework-review/*` без FAIL.
+## Validation
+- `python3 framework/orchestrator/orchestrator.py --config framework/orchestrator/orchestrator.json --phase legacy --dry-run` (checks dependencies and preflight).
+- `python3 -m compileall framework` and `python3 scripts/package-framework.py` with no errors.
+- Run `--phase main` and `--phase post` on a clean host; artifacts land in `framework/docs/orchestrator-run-summary.md` and `framework/framework-review/*` with no FAIL.

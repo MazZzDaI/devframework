@@ -1,14 +1,14 @@
-# Быстрый старт: Автономный режим Claude Code
+# Quick Start: Autonomous Mode for Claude Code
 
-## 3 способа использования (от простого к сложному)
+## 3 ways to use it (from simple to advanced)
 
-### 🟢 Уровень 1: Метапромпт в задаче (5 минут)
+### 🟢 Level 1: Metaprompt in the task (5 minutes)
 
-**Что**: Добавить autonomous protocol прямо в task definition
+**What**: Add the autonomous protocol directly to the task definition
 
-**Как**:
-1. Открыть любую задачу, например `framework/tasks/db-schema.md`
-2. Добавить в начало файла:
+**How**:
+1. Open any task, for example `framework/tasks/db-schema.md`
+2. Add this at the top of the file:
 
 ```markdown
 ---
@@ -18,30 +18,30 @@ time_budget: 45
 
 ## 🤖 AUTONOMOUS MODE PROTOCOL
 
-[Скопировать полный протокол из 01-autonomous-mode-protocol.md]
+[Copy the full protocol from 01-autonomous-mode-protocol.md]
 
 ---
 
-[... остальное содержание задачи ...]
+[... the rest of the task content ...]
 ```
 
-3. Запустить через orchestrator:
+3. Run it through the orchestrator:
 ```bash
 python framework/orchestrator/orchestrator.py --config framework/orchestrator/orchestrator.json
 ```
 
-**Плюсы**: Работает немедленно, без изменений в коде
-**Минусы**: Дублирование протокола в каждой задаче
+**Pros**: Works immediately, with no code changes
+**Cons**: The protocol is duplicated in every task
 
 ---
 
-### 🟡 Уровень 2: Конфигурация в orchestrator.json (30 минут)
+### 🟡 Level 2: Configuration in orchestrator.json (30 minutes)
 
-**Что**: Добавить поддержку autonomous mode в orchestrator
+**What**: Add autonomous mode support to the orchestrator
 
-**Как**:
+**How**:
 
-1. **Обновить `orchestrator.json`**:
+1. **Update `orchestrator.json`**:
 ```json
 {
   "runners": {
@@ -66,7 +66,7 @@ python framework/orchestrator/orchestrator.py --config framework/orchestrator/or
 }
 ```
 
-2. **Модифицировать `orchestrator.py`** (добавить ~30 строк кода):
+2. **Modify `orchestrator.py`** (add about 30 lines of code):
 
 ```python
 def build_command(self, task, runner):
@@ -105,157 +105,157 @@ def _inject_protocol(self, protocol_path, task_path, time_budget):
     return str(temp_path)
 ```
 
-**Плюсы**: Централизованный протокол, легко обновлять
-**Минусы**: Требует модификации orchestrator.py
+**Pros**: Centralized protocol, easy to update
+**Cons**: Requires modifying orchestrator.py
 
 ---
 
-### 🔴 Уровень 3: Полная интеграция с watchdog (2-3 часа)
+### 🔴 Level 3: Full integration with a watchdog (2-3 hours)
 
-**Что**: Добавить мониторинг прогресса и автоэскалацию
+**What**: Add progress monitoring and automatic escalation
 
-**Как**: Следовать инструкциям в `03-orchestrator-modifications.md` и `05-watchdog-escalation.md`
+**How**: Follow the instructions in `03-orchestrator-modifications.md` and `05-watchdog-escalation.md`
 
-**Основные компоненты**:
+**Main components**:
 1. ProgressWatchdog class
 2. Escalation strategies
 3. Validation compliance checker
 4. Metrics collection
 
-**Плюсы**: Production-ready, автоматическое разблокирование
-**Минусы**: Значительные изменения в коде
+**Pros**: Production-ready, automatic unblocking
+**Cons**: Significant code changes
 
 ---
 
-## Рекомендуемый путь
+## Recommended path
 
-### Шаг 1: Быстрый тест (день 1)
+### Step 1: Quick test (day 1)
 
-Выбрать **одну простую задачу** из `framework/tasks/` и попробовать Уровень 1:
+Pick **one simple task** from `framework/tasks/` and try Level 1:
 
-1. Скопировать `claude-code/examples/task-autonomous-example.md`
-2. Адаптировать под свою задачу
-3. Запустить вручную:
+1. Copy `claude-code/examples/task-autonomous-example.md`
+2. Adapt it to your task
+3. Run it manually:
    ```bash
    claude-code < modified-task.md
    ```
-4. Проверить результат:
-   - Использовал ли AskUserQuestion? (должно быть 0)
-   - Задокументированы ли решения в handoff.md?
-   - Завершена ли задача в пределах time budget?
+4. Check the result:
+   - Did it use AskUserQuestion? (it should be 0)
+   - Are decisions documented in handoff.md?
+   - Did the task finish within the time budget?
 
-### Шаг 2: Интеграция (день 2-3)
+### Step 2: Integration (day 2-3)
 
-Если тест успешен, внедрить Уровень 2:
+If the test succeeds, adopt Level 2:
 
-1. Скопировать пример из `examples/orchestrator-config-example.json`
-2. Модифицировать `orchestrator.py` (code snippets в `03-orchestrator-modifications.md`)
-3. Запустить на 3-5 задачах через orchestrator
-4. Собрать метрики:
-   - Процент задач без вопросов
-   - Точность time budgets
-   - Качество кода (ревью)
+1. Copy the example from `examples/orchestrator-config-example.json`
+2. Modify `orchestrator.py` (code snippets in `03-orchestrator-modifications.md`)
+3. Run 3-5 tasks through the orchestrator
+4. Collect metrics:
+   - Percentage of tasks with no questions
+   - Time-budget accuracy
+   - Code quality (review)
 
-### Шаг 3: Оптимизация (неделя 2)
+### Step 3: Optimization (week 2)
 
-Если метрики хорошие (>80% задач autonomous), добавить Уровень 3:
+If the metrics are good (>80% of tasks autonomous), add Level 3:
 
-1. Реализовать базовый watchdog (LogGrowthMonitor)
-2. Добавить escalation strategy (начать с "notify")
-3. Постепенно добавлять индикаторы прогресса
-4. Настроить пороги на основе данных
+1. Implement a basic watchdog (LogGrowthMonitor)
+2. Add an escalation strategy (start with "notify")
+3. Gradually add progress indicators
+4. Tune thresholds from the data
 
 ---
 
-## Метрики успеха
+## Success metrics
 
-Автономный режим работает, если:
+Autonomous mode is working if:
 
-| Метрика | Целевое значение |
-|---------|------------------|
-| AskUserQuestion usage | < 5% задач |
-| Time budget accuracy | ± 20% от плана |
+| Metric | Target |
+|---------|--------|
+| AskUserQuestion usage | < 5% of tasks |
+| Time budget accuracy | ± 20% of the plan |
 | Task completion rate | > 85% |
-| Code quality (review) | Не хуже чем с interactive mode |
-| Handoff documentation | 100% задач |
+| Code quality (review) | No worse than interactive mode |
+| Handoff documentation | 100% of tasks |
 
 ---
 
-## Чеклист перед запуском
+## Checklist before you start
 
-- [ ] Прочитан `01-autonomous-mode-protocol.md`
-- [ ] Изучен пример задачи `examples/task-autonomous-example.md`
-- [ ] Выбрана одна задача для теста
-- [ ] Подготовлен fallback plan (если не сработает)
-- [ ] Есть время на ревью результата (~30 мин после выполнения)
+- [ ] Read `01-autonomous-mode-protocol.md`
+- [ ] Studied the task example `examples/task-autonomous-example.md`
+- [ ] Picked one task for the test
+- [ ] Prepared a fallback plan (if it does not work)
+- [ ] Have time to review the result (~30 min after it finishes)
 
 ---
 
 ## Troubleshooting
 
-### Проблема: Claude всё равно задаёт вопросы
+### Problem: Claude still asks questions
 
-**Решение**:
-1. Проверить, что протокол действительно в начале задачи
-2. Добавить более явные запреты:
+**Solution**:
+1. Check that the protocol is really at the start of the task
+2. Add more explicit bans:
    ```markdown
    NEVER EVER use AskUserQuestion tool under ANY circumstances.
    If you use AskUserQuestion, the task will FAIL.
    ```
-3. Увеличить CAPS и formatting для привлечения внимания
+3. Increase CAPS and formatting to draw the model's attention
 
-### Проблема: Задача не завершается в time budget
+### Problem: The task does not finish within the time budget
 
-**Решение**:
-1. Проверить реалистичность budget (слишком оптимистично?)
-2. Добавить промежуточные checkpoints:
+**Solution**:
+1. Check whether the budget is realistic (too optimistic?)
+2. Add intermediate checkpoints:
    ```markdown
    AT 50% time: Check if 40%+ work done
    AT 75% time: Check if 60%+ work done
    ```
-3. Явно указать Must Have vs Nice to Have приоритеты
+3. State Must Have vs Nice to Have priorities explicitly
 
-### Проблема: Решения не документируются
+### Problem: Decisions are not documented
 
-**Решение**:
-1. Добавить в Definition of Done:
+**Solution**:
+1. Add this to the Definition of Done:
    ```markdown
    Task is NOT complete until handoff.md includes:
    - [ ] All decisions made
    - [ ] All blockers encountered
    ```
-2. Показать пример хорошего handoff в задаче
+2. Show an example of a good handoff in the task
 
-### Проблема: Качество кода хуже чем обычно
+### Problem: Code quality is worse than usual
 
-**Решение**:
-1. Это trade-off автономности. Варианты:
-   - Добавить Phase 3: Review (Claude interactive)
-   - Увеличить time budget на качество
-   - Добавить linter в Definition of Done
-2. Проверить, достаточно ли reference материалов в задаче
-
----
-
-## Следующие шаги
-
-1. ✅ Прочитали Quick Start
-2. → Изучить `01-autonomous-mode-protocol.md`
-3. → Попробовать на одной задаче
-4. → Если работает: изучить `02-task-template-improvements.md`
-5. → Если хотите масштабировать: `03-orchestrator-modifications.md`
-6. → Если нужен hybrid: `04-hybrid-pipeline-design.md`
-7. → Для production: `05-watchdog-escalation.md`
+**Solution**:
+1. This is the autonomy trade-off. Options:
+   - Add Phase 3: Review (Claude interactive)
+   - Increase the time budget for quality
+   - Add a linter to the Definition of Done
+2. Check whether the task includes enough reference material
 
 ---
 
-## Контакты и обратная связь
+## Next steps
 
-Если что-то не работает или нужна помощь:
-1. Проверить существующие примеры в `examples/`
-2. Перечитать соответствующий документ (01-05)
-3. Поэкспериментировать с формулировками в протоколе
+1. ✅ Read the Quick Start
+2. → Study `01-autonomous-mode-protocol.md`
+3. → Try it on one task
+4. → If it works: study `02-task-template-improvements.md`
+5. → If you want to scale: `03-orchestrator-modifications.md`
+6. → If you need a hybrid: `04-hybrid-pipeline-design.md`
+7. → For production: `05-watchdog-escalation.md`
 
-**Помните**: Autonomous mode — это не "set and forget", а итеративный процесс настройки под ваш проект и задачи.
+---
 
-Удачи! 🚀
+## Contacts and feedback
+
+If something does not work or you need help:
+1. Check the existing examples in `examples/`
+2. Reread the matching document (01-05)
+3. Experiment with the wording in the protocol
+
+**Remember**: Autonomous mode is not "set and forget". It is an iterative process of tuning for your project and tasks.
+
+Good luck! 🚀

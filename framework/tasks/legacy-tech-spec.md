@@ -1,7 +1,7 @@
 # Task: Legacy Reverse Tech Spec (read-only)
 
 ## Goal
-Сформировать обратное ТЗ из существующего кода.
+Write a reverse spec from the existing code.
 
 ## Inputs
 - `framework/migration/legacy-snapshot.md`
@@ -10,8 +10,8 @@
 - `framework/migration/legacy-tech-spec.md`
 
 ## Rules
-- Не менять код.
-- Опираться только на реальные факты из репозитория.
+- Do not change code.
+- Rely only on real facts from the repository.
 
 ## Done When
-- Tech‑spec заполнен.
+- The tech spec is filled in.

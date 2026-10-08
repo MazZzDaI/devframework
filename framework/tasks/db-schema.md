@@ -4,8 +4,8 @@
 Define the database schema and migrations with RLS.
 
 ## Inputs
-- framework/docs/orchestrator-plan-ru.md (section 1.3)
-- framework/docs/definition-of-done-ru.md
+- framework/docs/orchestrator-plan.md (section 1.3)
+- framework/docs/definition-of-done.md
 
 ## Outputs
 - Migration files or SQL snippets

@@ -1,46 +1,46 @@
-# Сгенерированное ТЗ (self-host devframework)
+# Generated spec (self-host devframework)
 
-## 1. Цель и критерий успеха
-- Цель фреймворка — создание полной версии технического задания, чтобы агент мог полностью автономно сделать весь цикл разработки; фреймворк задаёт вопросы и формирует всё необходимое, рассчитан на неквалифицированных пользователей, умеющих описать продукт простыми словами.
-- В любом хост‑проекте (пустом или с legacy) фреймворк сам проведёт опрос, подготовит полноценное ТЗ, запустит агента, который выполнит разработку/тестирование/сборку приложения, и корректно завершит работу, уведомив пользователя. Такой end-to-end проход считается успехом первой итерации.
+## 1. Goal and success criterion
+- The framework's goal is to produce a complete technical specification so that an agent can carry out the entire development cycle fully autonomously; the framework asks questions and produces everything required, and it is designed for non-technical users who can describe a product in plain language.
+- In any host project (empty or with legacy) the framework itself runs the interview, prepares a complete spec, launches an agent that carries out development, testing, and the application build, and finishes correctly, notifying the user. That end-to-end pass counts as success for the first iteration.
 
-## 2. Пользователь и опыт
-- Роли: Единственная роль — автор/владелец идеи продукта; он же продуктовый владелец, аналитик и бизнес-спонсор, но не разработчик. Он хорошо понимает ценность и пользовательские флоу, но слабо отвечает на технические вопросы.
-- Минимальный контакт после интервью: Идеал — полностью автономная работа без дальнейших вопросов; если по ходу возникнут неизбежные уточнения, их терпит, но рассчитывает на редкие и обоснованные случаи.
-- Ключевой сценарий: Единственный сценарий — запустить фреймворк, пройти вопросы до отметки «достаточно», получить сгенерированное ТЗ, дать финальное разрешение, уйти отдыхать; фреймворк сам делает разработку/тесты/релиз и шлёт алерт о завершении или о необходимости редких уточнений.
-- Финальное уведомление: Достаточно ответа прямо в текущем канале (чат или терминал), тем же тоном, что и сейчас: коротко «работа завершена, посмотри»; если нужно уточнение — задать вопрос тут же. Канал, язык, вложения или кнопки значения не имеют.
+## 2. User and experience
+- Roles: The only role is the author and owner of the product idea; they are also the product owner, analyst, and business sponsor, but not a developer. They understand the value and the user flows well, but are weak at answering technical questions.
+- Minimum contact after the interview: The ideal is fully autonomous work with no further questions; if unavoidable clarifications arise along the way, they will tolerate them, but they count on those cases being rare and justified.
+- Key scenario: The only scenario is to start the framework, go through the questions until it marks them "enough", receive the generated spec, give final approval, and go rest; the framework itself does the development, tests, and release and sends an alert when it is finished or when a rare clarification is needed.
+- Final notification: A reply right in the current channel (chat or terminal) is enough, in the same tone as now: a short "the work is done, take a look"; if a clarification is needed, ask the question right there. The channel, language, attachments, or buttons do not matter.
 
-## 3. Область (scope)
-- Включено: discovery → ТЗ → план → оркестратор → review/post-run.
-- Типы хост‑проектов: Подход задуман как общий: классический цикл «сбор требований → ТЗ → план → параллельные задачи → оркестратор». Должен одинаково работать для любых хост‑проектов (веб, мобильные, книги и др.), без привязки к стеку/ПААС; для простых проектов ожидается применимость «из коробки».
-- Исключено: оптимизации/перф на MVP (см. SLO).
+## 3. Scope
+- In scope: discovery → spec → plan → orchestrator → review/post-run.
+- Host project types: The approach is intended to be general: the classic cycle "gather requirements → spec → plan → parallel tasks → orchestrator". It should work the same way for any host projects (web, mobile, books, and others), with no tie to a stack or PaaS; for simple projects, out-of-the-box applicability is expected.
+- Out of scope: optimizations and performance work in the MVP (see SLO).
 
-## 4. Архитектура и процессы
-- Оркестратор + worktree по задачам + фазы main/post/legacy.
-- Карта параллельных задач: `docs/orchestrator-plan-ru.md`.
-- Self-review и сбор баг‑репортов: Такой поток уже предусмотрен: фреймворк должен сам себя анализировать (framework-review), собирать баг‑репорты от хост‑проектов в центральный репозиторий и улучшать себя. Шаблоны есть в repo; нужно использовать и следовать им.  Примечание: фреймворк обязан логировать все вопросы и ответы в этом файле.
-- Стоп‑точки: Ожидается полностью автономная работа. Стоп‑точки появляются только при нештатных ситуациях (недостаток информации, требуются доступы и т.п.); агент сам должен определить критерии, когда притормозить и спросить.
+## 4. Architecture and processes
+- Orchestrator + a worktree per task + main/post/legacy phases.
+- Parallel task map: `docs/orchestrator-plan.md`.
+- Self-review and bug-report collection: That flow is already provided for: the framework must analyze itself (framework-review), collect bug reports from host projects into a central repository, and improve itself. The templates are in the repo; they should be used and followed.  Note: the framework must log every question and answer in this file.
+- Stop points: Fully autonomous work is expected. Stop points appear only in abnormal situations (not enough information, access is required, and similar); the agent itself must decide the criteria for when to slow down and ask.
 
-## 5. Стек по умолчанию
-- Базовый стек: React + Node.js + Supabase; Stripe для платежей; Tailwind. Допустимы утилиты на Python. Для WordPress проектов — PHP и сопутствующий стек. Пока фокус на этом наборе, расширение возможно позже.
+## 5. Default stack
+- Base stack: React + Node.js + Supabase; Stripe for payments; Tailwind. Python utilities are allowed. For WordPress projects, PHP and the accompanying stack. For now the focus is on this set; expansion is possible later.
 
-## 6. Деплой и окружения
-- Два основных варианта деплоя: Vercel или Netlify. (Стек — React/Node/Supabase/Stripe). О окружениях явно не указано, можно предложить стандарт dev/staging/prod.
+## 6. Deployment and environments
+- Two main deployment options: Vercel or Netlify. (The stack is React/Node/Supabase/Stripe.) Environments were not stated explicitly; the standard dev/staging/prod set can be proposed.
 
-## 7. Интеграции
-- Пока только Supabase и Stripe; дополнительно может понадобиться отправка алертов по email через Amazon SES. Остальное не добавлять на этом этапе.
+## 7. Integrations
+- Only Supabase and Stripe for now; sending email alerts through Amazon SES may also be needed. Do not add anything else at this stage.
 
-## 8. Секреты и доступы
-- Разработка идёт без кредов, пока они реально не нужны. При необходимости агент делает стоп‑точку и просит их. Секреты кладём в env‑файл; предоставляются доступы для деплоя в нужные сервисы (секреты, edge‑functions и т.п.), дальше деплой по их правилам. Требование безопасности — критично (подразумевается минимизация/редакция секретов в логах).
+## 8. Secrets and access
+- Development proceeds without credentials until they are actually needed. When they are needed, the agent makes a stop point and asks for them. Secrets go in an env file; access is provided for deploying to the required services (secrets, edge functions, and similar), and deployment then follows their rules. The security requirement is critical (minimizing and redacting secrets in logs is implied).
 
-## 9. Логирование и отчётность
-- Нужны все логирующие артефакты, позволяющие эффективно отлавливать и чинить ошибки. Агент сам формирует нужные логи, баг‑репорты и отчёты (шаги оркестратора, тест‑результаты и т.д.) в подходящих форматах, чтобы по ним можно было анализировать и исправлять баги.
+## 9. Logging and reporting
+- Every logging artifact that makes it possible to catch and fix errors effectively is needed. The agent itself produces the required logs, bug reports, and reports (orchestrator steps, test results, and so on) in suitable formats, so that bugs can be analyzed and fixed from them.
 
-## 10. Нефункциональные требования (MVP)
-- На этапе MVP ключевое требование — полная работоспособность без ошибок и прохождение всех тестов. Цели по скорости/доступности пока не ставятся; оптимизация пойдёт после стабильной работы.
+## 10. Non-functional requirements (MVP)
+- At the MVP stage the key requirement is full operation with no errors and passing every test. Speed and availability targets are not set yet; optimization will come after stable operation.
 
-## 11. Формат артефактов
-- Нужен один обзорный файл с идеей и оглавлением, ссылающийся на детальные файлы. Структура должна быть понятна и достаточна, чтобы агент мог автономно работать. (Язык не уточнён явно; по контексту — можно оставить на русском.)
+## 11. Artifact format
+- One overview file is needed, with the idea and a table of contents, linking to the detailed files. The structure must be clear and sufficient for the agent to work autonomously. (The project language is English.)
 
 ## 12. TODO / UNKNOWN
 - None

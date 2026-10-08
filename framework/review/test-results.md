@@ -1,16 +1,16 @@
 # Test Results
 
-## Сводка
-- Всего тестов:
-- Пройдено:
-- Провалено:
-- Пропущено:
+## Summary
+- Total tests:
+- Passed:
+- Failed:
+- Skipped:
 
-## Детали запуска
-- Команда:
-- Дата/время:
-- Окружение:
-- Лог:
+## Run details
+- Command:
+- Date/time:
+- Environment:
+- Log:
 
-## Известные проблемы
+## Known issues
 - 

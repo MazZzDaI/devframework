@@ -1,15 +1,15 @@
 # Framework Review
 
-Этот поток анализирует ошибки и качество работы самого фреймворка (оркестратора).
-Запускается только между активными сессиями (после завершения main‑прогона).
+This flow analyzes errors and the quality of the framework itself (the orchestrator).
+It runs only between active sessions (after the main run finishes).
 
-## Что внутри
-- `bundle.md` — единая точка входа для post‑run ревью
-- `runbook.md` — как проводить анализ
-- `framework-log-analysis.md` — анализ логов прогона
-- `framework-bug-report.md` — баг‑репорт по фреймворку
-- `framework-fix-plan.md` — план исправлений
+## Contents
+- `bundle.md` — single entry point for the post-run review
+- `runbook.md` — how to run the analysis
+- `framework-log-analysis.md` — analysis of the run logs
+- `framework-bug-report.md` — bug report for the framework
+- `framework-fix-plan.md` — fix plan
 
-## Когда запускать
-- Только после завершения основного прогона.
-- Убедитесь, что `framework/logs/framework-run.lock` отсутствует.
+## When to run
+- Only after the main run has finished.
+- Make sure `framework/logs/framework-run.lock` is absent.

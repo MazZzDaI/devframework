@@ -1,35 +1,35 @@
 # Legacy Tech Spec (Reverse)
 
-## Назначение
-- Локальный каркас Devframework (v2026.01.24.2) для оркестрации параллельных задач разработки через git worktree, автоматизации запуска агентов, логирования и формирования отчётных артефактов/пакетов для репортинга.
+## Purpose
+- A local Devframework skeleton (v2026.01.24.2) for orchestrating parallel development tasks through git worktrees, automating agent launches, logging, and producing report artifacts and bundles for reporting.
 
-## Функциональные требования (из кода)
-- Читает конфиг `framework/orchestrator/orchestrator.json|yaml`, нормализует задачи, фазы (`main`, `legacy`, `post`) и зависимости.
-- Для каждой задачи создаёт ветку и git worktree по заданному пути, выполняет внешнюю команду runner’а (по умолчанию `bash framework/tools/cursor-runner.sh "{prompt}"`, Cursor Agent на Grok), пишет stdout/stderr в персональный лог.
-- Ведёт события в `framework/logs/framework-run.jsonl`, ставит lock для основной фазы, пишет сводку в `framework/docs/orchestrator-run-summary.md`.
-- Поддерживает опцию `--include-manual` (включает задачи с `manual: true`) и dry-run.
-- Инсталлер `install-fr.sh` доставляет/обновляет `framework/` из локального `framework.zip` или GitHub, делает бэкап при `--update`, автоопределяет фазу (legacy, если в корне есть чужие файлы).
-- Инструменты `framework/tools/export-report.py` и `publish-report.py` собирают артефакты/логи в zip и могут отправлять PR/Issue в GitHub при наличии `GITHUB_TOKEN`.
+## Functional requirements (from the code)
+- Reads the config `framework/orchestrator/orchestrator.json|yaml`, normalizes tasks, phases (`main`, `legacy`, `post`), and dependencies.
+- For each task, creates a branch and a git worktree at the given path, runs the runner's external command (by default `bash framework/tools/cursor-runner.sh "{prompt}"`, Cursor Agent on Grok), and writes stdout/stderr to a per-task log.
+- Records events in `framework/logs/framework-run.jsonl`, takes a lock for the main phase, and writes a summary to `framework/docs/orchestrator-run-summary.md`.
+- Supports `--include-manual` (includes tasks with `manual: true`) and dry-run.
+- The installer `install-fr.sh` delivers or updates `framework/` from a local `framework.zip` or from GitHub, takes a backup on `--update`, and auto-detects the phase (legacy if the repo root contains files that are not part of the framework).
+- The tools `framework/tools/export-report.py` and `publish-report.py` collect artifacts and logs into a zip and can open a GitHub PR or Issue when `GITHUB_TOKEN` is set.
 
-## Нефункциональные требования
-- Требуются `python3`, `git`, Cursor CLI `agent` (модель Grok) и при YAML-конфиге — PyYAML.
-- Работает локально, без сетевых вызовов в оркестраторе (кроме publish-report, который пушит в GitHub).
-- Логирование файловое, без ротации; ожидается запись в `framework/logs` с правами на запись.
-- Без встроенных тестов; надежность опирается на корректность окружения и runner’ов.
+## Non-functional requirements
+- Requires `python3`, `git`, the Cursor CLI `agent` (Grok model), and PyYAML when the config is YAML.
+- Runs locally, with no network calls in the orchestrator (except publish-report, which pushes to GitHub).
+- File-based logging, no rotation; writes are expected under `framework/logs` with write permission.
+- No built-in tests; reliability depends on a correct environment and working runners.
 
-## Интеграции
-- Git (worktree, ветки, статус).
-- Внешний агент CLI: Cursor `agent` с моделью Grok (команда задаётся в `runners`).
-- GitHub API через `publish-report.py` (curl/subprocess).
-- Опционально `curl` для загрузки zip в инсталлере.
+## Integrations
+- Git (worktrees, branches, status).
+- External agent CLI: Cursor `agent` with the Grok model (the command is set in `runners`).
+- GitHub API via `publish-report.py` (curl/subprocess).
+- Optionally `curl` for downloading the zip in the installer.
 
-## Данные / Контракты
-- Конфигурация задач: name/branch/worktree/prompt/runner/depends_on/log/phase/manual.
-- Артефакты: логи задач (`framework/logs/*.log`), события (`framework-run.jsonl`), сводка (`docs/orchestrator-run-summary.md`), миграционные документы (`framework/migration/*.md`), отчётные бандлы (`reports/<host>/<run_id>.zip` при публикации).
-- Нет приложенного продуктового кода, SQL, CSV-шаблонов или фикстур; задекларированные файлы `plans_2026.csv`, `zip_rating_map_2026.csv`, `fpl_2026.csv`, `slcsp_2026.csv` отсутствуют.
+## Data / contracts
+- Task configuration: name/branch/worktree/prompt/runner/depends_on/log/phase/manual.
+- Artifacts: task logs (`framework/logs/*.log`), events (`framework-run.jsonl`), the summary (`docs/orchestrator-run-summary.md`), migration documents (`framework/migration/*.md`), report bundles (`reports/<host>/<run_id>.zip` when publishing).
+- No product code, SQL, CSV templates, or fixtures are included; the declared files `plans_2026.csv`, `zip_rating_map_2026.csv`, `fpl_2026.csv`, and `slcsp_2026.csv` are missing.
 
-## Ограничения / Допущения
-- Хост обязан быть git-репозиторием; worktree пути должны быть свободны.
-- Предполагается наличие внешних runner’ов; при их отсутствии задачи падают или зависают.
-- Секреты в логах редактируются частично (regex в export-report), возможны утечки нестандартных токенов.
-- Нет встроенной валидации наличия данных/ТЗ; оркестратор выполнится даже при пустых входах.
+## Constraints / assumptions
+- The host must be a git repository; worktree paths must be free.
+- External runners are assumed to exist; without them, tasks fail or hang.
+- Secrets in logs are only partly redacted (regex in export-report), so nonstandard tokens can leak.
+- There is no built-in check that data or a spec is present; the orchestrator will run even with empty inputs.

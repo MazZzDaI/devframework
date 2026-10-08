@@ -1,4 +1,4 @@
-# Bug Report Template (host → core)
+# Bug Report Template (host to core)
 
 ## Metadata
 - Host ID:
@@ -9,24 +9,24 @@
 - Timestamp:
 
 ## Summary
-Коротко опишите проблему в 1–2 предложениях.
+Describe the problem in one or two sentences.
 
 ## Expected vs Actual
-- Ожидалось:
-- Получилось:
+- Expected:
+- Actual:
 
 ## Steps to Reproduce
-1) 
-2) 
-3) 
+1)
+2)
+3)
 
 ## Logs / Artifacts
 - `framework/logs/framework-run.jsonl`
 - `framework/docs/orchestrator-run-summary-<phase>-<run_id>.md`
-- Доп. логи/скриншоты:
+- Extra logs or screenshots:
 
 ## Impact / Severity
 - P0 | P1 | P2 | P3
 
 ## Notes
-- Что уже пробовали, любые гипотезы.
+- What you already tried, and any hypotheses.

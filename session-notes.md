@@ -9,7 +9,7 @@
 - Discovery task rewritten for plain-language interview; all core tasks depend on it: `framework/tasks/discovery.md`.
 - Preflight + runner no-op toggle added to orchestrator; stronger secret redaction in export-report.
 - Migration docs filled: legacy snapshot, reverse tech spec, gap report, migration plan, risk assessment, rollback plan.
-- Added stub docs (`tech-spec-ru.md`, `tech-addendum-1-ru.md`, `inputs-required-ru.md`, `data-templates-ru.md`) and sample CSVs in `framework/data/`.
+- Added stub docs (`tech-spec.md`, `tech-addendum-1.md`, `inputs-required.md`, `data-templates.md`) and sample CSVs in `framework/data/`.
 - Discovery interview log lives at `framework/docs/discovery/interview.md` with Q1–Q5 answered.
 
 ## Interview log state (Q1–Q5 answered)

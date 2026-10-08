@@ -1,20 +1,20 @@
-# Пример гибридного workflow: Claude Code + Codex
+# Hybrid workflow example: Claude Code + Codex
 
-Этот пример показывает как комбинировать сильные стороны обоих агентов в одном проекте.
+This example shows how to combine the strengths of both agents in one project.
 
-## Сценарий
+## Scenario
 
-**Задача**: Реализовать систему уведомлений для SaaS-приложения
+**Task**: Implement a notification system for a SaaS application
 
-**Сложность**: Высокая (архитектурные решения + большой объём кода)
+**Complexity**: High (architectural decisions + a large amount of code)
 
-**Требования**:
-- In-app уведомления (колокольчик в header)
-- Email уведомления
-- Push уведомления (опционально)
-- Настройки уведомлений для пользователя
-- История уведомлений
-- Отметка как прочитанное
+**Requirements**:
+- In-app notifications (a bell in the header)
+- Email notifications
+- Push notifications (optional)
+- Notification settings for the user
+- Notification history
+- Mark as read
 
 ---
 

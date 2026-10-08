@@ -1,40 +1,40 @@
 # Backlog (self-host devframework)
 
-Основано на `docs/tech-spec-generated.md`, `docs/plan-generated.md` и интервью.
+Based on `docs/tech-spec-generated.md`, `docs/plan-generated.md`, and the interview.
 
-## P0 / MVP (обязательно для первого стабильного цикла)
-1) BKL-001 — Раздельные summary по фазам (main/post/legacy) — DONE
-   - Цель: не перезаписывать `orchestrator-run-summary.md`.
-   - Критерии: summary сохраняется в `framework/docs/orchestrator-run-summary-<phase>-<run_id>.md`
-     + ссылку на последний run писать в `orchestrator-run-summary.md`.
-2) BKL-002 — Авто‑генерация артефактов из interview — DONE
-   - Артефакты: `tech-spec-generated.md`, `plan-generated.md`,
+## P0 / MVP (required for the first stable cycle)
+1) BKL-001 — Separate summaries by phase (main/post/legacy) — DONE
+   - Goal: do not overwrite `orchestrator-run-summary.md`.
+   - Criteria: the summary is saved to `framework/docs/orchestrator-run-summary-<phase>-<run_id>.md`
+     and a link to the latest run is written to `orchestrator-run-summary.md`.
+2) BKL-002 — Auto-generation of artifacts from the interview — DONE
+   - Artifacts: `tech-spec-generated.md`, `plan-generated.md`,
      `data-inputs-generated.md`, `review/test-plan.md`.
-   - Критерии: один запуск задачи генерирует полный набор без ручной правки;
-     UNKNOWN/TODO фиксируются явно.
-3) BKL-003 — Критерий «достаточно вопросов» в discovery — DONE
-   - Критерии: фиксированный список обязательных секций + порог полноты; при
-     достижении — финальное подтверждение и переход к генерации.
-4) BKL-004 — Стандартизированный сбор баг‑репортов от хост‑проектов — DONE
-   - Критерии: единый шаблон issue/PR + автопубликация через `publish-report.py`
-     с `host_id`, `run_id`, фазой, списком артефактов.
-5) BKL-005 — Усиленная редактирование секретов в логах/отчётах — DONE
-   - Критерии: `export-report.py` удаляет/маскирует ключи/токены из env и логов,
-     в отчёте нет явных секретов при тесте с фикстурами.
+   - Criteria: a single task run generates the full set with no manual editing;
+     UNKNOWN/TODO items are recorded explicitly.
+3) BKL-003 — "Enough questions" criterion in discovery — DONE
+   - Criteria: a fixed list of required sections plus a completeness threshold; once
+     reached, a final confirmation and a move to generation.
+4) BKL-004 — Standardized collection of bug reports from host projects — DONE
+   - Criteria: a single issue/PR template plus automatic publishing through `publish-report.py`
+     with `host_id`, `run_id`, the phase, and the list of artifacts.
+5) BKL-005 — Stronger secret redaction in logs and reports — DONE
+   - Criteria: `export-report.py` removes or masks keys and tokens from env and logs,
+     and the report contains no plaintext secrets when tested with fixtures.
 
-## P1 / Следующая итерация
-6) BKL-006 — Валидации конфигурации оркестратора — DONE
-   - Критерии: понятные ошибки при конфликте worktree, пустых полях, missing prompt.
-7) BKL-007 — Обновлённый `.env` шаблон и `inputs-required-ru.md` — DONE
-   - Критерии: список секретов для Supabase/Stripe/SES/Vercel|Netlify,
-     ясные шаги запроса на креды.
-8) BKL-008 — Тесты оркестратора (unit/integration) — DONE
-   - Критерии: минимум 5 unit тестов на конфиг/lock/redact + 1 интеграционный no‑op.
-9) BKL-011 — Исключить служебные папки из legacy‑аудита
-   - Критерии: `framework/`, `framework.backup.*`, `_worktrees/` и `.git` не читаются при legacy‑audit.
+## P1 / Next iteration
+6) BKL-006 — Orchestrator configuration validation — DONE
+   - Criteria: clear errors for a worktree conflict, empty fields, and a missing prompt.
+7) BKL-007 — Updated `.env` template and `inputs-required.md` — DONE
+   - Criteria: a list of secrets for Supabase/Stripe/SES/Vercel|Netlify,
+     and clear steps for requesting credentials.
+8) BKL-008 — Orchestrator tests (unit/integration) — DONE
+   - Criteria: at least 5 unit tests for config/lock/redact plus 1 integration no-op.
+9) BKL-011 — Exclude internal folders from the legacy audit
+   - Criteria: `framework/`, `framework.backup.*`, `_worktrees/`, and `.git` are not read during the legacy audit.
 
 ## P2 / Optional
-10) BKL-009 — Улучшение UX артефактов (master‑doc + оглавление + ссылки) — DONE
-   - Критерии: единый обзорный документ с оглавлением и ссылками на детали.
-11) BKL-010 — Интеграции аналитики/наблюдаемости (опционально)
-    - Критерии: опциональные модули, не блокируют MVP.
+10) BKL-009 — Better artifact UX (master doc + table of contents + links) — DONE
+    - Criteria: a single overview document with a table of contents and links to the details.
+11) BKL-010 — Analytics and observability integrations (optional)
+    - Criteria: optional modules that do not block the MVP.

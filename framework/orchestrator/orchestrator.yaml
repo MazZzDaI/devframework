@@ -1,6 +1,6 @@
-# Оркестратор: базовая конфигурация
-# Относительные пути считаются от расположения этого файла,
-# далее все task-пути — от project_root.
+# Orchestrator: base configuration
+# Paths relative to this file are resolved first.
+# Task paths are then resolved from project_root.
 project_root: ../..
 logs_dir: framework/logs
 
@@ -20,15 +20,15 @@ reporting:
   include_review: false
   include_task_logs: false
 
-# Профили запусков. cursor — headless Grok; cursor-interactive — discovery в терминале.
-# Модель: FRAMEWORK_CURSOR_MODEL (по умолчанию grok-4.7).
+# Runner profiles. cursor is headless Grok; cursor-interactive is discovery in the terminal.
+# Model: FRAMEWORK_CURSOR_MODEL (default grok-4.7).
 runners:
   cursor:
     command: "bash framework/tools/cursor-runner.sh \"{prompt}\""
   cursor-interactive:
     command: "agent"
 
-# Задачи (пример)
+# Tasks
 tasks:
   - name: discovery
     phase: discovery

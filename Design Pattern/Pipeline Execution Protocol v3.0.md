@@ -1,107 +1,107 @@
-Это правильный вектор. Чтобы пайплайн стал исполняемым алгоритмом, каждый шаг должен содержать **механику реализации**.
+This is the right direction. For the pipeline to become an executable algorithm, every step must include **implementation mechanics**.
 
-Ниже представлен **Pipeline Execution Protocol v3.0** с прикладными инструкциями «Как это сделать» для каждого этапа.
+Below is **Pipeline Execution Protocol v3.0**, with practical "How to do it" instructions for each stage.
 
 ---
 
 # Pipeline Execution Protocol: Agentic System Design (with Implementation Guide)
 
-### 1. Формирование User Flow и точек квеста
+### 1. Building the User Flow and quest points
 
-* **Как сделать:** Провести интервью с пользователем, используя метод «5 Почему». Нарисовать граф, где узлы — это состояния пользователя, а ребра — действия. Каждую точку на графе пометить как достигнутый результат (Value).
-* **Инструментарий:** Mermaid.js (код) или текстовое описание связей `[A] --действие--> [B]`.
+* **How to do it:** Interview the user using the "5 Whys" method. Draw a graph where the nodes are user states and the edges are actions. Mark each point on the graph as an achieved outcome (Value).
+* **Tooling:** Mermaid.js (code) or a text description of the links `[A] --action--> [B]`.
 
-### 2. Сегментация сценариев
+### 2. Scenario segmentation
 
-* **Как сделать:** Промаркировать каждое ребро графа из п. 1. Если действие повторяется ежедневно — это **Main Flow**. Если выполняется один раз (регистрация, API-ключ) — это **Side Flow**.
-* **Инструментарий:** Таблица в Markdown с колонками `Сценарий | Тип | Частота`.
+* **How to do it:** Label every edge of the graph from step 1. If an action repeats daily, it is a **Main Flow**. If it happens once (registration, an API key), it is a **Side Flow**.
+* **Tooling:** A Markdown table with columns `Scenario | Type | Frequency`.
 
-### 3. Определение диалоговых сцен
+### 3. Defining dialogue scenes
 
-* **Как сделать:** Описать «входные условия» (какие данные уже есть) и «выходные условия» (что изменилось). Спроектировать сценарий как серию шагов: Запрос -> Валидация -> Ответ системы.
-* **Инструментарий:** Схема переходов состояний (FSM).
+* **How to do it:** Describe the "entry conditions" (which data already exists) and the "exit conditions" (what changed). Design the scenario as a series of steps: Request -> Validation -> System response.
+* **Tooling:** A state-transition diagram (FSM).
 
-### 4. Атомарное описание сцены (UI/Data/Logic)
+### 4. Atomic scene description (UI/Data/Logic)
 
-* **Как сделать:** Составить для каждой сцены спецификатор: список полей ввода, типы данных (string, boolean), и ID модуля бэкенда, который обрабатывает эти данные.
-* **Инструментарий:** JSON-структура описания компонентов (Schema.org style).
+* **How to do it:** For each scene, write a specifier: the list of input fields, the data types (string, boolean), and the ID of the backend module that processes that data.
+* **Tooling:** A JSON structure that describes the components (Schema.org style).
 
-### 5. Сериализация данных
+### 5. Data serialization
 
-* **Как сделать:** Собрать все артефакты из п. 1–4 в один файл. Использовать строгую иерархию, чтобы агент мог обращаться к любой сцене по ключу `project.scenes[id]`.
-* **Инструментарий:** Конвертация Markdown/текста в YAML-конфиг.
+* **How to do it:** Collect all artifacts from steps 1–4 into one file. Use a strict hierarchy so an agent can address any scene by the key `project.scenes[id]`.
+* **Tooling:** Convert Markdown/text into a YAML config.
 
-### 6. Создание Тезауруса и Стандартов
+### 6. Creating the thesaurus and standards
 
-* **Как сделать:** Выписать все сущности (например, "User", "Transaction", "Agent"). Дать им жесткое определение, чтобы ИИ не называл "User" словом "Client" в коде.
-* **Инструментарий:** Markdown-словарь (Glossary).
+* **How to do it:** List every entity (for example, "User", "Transaction", "Agent"). Give each a strict definition so the AI does not call "User" "Client" in the code.
+* **Tooling:** A Markdown glossary.
 
-### 7. Проектирование модульной архитектуры
+### 7. Designing the modular architecture
 
-* **Как сделать:** Описать формат JSON-объекта, которым обмениваются модули. Зафиксировать: "Модуль А передает Модулю Б только ID и Token".
-* **Инструментарий:** OpenAPI/Swagger спецификации.
+* **How to do it:** Describe the format of the JSON object that modules exchange. Record the rule: "Module A passes Module B only an ID and a Token".
+* **Tooling:** OpenAPI/Swagger specifications.
 
-### 8. Определение системных слоев
+### 8. Defining system layers
 
-* **Как сделать:** Прописать, где «живет» логика. Если это UI — это Frontend. Если расчеты — Backend. Если хранение — DB. Указать конкретные технологии (например, Python, React, PostgreSQL).
-* **Инструментарий:** Схема слоев (Layered Architecture Diagram).
+* **How to do it:** State where the logic lives. If it is UI, that is the Frontend. If it is calculation, that is the Backend. If it is storage, that is the DB. Name the concrete technologies (for example, Python, React, PostgreSQL).
+* **Tooling:** A layered architecture diagram.
 
-### 9. Выходной формат и Схемы
+### 9. Output format and diagrams
 
-* **Как сделать:** Собрать итоговый PDF/Markdown пакет, где текст подтвержден схемами (Flowcharts). Это «библия» проекта.
-* **Инструментарий:** Генерация документации из кода или YAML.
+* **How to do it:** Assemble the final PDF/Markdown package in which the text is backed by diagrams (flowcharts). This is the project bible.
+* **Tooling:** Documentation generated from code or YAML.
 
-### 10. Формирование Фреймворка документов
+### 10. Building the document framework
 
-* **Как сделать:** Создать структуру папок: `/docs`, `/specs`, `/logs`, `/changelog`. Инициализировать Git-репозиторий для документации.
-* **Инструментарий:** Git, Obsidian или файловая структура.
+* **How to do it:** Create the folder structure: `/docs`, `/specs`, `/logs`, `/changelog`. Initialize a Git repository for the documentation.
+* **Tooling:** Git, Obsidian, or a file structure.
 
-### 11. Модуль Валидации (The Gatekeeper)
+### 11. Validation module (The Gatekeeper)
 
-* **Как сделать:** Запустить скрипт, который проверяет: 1. Все ли ссылки в Flow ведут на существующие Сцены? 2. Все ли данные в Сценах имеют тип?
-* **Инструментарий:** JSON Schema Validator или кастомный Python-скрипт.
+* **How to do it:** Run a script that checks: 1. Do all links in the Flow point to existing Scenes? 2. Does every piece of data in the Scenes have a type?
+* **Tooling:** A JSON Schema validator or a custom Python script.
 
-### 12. План тестового покрытия
+### 12. Test coverage plan
 
-* **Как сделать:** Для каждого ребра из п. 1 написать тестовый кейс: "Если нажать Х, должен получиться результат Y".
-* **Инструментарий:** Тест-кейсы в формате Gherkin (Given/When/Then).
+* **How to do it:** For each edge from step 1, write a test case: "If X is pressed, the result must be Y".
+* **Tooling:** Test cases in Gherkin format (Given/When/Then).
 
-### 13. Документ по безопасности
+### 13. Security document
 
-* **Как сделать:** Описать матрицу ролей (кто к чему имеет доступ) и методы шифрования данных "в покое" и "в движении".
-* **Инструментарий:** Access Control Matrix (RBAC).
+* **How to do it:** Describe the role matrix (who has access to what) and the methods for encrypting data at rest and in transit.
+* **Tooling:** An access control matrix (RBAC).
 
-### 14. Декомпозиция и Оркестрация
+### 14. Decomposition and orchestration
 
-* **Как сделать:** Разбить Master Spec на мелкие задачи (Tasks). Каждая задача должна содержать входной JSON, ожидаемый выходной код и ссылку на Тезаурус.
-* **Инструментарий:** Kanban-доска или JSON-очередь задач.
+* **How to do it:** Break the Master Spec into small tasks. Each task must contain the input JSON, the expected output code, and a link to the thesaurus.
+* **Tooling:** A Kanban board or a JSON task queue.
 
-### 15. Запуск Роя и Чат-бриджей
+### 15. Launching the swarm and chat bridges
 
-* **Как сделать:** Подключить агентов к общей шине данных (например, Redis или общая папка). Настроить промпт так, чтобы при изменении функции агент писал в "чат-бридж" другим.
-* **Инструментарий:** LangGraph, CrewAI или кастомный Orchestrator на Python.
+* **How to do it:** Connect the agents to a shared data bus (for example, Redis or a shared folder). Configure the prompt so that, when a function changes, the agent writes to the chat bridge for the others.
+* **Tooling:** LangGraph, CrewAI, or a custom orchestrator in Python.
 
-### 16. Мониторинг и Логирование
+### 16. Monitoring and logging
 
-* **Как сделать:** Настроить запись каждого действия агента (Input/Output/Token usage/Error) в центральную БД.
-* **Инструментарий:** ELK Stack, Loggly или простые JSON-логи.
+* **How to do it:** Record every agent action (Input/Output/Token usage/Error) in a central database.
+* **Tooling:** ELK Stack, Loggly, or simple JSON logs.
 
-### 17. Эмуляция и Отладка
+### 17. Emulation and debugging
 
-* **Как сделать:** Запустить "песочницу", где агент-тестировщик имитирует клики пользователя по сценариям из п. 1.
-* **Инструментарий:** Playwright / Selenium для фронта, PyTest для бэкенда.
+* **How to do it:** Start a sandbox where a tester agent simulates user clicks against the scenarios from step 1.
+* **Tooling:** Playwright / Selenium for the frontend, PyTest for the backend.
 
-### 18. Сбор требований для следующей итерации
+### 18. Gathering requirements for the next iteration
 
-* **Как сделать:** Проанализировать логи ошибок и "недовыполненные" квесты. Сформировать из них список задач (Backlog) для v2.
-* **Инструментарий:** Issue Tracker (GitHub Issues / Jira).
+* **How to do it:** Analyze the error logs and the unfinished quests. Turn them into a task list (Backlog) for v2.
+* **Tooling:** An issue tracker (GitHub Issues / Jira).
 
-### 19. Управление памятью и средой
+### 19. Memory and environment management
 
-* **Как сделать:** Сохранять векторы ключевых решений в Vector DB, чтобы при запуске новой сессии агент "вспоминал" контекст проекта.
-* **Инструментарий:** Pinecone, Weaviate или локальный ChromaDB.
+* **How to do it:** Store vectors of the key decisions in a vector database so that, when a new session starts, the agent recalls the project context.
+* **Tooling:** Pinecone, Weaviate, or a local ChromaDB.
 
 ---
 
-**Что дальше?**
-Хотите, чтобы я выбрал один из критических этапов (например, **Этап 4: Описание сцены**) и подготовил для него конкретный шаблон вопроса/анкеты, который агент будет задавать вам в чате?
+**What next?**
+Would you like me to pick one of the critical stages (for example, **Stage 4: Scene description**) and prepare a concrete question or questionnaire template that the agent will ask you in chat?

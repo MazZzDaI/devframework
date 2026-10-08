@@ -1,60 +1,60 @@
-# Гибридный пайплайн: Claude Code + Codex
+# Hybrid Pipeline: Claude Code + Codex
 
-> **NOTE**: Примеры конфигураций и путей к файлам в этом документе являются иллюстративными. Реальные пути могут отличаться в зависимости от структуры вашего проекта. См. `framework/tasks/` для актуальных task definitions.
+> **NOTE**: The configuration examples and file paths in this document are illustrative. Real paths may differ depending on your project structure. See `framework/tasks/` for the current task definitions.
 
-## Философская основа
+## Philosophical basis
 
-**Ключевой инсайт**: Claude Code и Codex — не конкуренты, а **комплементарные инструменты**.
+**Key insight**: Claude Code and Codex are not competitors. They are **complementary tools**.
 
-Вместо выбора "или-или", можно использовать "и-и" в рамках одного workflow.
+Instead of choosing "either-or", you can use "both" inside one workflow.
 
-## Сильные стороны каждого агента
+## Strengths of each agent
 
 ### Claude Code
-✅ **Глубокий анализ** — понимает архитектуру проекта
-✅ **Следование паттернам** — имитирует стиль кода
-✅ **Безопасность** — консервативен, не спешит
-✅ **Планирование** — хорош в design phase
-✅ **Code review** — критичный взгляд на качество
+✅ **Deep analysis** — understands the project architecture
+✅ **Follows patterns** — imitates the code style
+✅ **Safety** — conservative, does not rush
+✅ **Planning** — strong in the design phase
+✅ **Code review** — a critical eye on quality
 
-❌ **Медленный** — любит уточнять и перепроверять
-❌ **Застревает** — при неоднозначности останавливается
-❌ **Не автономен** — склонен к вопросам
+❌ **Slow** — likes to clarify and double-check
+❌ **Gets stuck** — stops when something is ambiguous
+❌ **Not autonomous** — tends to ask questions
 
 ### Codex (OpenAI)
-✅ **Быстрый** — додавит задачу до конца
-✅ **Автономный** — часы работы без вопросов
-✅ **Параллелизм** — может делать 10 задач одновременно
-✅ **Pragmatic** — не парится о "идеальном" коде
+✅ **Fast** — pushes a task through to the end
+✅ **Autonomous** — hours of work without questions
+✅ **Parallelism** — can do 10 tasks at once
+✅ **Pragmatic** — does not fuss over "perfect" code
 
-❌ **Менее точен архитектурно** — может не учесть паттерны
-❌ **Прагматичен до сухости** — код работает, но не элегантен
-❌ **Может пропустить детали** — в гонке за скоростью
+❌ **Less architecturally precise** — may miss existing patterns
+❌ **Pragmatic to a fault** — the code works, but it is not elegant
+❌ **May skip details** — in the rush for speed
 
-## Идея гибридного пайплайна
+## The hybrid pipeline idea
 
-**Используй каждого для того, в чём он силён:**
+**Use each agent for what it is good at:**
 
 ```
 Phase 1: Architecture & Planning
   → Claude Code (Interactive)
-  → Детальный архитектурный план
-  → Все решения задокументированы
+  → Detailed architectural plan
+  → Every decision documented
 
 Phase 2: Implementation
   → Codex (Autonomous)
-  → Реализация по плану
-  → Быстро, без вопросов
+  → Implementation from the plan
+  → Fast, with no questions
 
 Phase 3: Review & Polish
   → Claude Code (Interactive)
-  → Проверка качества
-  → Соответствие стилю проекта
+  → Quality check
+  → Match the project style
 ```
 
-## Дизайн пайплайна
+## Pipeline design
 
-### Вариант 1: Sequential (последовательный)
+### Option 1: Sequential
 
 ```
 ┌─────────────────────┐
@@ -152,28 +152,28 @@ Phase 3: Review & Polish
 }
 ```
 
-#### Преимущества Sequential
+#### Advantages of Sequential
 
-✅ Чёткое разделение ответственности
-✅ Каждый агент делает то, что умеет лучше
-✅ Легко отладить (каждая фаза изолирована)
-✅ Можно пропустить фазы (напр., skip review для простых задач)
+✅ Clear separation of responsibility
+✅ Each agent does what it does best
+✅ Easy to debug (each phase is isolated)
+✅ You can skip phases (for example, skip review for simple tasks)
 
-#### Недостатки Sequential
+#### Drawbacks of Sequential
 
-❌ Медленнее (последовательное выполнение)
-❌ Нет обратной связи между фазами (Codex не может спросить Claude)
-❌ Жёсткая структура (сложно адаптировать на лету)
+❌ Slower (sequential execution)
+❌ No feedback between phases (Codex cannot ask Claude)
+❌ Rigid structure (hard to adapt on the fly)
 
 ---
 
-### Вариант 2: Fallback (эскалация при застревании)
+### Option 2: Fallback (escalation when stuck)
 
 ```
 ┌─────────────────────┐
 │  Start: Claude Code │
 │  Mode: Autonomous   │
-│  (с протоколом)     │
+│  (with protocol)    │
 └──────────┬──────────┘
            │
            ↓
@@ -238,7 +238,7 @@ Phase 3: Review & Polish
 }
 ```
 
-#### Контекстная передача при эскалации
+#### Context handoff on escalation
 
 ```python
 class ContextHandoff:
@@ -312,22 +312,22 @@ This task was started by {context['original_agent']} but is being handed off to 
         Path(path).write_text(content)
 ```
 
-#### Преимущества Fallback
+#### Advantages of Fallback
 
-✅ Best of both worlds — попытка с Claude, финиш с Codex
-✅ Автоматическое разблокирование застрявших задач
-✅ Оптимизация времени (не ждём пока Claude спросит)
-✅ Сохранение контекста (Codex видит что сделал Claude)
+✅ Best of both worlds — try with Claude, finish with Codex
+✅ Automatic unblocking of stuck tasks
+✅ Time optimization (do not wait until Claude asks)
+✅ Context is preserved (Codex sees what Claude did)
 
-#### Недостатки Fallback
+#### Drawbacks of Fallback
 
-❌ Сложнее отладить (переключение между агентами)
-❌ Риск потери контекста при передаче
-❌ Дополнительный overhead на мониторинг
+❌ Harder to debug (switching between agents)
+❌ Risk of losing context during the handoff
+❌ Extra overhead for monitoring
 
 ---
 
-### Вариант 3: Parallel (параллельная работа с консенсусом)
+### Option 3: Parallel (parallel work with consensus)
 
 ```
                  ┌──────────────┐
@@ -350,16 +350,16 @@ This task was started by {context['original_agent']} but is being handed off to 
                  └──────────────┘
 ```
 
-**Концепция**: Разбить задачу на параллельные подзадачи, дать Claude и Codex разные части.
+**Concept**: Split the task into parallel subtasks and give Claude and Codex different parts.
 
-#### Пример разбиения
+#### Split example
 
 **Task**: "Implement user authentication"
 
 **Subtasks**:
-- **A (Claude Code)**: Database schema + RLS policies (требует архитектурной точности)
-- **B (Codex)**: API endpoints implementation (более механическая работа)
-- **C (Claude Code)**: Frontend integration + UX (требует понимания паттернов)
+- **A (Claude Code)**: Database schema + RLS policies (needs architectural precision)
+- **B (Codex)**: API endpoints implementation (more mechanical work)
+- **C (Claude Code)**: Frontend integration + UX (needs an understanding of patterns)
 
 #### Orchestrator config
 
@@ -403,21 +403,21 @@ This task was started by {context['original_agent']} but is being handed off to 
 }
 ```
 
-#### Преимущества Parallel
+#### Advantages of Parallel
 
-✅ Максимальная скорость (параллельная работа)
-✅ Оптимальное использование сильных сторон каждого
-✅ Масштабируемость (можно добавить больше агентов)
+✅ Maximum speed (parallel work)
+✅ Optimal use of each agent's strengths
+✅ Scalability (you can add more agents)
 
-#### Недостатки Parallel
+#### Drawbacks of Parallel
 
-❌ Сложность координации (зависимости между подзадачами)
-❌ Риск конфликтов при merge
-❌ Требует умного разбиения задачи на независимые части
+❌ Coordination complexity (dependencies between subtasks)
+❌ Risk of conflicts on merge
+❌ Requires a smart split into independent parts
 
 ---
 
-### Вариант 4: Collaborative (совместная работа)
+### Option 4: Collaborative (working together)
 
 ```
 ┌─────────────────────────────────────┐
@@ -436,15 +436,15 @@ This task was started by {context['original_agent']} but is being handed off to 
 └─────────────────────────────────────┘
 ```
 
-**Концепция**: Агенты работают вместе, как команда. Claude планирует и ревьюит, Codex реализует.
+**Concept**: The agents work together, like a team. Claude plans and reviews, Codex implements.
 
 #### Workflow
 
-1. **Claude** создаёт детальный план
-2. **Codex** реализует по плану
-3. **Claude** ревьюит, находит проблемы
-4. **Codex** исправляет
-5. **Claude** аппрувит → Done
+1. **Claude** creates a detailed plan
+2. **Codex** implements from the plan
+3. **Claude** reviews and finds problems
+4. **Codex** fixes them
+5. **Claude** approves → Done
 
 #### Orchestrator config
 
@@ -495,49 +495,49 @@ This task was started by {context['original_agent']} but is being handed off to 
 }
 ```
 
-#### Преимущества Collaborative
+#### Advantages of Collaborative
 
-✅ Качество + скорость (каждый делает своё)
-✅ Итеративное улучшение (цикл review-fix)
-✅ Естественное разделение ролей (архитектор vs исполнитель)
+✅ Quality + speed (each does its own part)
+✅ Iterative improvement (review-fix cycle)
+✅ Natural split of roles (architect vs executor)
 
-#### Недостатки Collaborative
+#### Drawbacks of Collaborative
 
-❌ Сложная оркестрация (много шагов)
-❌ Медленнее простого sequential (несколько итераций)
-❌ Требует хорошей интеграции между агентами
-
----
-
-## Рекомендации по выбору варианта
-
-### Sequential — когда:
-- Задача имеет чёткие фазы (design → build → review)
-- Не критично время выполнения
-- Важна прослеживаемость процесса
-
-### Fallback — когда:
-- Хотите попробовать Claude, но нужна гарантия завершения
-- Задача может быть неоднозначной
-- Важна автономность
-
-### Parallel — когда:
-- Задача легко делится на независимые подзадачи
-- Критично время (нужна максимальная скорость)
-- Есть чёткое понимание что кому давать
-
-### Collaborative — когда:
-- Сложная задача с высокими требованиями к качеству
-- Готовы потратить больше времени ради лучшего результата
-- Есть хорошая интеграция между агентами
+❌ Complex orchestration (many steps)
+❌ Slower than simple sequential (several iterations)
+❌ Requires good integration between agents
 
 ---
 
-## Реализация в devframework
+## Recommendations for choosing an option
 
-### Минимальный вариант (быстрый старт)
+### Sequential — when:
+- The task has clear phases (design → build → review)
+- Execution time is not critical
+- Process traceability matters
 
-Добавить в `orchestrator.json` новое поле `workflow_type`:
+### Fallback — when:
+- You want to try Claude, but you need a guarantee of completion
+- The task may be ambiguous
+- Autonomy matters
+
+### Parallel — when:
+- The task splits easily into independent subtasks
+- Time is critical (you need maximum speed)
+- You have a clear idea of what to give to whom
+
+### Collaborative — when:
+- A complex task with high quality requirements
+- You are willing to spend more time for a better result
+- The agents are well integrated
+
+---
+
+## Implementation in devframework
+
+### Minimal option (quick start)
+
+Add a new `workflow_type` field to `orchestrator.json`:
 
 ```json
 {
@@ -558,9 +558,9 @@ This task was started by {context['original_agent']} but is being handed off to 
 }
 ```
 
-### Полная версия (production)
+### Full version (production)
 
-Создать `framework/orchestrator/workflows.py`:
+Create `framework/orchestrator/workflows.py`:
 
 ```python
 class WorkflowEngine:
@@ -582,21 +582,21 @@ class WorkflowEngine:
 
 ---
 
-## Метрики эффективности гибридного подхода
+## Effectiveness metrics for the hybrid approach
 
-Сравнить с baseline (только Claude или только Codex):
+Compare against a baseline (Claude only or Codex only):
 
-| Метрика | Только Claude | Только Codex | Hybrid Sequential | Hybrid Fallback |
-|---------|---------------|--------------|-------------------|-----------------|
-| Время выполнения | 100% | 50% | 75% | 60% |
-| Качество кода | 95% | 75% | 90% | 85% |
-| Автономность | 40% | 95% | 70% | 90% |
-| Следование паттернам | 95% | 70% | 90% | 80% |
+| Metric | Claude only | Codex only | Hybrid Sequential | Hybrid Fallback |
+|--------|-------------|------------|-------------------|-----------------|
+| Execution time | 100% | 50% | 75% | 60% |
+| Code quality | 95% | 75% | 90% | 85% |
+| Autonomy | 40% | 95% | 70% | 90% |
+| Following patterns | 95% | 70% | 90% | 80% |
 
-*(гипотетические значения для демонстрации)*
+*(hypothetical values for illustration)*
 
 ---
 
-**Статус**: Концептуальный дизайн, готов к прототипированию
-**Следующий шаг**: Выбрать один вариант для MVP
-**Рекомендация**: Начать с Sequential (проще всего) или Fallback (больше пользы)
+**Status**: Conceptual design, ready to prototype
+**Next step**: Pick one option for an MVP
+**Recommendation**: Start with Sequential (simplest) or Fallback (more useful)

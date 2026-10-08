@@ -1,17 +1,17 @@
-# Отчёт независимого ревью
+# Independent review report
 
-## Общее впечатление
+## Overall impression
 - 
 
-## Найденные проблемы (по приоритету)
+## Issues found (by priority)
 - **P0**: 
 - **P1**: 
 - **P2**: 
 - **P3**: 
 
-## Риски и предположения
+## Risks and assumptions
 - 
 
-## Покрытие тестами
-- Что проверено:
-- Что требует доп. тестов:
+## Test coverage
+- What was verified:
+- What needs additional tests:

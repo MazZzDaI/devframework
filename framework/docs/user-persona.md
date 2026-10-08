@@ -1,10 +1,10 @@
 # User Persona (Primary)
 
-- **Кто**: Доменный эксперт/продуктовый владелец. Может хорошо формулировать пользовательские сценарии, бизнес-правила и дизайн, но **не знаком с разработкой/DevOps/CI/CD/ветками/CLI**.
-- **Цель**: Один раз подробно рассказать о продукте (готов потратить 60–90 минут), дальше ожидать, что система сама подготовит ТЗ, план, тест‑план, данные и соберёт релиз‑кандидат без его участия.
-- **UX ожидания**:
-  - Вопросы на языке пользователя, без жаргона (git, worktree, CI, runner, env не употреблять).
-  - Проверка понимания: перефразировать ключевые ответы, спрашивать «так верно?» простыми словами.
-  - Показывать прогресс (секции интервью), не требовать технических действий.
-- **Материалы, которые он может дать**: описания флоу, мокапы, ссылки, примеры данных; не ожидается знание форматов CSV/JSON/SQL.
-- **Что он не делает**: не настраивает окружение, не запускает скрипты, не пишет код.
+- **Who**: A domain expert and product owner. They can describe user scenarios, business rules, and design clearly, and they are **not familiar with development, DevOps, CI/CD, branches, or the CLI**.
+- **Goal**: Explain the product once in detail (willing to spend 60–90 minutes), then expect the system to prepare the specification, plan, test plan, and data and to assemble a release candidate without further participation.
+- **UX expectations**:
+  - Questions in plain English, without jargon (do not use git, worktree, CI, runner, or env).
+  - Check understanding: restate key answers and ask "is that right?" in simple words.
+  - Show interview progress by section. Do not ask the user to take technical actions.
+- **Materials they can provide**: flow descriptions, mockups, links, and data examples. Do not expect them to know CSV, JSON, or SQL formats.
+- **What they do not do**: they do not configure an environment, run scripts, or write code.

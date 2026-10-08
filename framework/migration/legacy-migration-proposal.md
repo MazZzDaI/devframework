@@ -1,13 +1,13 @@
 # Legacy Migration Proposal
 
-## Что предлагается сделать
+## What is proposed
 - 
 
-## Ожидаемый эффект
+## Expected effect
 - 
 
-## Риски
+## Risks
 - 
 
-## Требуемые проверки
+## Required checks
 - 

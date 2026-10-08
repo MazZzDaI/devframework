@@ -11,7 +11,7 @@ The immediate focus is establishing the **Memory Bank** documentation structure 
 
 ## Active Decisions
 - **Documentation First**: We are prioritizing documenting the existing system state before proceeding with any implementation or modification tasks.
-- **Language**: The user communicates in Russian, so interactive responses will be in Russian, while the documentation artifacts are being kept in English (as per the existing project structure and standard practice, though this can be adapted if requested).
+- **Language**: Every document, prompt, question, and reply in this repository is English.
 
 ## Next Steps
 1. Complete the memory bank initialization (`activeContext.md` and `progress.md`).

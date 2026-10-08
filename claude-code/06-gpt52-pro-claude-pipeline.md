@@ -1,72 +1,72 @@
-# GPT-5.2 Pro + Claude Code: Архитектор + Исполнитель
+# GPT-5.2 Pro + Claude Code: Architect + Executor
 
-> **NOTE**: В этом документе используются примерные пути к файлам (formal-spec.md, architecture-decisions.md, review-report.md и др.). Эти файлы **будут генерироваться** агентами во время выполнения задач. Пути указаны для иллюстрации структуры.
+> **NOTE**: This document uses example file paths (formal-spec.md, architecture-decisions.md, review-report.md, and others). These files **will be generated** by agents while tasks run. The paths are shown to illustrate the structure.
 
-## Концепция
+## Concept
 
-**Ключевая идея**: Использовать сильные стороны обоих агентов в одном пайплайне.
+**Key idea**: Use the strengths of both agents in one pipeline.
 
 ```
-GPT-5.2 Pro reasoning → Устраняет неоднозначности
+GPT-5.2 Pro reasoning → Removes ambiguities
          ↓
-Claude Code → Может работать автономно
+Claude Code → Can work autonomously
 ```
 
-## Почему эта связка работает
+## Why this pairing works
 
-### Проблема Claude Code
-❌ Задаёт много вопросов из-за неоднозначностей в ТЗ
-❌ Останавливается при неопределённости
-❌ Требует постоянного участия пользователя
+### The Claude Code problem
+❌ Asks many questions because the spec is ambiguous
+❌ Stops when something is uncertain
+❌ Requires constant user involvement
 
-### Сила GPT-5.2 Pro reasoning
-✅ Формализует требования до машиночитаемого уровня
-✅ Выявляет противоречия и дырки
-✅ Описывает инварианты, edge cases, критерии
-✅ Создаёт детальную архитектуру
+### The strength of GPT-5.2 Pro reasoning
+✅ Formalizes requirements to a machine-readable level
+✅ Finds contradictions and gaps
+✅ Describes invariants, edge cases, and criteria
+✅ Creates a detailed architecture
 
-### Результат
-✅ Claude Code получает настолько детальный спек, что **не нужно задавать вопросы**
-✅ Автономная работа часами без прерываний
-✅ Высокое качество кода (сильная сторона Claude)
-✅ Security audit от GPT-5.2 Pro на финальной стадии
+### Result
+✅ Claude Code gets a spec so detailed that **it does not need to ask questions**
+✅ Autonomous work for hours without interruptions
+✅ High code quality (Claude's strength)
+✅ A security audit from GPT-5.2 Pro at the final stage
 
 ---
 
-## Архитектура пайплайна
+## Pipeline architecture
 
 ```
 ┌─────────────────────────────────────────────────────┐
 │ USER INPUT                                          │
-│ "Реализовать систему уведомлений с email и push"   │
+│ "Implement a notification system with email and push" │
 └──────────────────┬──────────────────────────────────┘
                    │
                    ↓
 ┌─────────────────────────────────────────────────────┐
 │ PHASE 1: FORMAL SPECIFICATION                       │
 │ Agent: GPT-5.2 Pro reasoning                        │
-│ Mode: Interactive (задаёт вопросы пользователю)     │
+│ Mode: Interactive (asks the user questions)         │
 │ Duration: 45-90 min                                 │
 │                                                     │
-│ Процесс:                                            │
-│ 1. Анализирует требования                          │
-│ 2. Задаёт уточняющие вопросы                       │
-│ 3. Формализует архитектуру                         │
-│ 4. Описывает инварианты                            │
-│ 5. Определяет acceptance criteria                  │
-│ 6. Создаёт test matrix                             │
+│ Process:                                            │
+│ 1. Analyzes the requirements                       │
+│ 2. Asks clarifying questions                       │
+│ 3. Formalizes the architecture                     │
+│ 4. Describes invariants                            │
+│ 5. Defines acceptance criteria                     │
+│ 6. Creates a test matrix                           │
 │                                                     │
 │ Output:                                             │
-│ - formal-spec.md (детальная спецификация)          │
+│ - formal-spec.md (detailed specification)          │
 │ - architecture-decisions.md (ADR)                  │
-│ - test-plan.md (тест-план)                         │
+│ - test-plan.md (test plan)                         │
 └──────────────────┬──────────────────────────────────┘
                    │
                    ↓
 ┌─────────────────────────────────────────────────────┐
 │ PHASE 2: IMPLEMENTATION                             │
 │ Agent: Claude Code                                  │
-│ Mode: AUTONOMOUS (без вопросов!)                    │
+│ Mode: AUTONOMOUS (no questions!)                    │
 │ Duration: 2-6 hours                                 │
 │                                                     │
 │ Input:                                              │
@@ -74,24 +74,24 @@ Claude Code → Может работать автономно
 │ - architecture-decisions.md                         │
 │ - autonomous-mode-protocol.md                       │
 │                                                     │
-│ Почему автономен:                                   │
-│ ✓ Все архитектурные решения приняты               │
-│ ✓ Технологии выбраны                               │
-│ ✓ Edge cases описаны                               │
-│ ✓ Критерии готовности явные                        │
-│ ✓ Паттерны указаны                                 │
+│ Why it is autonomous:                               │
+│ ✓ All architectural decisions are made            │
+│ ✓ Technologies are chosen                          │
+│ ✓ Edge cases are described                         │
+│ ✓ Done criteria are explicit                       │
+│ ✓ Patterns are specified                           │
 │                                                     │
-│ Процесс:                                            │
-│ 1. Читает formal-spec.md                           │
-│ 2. Реализует по спецификации                       │
-│ 3. Следует паттернам проекта                       │
-│ 4. Пишет тесты согласно test-plan.md              │
-│ 5. Документирует решения в handoff.md             │
+│ Process:                                            │
+│ 1. Reads formal-spec.md                            │
+│ 2. Implements from the specification               │
+│ 3. Follows project patterns                        │
+│ 4. Writes tests according to test-plan.md         │
+│ 5. Documents decisions in handoff.md              │
 │                                                     │
 │ Output:                                             │
-│ - Реализованная функциональность                   │
-│ - Тесты (unit + integration)                       │
-│ - handoff.md (документация решений)                │
+│ - Implemented functionality                        │
+│ - Tests (unit + integration)                       │
+│ - handoff.md (decision documentation)              │
 └──────────────────┬──────────────────────────────────┘
                    │
                    ↓
@@ -102,49 +102,49 @@ Claude Code → Может работать автономно
 │ Duration: 30-60 min                                 │
 │                                                     │
 │ Input:                                              │
-│ - formal-spec.md (оригинальная спецификация)       │
-│ - Код от Claude Code                               │
-│ - handoff.md (решения Claude)                      │
+│ - formal-spec.md (original specification)          │
+│ - Code from Claude Code                            │
+│ - handoff.md (Claude's decisions)                  │
 │                                                     │
-│ Процесс:                                            │
-│ 1. Проверяет соответствие спецификации             │
-│ 2. Ищет логические баги                            │
-│ 3. Проверяет инварианты                            │
-│ 4. Находит race conditions                         │
+│ Process:                                            │
+│ 1. Checks conformance to the specification         │
+│ 2. Looks for logic bugs                            │
+│ 3. Checks invariants                               │
+│ 4. Finds race conditions                           │
 │ 5. Security audit                                  │
-│ 6. Проверяет edge cases                            │
+│ 6. Checks edge cases                               │
 │                                                     │
 │ Output:                                             │
 │ - review-report.md                                  │
-│   - Critical issues (блокируют мерж)               │
-│   - Warnings (желательно исправить)                │
-│   - Suggestions (опциональные улучшения)           │
+│   - Critical issues (block the merge)              │
+│   - Warnings (should be fixed)                     │
+│   - Suggestions (optional improvements)            │
 └──────────────────┬──────────────────────────────────┘
                    │
-              [Если найдены critical issues]
+              [If critical issues are found]
                    │
                    ↓
 ┌─────────────────────────────────────────────────────┐
-│ PHASE 4: FIXES (опционально)                        │
+│ PHASE 4: FIXES (optional)                           │
 │ Agent: Claude Code                                  │
 │ Mode: Autonomous                                    │
 │ Duration: 30-90 min                                 │
 │                                                     │
-│ Input: review-report.md (только critical issues)    │
-│ Исправляет найденные критичные проблемы            │
+│ Input: review-report.md (critical issues only)      │
+│ Fixes the critical problems that were found        │
 │                                                     │
-│ Output: Исправленный код                            │
+│ Output: Fixed code                                  │
 └──────────────────┬──────────────────────────────────┘
                    │
                    ↓
-              [ГОТОВО]
+              [DONE]
 ```
 
 ---
 
-## Шаблон Formal Specification от GPT-5.2 Pro
+## Formal Specification template from GPT-5.2 Pro
 
-### Структура документа `formal-spec.md`
+### Structure of `formal-spec.md`
 
 ```markdown
 # Formal Specification: [Feature Name]
@@ -157,13 +157,13 @@ Claude Code → Может работать автономно
 
 ## 1. EXECUTIVE SUMMARY
 
-**What**: [Краткое описание фичи в 2-3 предложениях]
+**What**: [A short description of the feature in 2-3 sentences]
 
-**Why**: [Бизнес-обоснование, зачем это нужно]
+**Why**: [The business reason this is needed]
 
-**Success Criteria**: [Как измерить успех]
-- Metric 1: [конкретная метрика]
-- Metric 2: [конкретная метрика]
+**Success Criteria**: [How to measure success]
+- Metric 1: [a concrete metric]
+- Metric 2: [a concrete metric]
 
 ---
 
@@ -172,7 +172,7 @@ Claude Code → Может работать автономно
 ### 2.1 Core Features (Must Have)
 
 #### Feature 1: [Name]
-**Description**: [Детальное описание]
+**Description**: [Detailed description]
 
 **User Story**: As a [role], I want [action], so that [benefit]
 
@@ -180,27 +180,27 @@ Claude Code → Может работать автономно
 - [ ] Given [precondition], when [action], then [expected result]
 - [ ] Given [precondition], when [action], then [expected result]
 
-**Invariants** (условия, которые ВСЕГДА должны быть true):
-- Invariant 1: [формальное описание]
-- Invariant 2: [формальное описание]
+**Invariants** (conditions that must ALWAYS be true):
+- Invariant 1: [formal description]
+- Invariant 2: [formal description]
 
 **Edge Cases**:
-- Case 1: [описание] → Expected behavior: [что должно произойти]
-- Case 2: [описание] → Expected behavior: [что должно произойти]
+- Case 1: [description] → Expected behavior: [what should happen]
+- Case 2: [description] → Expected behavior: [what should happen]
 
 ---
 
 ### 2.2 Optional Features (Should Have)
 
-[Аналогичная структура для опциональных фич]
+[The same structure for optional features]
 
 ---
 
 ### 2.3 Out of Scope
 
 **Explicitly NOT included**:
-- Item 1: [что не входит] — Reason: [почему]
-- Item 2: [что не входит] — Reason: [почему]
+- Item 1: [what is excluded] — Reason: [why]
+- Item 2: [what is excluded] — Reason: [why]
 
 ---
 
@@ -208,7 +208,7 @@ Claude Code → Может работать автономно
 
 ### 3.1 Technology Stack
 
-**Confirmed Choices** (уже приняты, НЕ менять):
+**Confirmed Choices** (already decided, do NOT change):
 
 | Component | Technology | Rationale |
 |-----------|-----------|-----------|
@@ -218,7 +218,7 @@ Claude Code → Может работать автономно
 | Styling | Tailwind CSS | Project standard |
 | Testing | Jest + React Testing Library | Project standard |
 
-**New Dependencies** (нужно добавить):
+**New Dependencies** (need to be added):
 - Package: `nodemailer` — Purpose: Email sending
 - Package: `web-push` — Purpose: Push notifications
 
@@ -684,7 +684,7 @@ INSERT INTO notifications (user_id, type, title, body) VALUES
 
 ---
 
-## Интеграция в orchestrator.json
+## Integration into orchestrator.json
 
 ```json
 {
@@ -783,104 +783,104 @@ INSERT INTO notifications (user_id, type, title, body) VALUES
 
 ---
 
-## Полный пример workflow
+## Full workflow example
 
-### Шаг 1: Пользователь даёт задачу GPT-5.2 Pro
+### Step 1: The user gives the task to GPT-5.2 Pro
 
 **Input**: `prompts/notifications-initial-request.md`
 
 ```markdown
-Нужно реализовать систему уведомлений для SaaS-приложения.
+We need to implement a notification system for a SaaS application.
 
-Требования:
-- In-app уведомления (колокольчик в header)
-- Email уведомления
-- Push notifications (опционально)
-- Пользователь может отмечать как прочитанное
-- История уведомлений
+Requirements:
+- In-app notifications (a bell in the header)
+- Email notifications
+- Push notifications (optional)
+- The user can mark notifications as read
+- Notification history
 
-Стек: Node.js, React, PostgreSQL
+Stack: Node.js, React, PostgreSQL
 ```
 
-### Шаг 2: GPT-5.2 Pro задаёт вопросы
+### Step 2: GPT-5.2 Pro asks questions
 
 ```
-GPT-5.2: "Уточню несколько моментов для полной спецификации:
+GPT-5.2: "I will clarify a few points so the specification is complete:
 
-1. Email уведомления:
-   - Использовать существующий email provider или нужен новый?
-   - Какие триггеры для email? (сразу, дайджест раз в день, настраиваемо?)
+1. Email notifications:
+   - Use the existing email provider, or do we need a new one?
+   - What triggers email? (immediately, a once-a-day digest, or configurable?)
 
-2. In-app уведомления:
-   - Real-time (WebSocket) или polling?
-   - Нужна ли группировка похожих уведомлений?
+2. In-app notifications:
+   - Real-time (WebSocket) or polling?
+   - Do similar notifications need to be grouped?
 
 3. Push notifications:
-   - Web Push (Service Workers) или native apps тоже?
-   - Defer в Phase 2 или реализовать сразу?
+   - Web Push (Service Workers), or native apps as well?
+   - Defer to Phase 2, or implement it now?
 
-4. Архитектура:
-   - Notifications как отдельный микросервис или часть монолита?
-   - Нужна ли очередь (Redis/RabbitMQ) или синхронно?
+4. Architecture:
+   - Notifications as a separate microservice, or part of the monolith?
+   - Do we need a queue (Redis/RabbitMQ), or is synchronous enough?
 
 5. Privacy & Security:
-   - Могут ли уведомления содержать sensitive data?
-   - Как долго хранить (retention policy)?
+   - Can notifications contain sensitive data?
+   - How long should we keep them (retention policy)?
 ```
 
-### Шаг 3: Пользователь отвечает
+### Step 3: The user answers
 
 ```
 User: "
-1. Email - использовать существующий SendGrid, триггер сразу
-2. In-app - polling проще, real-time defer в Phase 2
-3. Push - defer в Phase 2 совсем
-4. Архитектура - часть монолита, синхронно
-5. Privacy - нет sensitive data, хранить 90 дней
+1. Email — use the existing SendGrid, trigger immediately
+2. In-app — polling is simpler; defer real-time to Phase 2
+3. Push — defer it entirely to Phase 2
+4. Architecture — part of the monolith, synchronous
+5. Privacy — no sensitive data, keep for 90 days
 "
 ```
 
-### Шаг 4: GPT-5.2 Pro создаёт formal-spec.md
+### Step 4: GPT-5.2 Pro creates formal-spec.md
 
-(См. шаблон выше — полный документ на ~20KB с детализацией каждого аспекта)
+(See the template above — a full ~20KB document that spells out every aspect)
 
-### Шаг 5: Claude Code реализует автономно
+### Step 5: Claude Code implements it autonomously
 
-**Запуск**:
+**Launch**:
 ```bash
 python orchestrator.py --phase implementation --task notifications-feature
 ```
 
-**Что происходит**:
-1. Claude Code читает `formal-spec.md`
-2. Видит что все решения приняты (email = SendGrid, polling, монолит, etc)
-3. Читает паттерны из reference files
-4. Реализует:
-   - Database migration (20 мин)
-   - API endpoints (90 мин)
-   - React components (80 мин)
-   - Tests (40 мин)
-5. Документирует решения в `handoff.md`
-6. **Ноль вопросов к пользователю** (всё было в спеке)
+**What happens**:
+1. Claude Code reads `formal-spec.md`
+2. Sees that every decision is already made (email = SendGrid, polling, monolith, and so on)
+3. Reads patterns from the reference files
+4. Implements:
+   - Database migration (20 min)
+   - API endpoints (90 min)
+   - React components (80 min)
+   - Tests (40 min)
+5. Documents decisions in `handoff.md`
+6. **Zero questions to the user** (everything was in the spec)
 
-### Шаг 6: GPT-5.2 Pro делает review
+### Step 6: GPT-5.2 Pro reviews the code
 
 **Input**:
-- `formal-spec.md` (оригинальная спецификация)
-- `git diff main...notifications-branch` (код от Claude)
-- `handoff.md` (решения Claude)
+- `formal-spec.md` (the original specification)
+- `git diff main...notifications-branch` (code from Claude)
+- `handoff.md` (Claude's decisions)
 
 **Process**:
 ```
-GPT-5.2 Pro анализирует:
+GPT-5.2 Pro analyzes:
 
-✓ Соответствие спецификации
-✓ Инварианты соблюдены (read_at monotonic, user_id always valid)
-✓ Security: RLS policies работают
-✓ Edge cases обработаны
-⚠ Найдено: Race condition в markAsRead (два параллельных запроса)
-⚠ Найдено: Missing index на notifications.created_at
-✓ Accessibility: ARIA labels присутствуют
+✓ Conformance to the specification
+✓ Invariants hold (read_at monotonic, user_id always valid)
+✓ Security: RLS policies work
+✓ Edge cases are handled
+⚠ Found: race condition in markAsRead (two parallel requests)
+⚠ Found: missing index on notifications.created_at
+✓ Accessibility: ARIA labels are present
 ```
 
 **Output**: `review-report.md`
@@ -892,7 +892,7 @@ GPT-5.2 Pro анализирует:
 Implementation matches specification 95%.
 Found 2 issues: 1 critical, 1 warning.
 
-## Critical Issues (блокируют мерж)
+## Critical Issues (block the merge)
 
 ### Issue 1: Race Condition in markAsRead
 **File**: `src/api/notifications/markRead.ts:23`
@@ -927,7 +927,7 @@ if (result.rows.length === 0) {
 
 ---
 
-## Warnings (желательно исправить)
+## Warnings (should be fixed)
 
 ### Issue 2: Missing Index
 **File**: `framework/migration/007_create_notifications.sql`
@@ -947,7 +947,7 @@ CREATE INDEX idx_notifications_user_created ON notifications(user_id, created_at
 
 ---
 
-## Suggestions (опциональные улучшения)
+## Suggestions (optional improvements)
 
 1. Consider adding `updated_at` trigger for audit
 2. Notification `data` JSONB could use GIN index for filtering
@@ -960,27 +960,27 @@ CREATE INDEX idx_notifications_user_created ON notifications(user_id, created_at
 ❌ NOT APPROVED - Fix critical issue #1 first
 ```
 
-### Шаг 7: Claude Code исправляет critical issues
+### Step 7: Claude Code fixes the critical issues
 
-**Input**: `review-report.md` (секция Critical Issues)
+**Input**: `review-report.md` (Critical Issues section)
 
 **Process**:
 ```
 Claude Code:
-1. Читает Issue #1
-2. Применяет предложенный fix
-3. Обновляет тесты (добавляет test for race condition)
-4. Коммитит: "fix: atomic update in markAsRead to prevent race condition"
-5. Документирует в handoff.md:
+1. Reads Issue #1
+2. Applies the proposed fix
+3. Updates the tests (adds a test for the race condition)
+4. Commits: "fix: atomic update in markAsRead to prevent race condition"
+5. Documents it in handoff.md:
    "FIXED: Race condition in markAsRead (review issue #1)
     Changed to atomic UPDATE with WHERE clause"
 ```
 
-**Duration**: 15 минут
+**Duration**: 15 minutes
 
-### Шаг 8: Финальная проверка
+### Step 8: Final check
 
-GPT-5.2 Pro проверяет что fix применён:
+GPT-5.2 Pro checks that the fix was applied:
 
 ```markdown
 # Re-review: Critical Issues
@@ -996,107 +996,107 @@ GPT-5.2 Pro проверяет что fix применён:
 
 ---
 
-## Метрики эффективности
+## Effectiveness metrics
 
-### Сравнение подходов
+### Comparison of approaches
 
-| Метрика | Claude Only | GPT-5.2 Pro Only | **Pipeline** |
+| Metric | Claude Only | GPT-5.2 Pro Only | **Pipeline** |
 |---------|-------------|------------------|--------------|
-| **Время спецификации** | 30 мин (неполная) | 90 мин (полная) | **90 мин** |
-| **Вопросов во время реализации** | 15-20 | 0 | **0** ✅ |
-| **Время реализации** | 6-8 часов | 8-10 часов | **4 часа** ✅ |
-| **Багов в review** | 3-5 | 1-2 | **2** |
+| **Specification time** | 30 min (incomplete) | 90 min (complete) | **90 min** |
+| **Questions during implementation** | 15-20 | 0 | **0** ✅ |
+| **Implementation time** | 6-8 hours | 8-10 hours | **4 hours** ✅ |
+| **Bugs in review** | 3-5 | 1-2 | **2** |
 | **Critical issues** | 2-3 | 0-1 | **1** |
-| **Качество кода** | 8/10 | 7/10 | **9/10** ✅ |
-| **Security audit качество** | 6/10 | 10/10 | **10/10** ✅ |
-| **Общее время** | 7-9 часов | 9-11 часов | **6 часов** ✅ |
-| **Привязка пользователя** | Высокая | Средняя | **Низкая** ✅ |
+| **Code quality** | 8/10 | 7/10 | **9/10** ✅ |
+| **Security audit quality** | 6/10 | 10/10 | **10/10** ✅ |
+| **Total time** | 7-9 hours | 9-11 hours | **6 hours** ✅ |
+| **User tie-up** | High | Medium | **Low** ✅ |
 
-### Детализация по фазам
+### Breakdown by phase
 
 ```
 GPT-5.2 + Claude Pipeline:
 ├─ Phase 1 (Spec): 90 min [GPT-5.2 Pro, interactive]
-├─ Phase 2 (Code): 240 min [Claude Code, AUTONOMOUS] ← Нет вопросов!
+├─ Phase 2 (Code): 240 min [Claude Code, AUTONOMOUS] ← No questions!
 ├─ Phase 3 (Review): 60 min [GPT-5.2 Pro, analytical]
 └─ Phase 4 (Fixes): 30 min [Claude Code, autonomous]
 ─────────────────────────────────────────────────────
 Total: 420 min (7 hours)
 
-Из них user interaction:
-- Phase 1: 90 min (отвечает на вопросы GPT-5.2 Pro)
-- Phase 2: 0 min (автономная работа Claude) ✅
-- Phase 3: 10 min (читает review report)
-- Phase 4: 0 min (автономные фиксы)
+Of that, user interaction:
+- Phase 1: 90 min (answers GPT-5.2 Pro's questions)
+- Phase 2: 0 min (Claude works autonomously) ✅
+- Phase 3: 10 min (reads the review report)
+- Phase 4: 0 min (autonomous fixes)
 ─────────────────────────────────────────────────────
 Total user time: ~100 min (1.7 hours)
 
-Autonomy index: 76% (5.3 из 7 часов автономно)
+Autonomy index: 76% (5.3 of 7 hours autonomous)
 ```
 
-### ROI анализ
+### ROI analysis
 
-**Стоимость**:
-- ChatGPT Pro: $200/мес
-- Claude Code: включен в Anthropic API (~$50/мес)
-- **Total**: ~$250/мес
+**Cost**:
+- ChatGPT Pro: $200/mo
+- Claude Code: included in the Anthropic API (~$50/mo)
+- **Total**: ~$250/mo
 
-**Экономия времени** (на 1 фиче):
-- Без пайплайна: 9 часов
-- С пайплайном: 7 часов
-- **Saved**: 2 часа чистой работы
+**Time saved** (per feature):
+- Without the pipeline: 9 hours
+- With the pipeline: 7 hours
+- **Saved**: 2 hours of actual work
 
-**Экономия привязки**:
-- Без пайплайна: 7 часов привязки к компьютеру
-- С пайплайном: 1.7 часа привязки
-- **Freedom**: 5.3 часа можешь делать другие дела
+**Time freed from the keyboard**:
+- Without the pipeline: 7 hours tied to the computer
+- With the pipeline: 1.7 hours tied to the computer
+- **Freedom**: 5.3 hours you can spend on other work
 
-**Break-even** (при $100/час developer time):
-- Savings: 2 часа × $100 = $200 за фичу
-- Cost: $250/мес
-- Break-even: **1.25 фичи в месяц**
-
----
-
-## Практические рекомендации
-
-### Когда использовать этот пайплайн
-
-✅ **Используй когда:**
-- Фича сложная (> 4 часов реализации)
-- Важна надёжность (финансы, безопасность, данные)
-- Нужна автономность (не хочешь быть привязанным)
-- Есть бюджет на ChatGPT Pro
-- Проект долгосрочный
-
-❌ **Не используй когда:**
-- Простые CRUD (< 2 часов реализации)
-- Прототипы, эксперименты
-- Нет бюджета на Pro
-- Задача исследовательская (архитектура неясна)
-
-### Оптимизация пайплайна
-
-**Ускорить Phase 1 (Spec)**:
-- Подготовь шаблон вопросов для GPT-5.2 Pro
-- Дай ссылки на docs заранее
-- Укажи reference files в initial request
-
-**Ускорить Phase 2 (Code)**:
-- Убедись что formal-spec.md действительно полный
-- Добавь больше code examples в спек
-- Укажи явно что defer в будущее
-
-**Улучшить Phase 3 (Review)**:
-- Дай GPT-5.2 Pro доступ к test results
-- Включи security checklist в спек
-- Попроси ranked list issues (critical → warning → suggestion)
+**Break-even** (at $100/hour of developer time):
+- Savings: 2 hours × $100 = $200 per feature
+- Cost: $250/mo
+- Break-even: **1.25 features per month**
 
 ---
 
-## Альтернативные конфигурации
+## Practical recommendations
 
-### Вариант 1: Бюджетная (без GPT-5.2 Pro)
+### When to use this pipeline
+
+✅ **Use it when:**
+- The feature is complex (> 4 hours of implementation)
+- Reliability matters (finance, security, data)
+- You need autonomy (you do not want to stay tied to the machine)
+- You have budget for ChatGPT Pro
+- The project is long-term
+
+❌ **Do not use it when:**
+- Simple CRUD (< 2 hours of implementation)
+- Prototypes and experiments
+- There is no budget for Pro
+- The task is exploratory (the architecture is unclear)
+
+### Optimizing the pipeline
+
+**Speed up Phase 1 (Spec)**:
+- Prepare a question template for GPT-5.2 Pro
+- Give links to the docs up front
+- Name the reference files in the initial request
+
+**Speed up Phase 2 (Code)**:
+- Make sure formal-spec.md is actually complete
+- Add more code examples to the spec
+- State explicitly what to defer
+
+**Improve Phase 3 (Review)**:
+- Give GPT-5.2 Pro access to the test results
+- Include a security checklist in the spec
+- Ask for a ranked list of issues (critical → warning → suggestion)
+
+---
+
+## Alternative configurations
+
+### Option 1: Budget (without GPT-5.2 Pro)
 
 ```
 Claude Code (spec, interactive)
@@ -1106,17 +1106,17 @@ Codex (implementation, autonomous)
 Claude Code (review, interactive)
 ```
 
-**Плюсы**: Дешевле (~$50/мес вместо $250)
-**Минусы**: Claude будет задавать вопросы в Phase 1, менее строгий review
+**Pros**: Cheaper (~$50/mo instead of $250)
+**Cons**: Claude will ask questions in Phase 1, and the review is less strict
 
 ---
 
-### Вариант 2: Максимальное качество
+### Option 2: Maximum quality
 
 ```
 GPT-5.2 Pro (spec, interactive)
        ↓
-Claude Code (architecture, interactive) ← Добавлен шаг
+Claude Code (architecture, interactive) ← Extra step
        ↓
 Codex (implementation, autonomous)
        ↓
@@ -1125,97 +1125,97 @@ GPT-5.2 Pro (review, analytical)
 Claude Code (polish, autonomous)
 ```
 
-**Плюсы**: Максимум качества, код следует паттернам
-**Минусы**: Дольше (~8-9 часов вместо 7)
+**Pros**: Maximum quality; the code follows the patterns
+**Cons**: Longer (~8-9 hours instead of 7)
 
 ---
 
-### Вариант 3: Ультра-автономный
+### Option 3: Ultra-autonomous
 
 ```
-GPT-5.2 Pro (spec, interactive) ← Только этот шаг с пользователем
+GPT-5.2 Pro (spec, interactive) ← The only step with the user
        ↓
 Codex (implementation, autonomous)
        ↓
-GPT-5.2 Pro (review, autonomous) ← Тоже автономно!
+GPT-5.2 Pro (review, autonomous) ← Autonomous too!
        ↓
 Codex (fixes, autonomous)
 ```
 
-**Плюсы**: Максимальная автономность (пользователь только в начале)
-**Минусы**: Нужна автономная версия GPT-5.2 Pro review
+**Pros**: Maximum autonomy (the user is involved only at the start)
+**Cons**: You need an autonomous version of the GPT-5.2 Pro review
 
 ---
 
 ## Troubleshooting
 
-### Проблема: Claude всё равно задаёт вопросы
+### Problem: Claude still asks questions
 
-**Причина**: formal-spec.md недостаточно детальный
+**Cause**: formal-spec.md is not detailed enough
 
-**Решение**:
-1. Проверь что спек содержит ВСЕ секции из шаблона
-2. Добавь больше примеров кода
-3. Укажи reference files явно
-4. В следующий раз дай GPT-5.2 Pro больше времени на спек
-
----
-
-### Проблема: GPT-5.2 Pro делает спек слишком долго
-
-**Причина**: Overthinking, слишком детализирует
-
-**Решение**:
-1. Дай ограничение времени: "У тебя 60 минут на спек"
-2. Попроси "production-ready spec, не academic paper"
-3. Укажи что defer некритичные детали
-4. Дай template и скажи "заполни этот шаблон"
+**Solution**:
+1. Check that the spec contains EVERY section from the template
+2. Add more code examples
+3. Name the reference files explicitly
+4. Next time, give GPT-5.2 Pro more time for the spec
 
 ---
 
-### Проблема: Claude не находит reference files
+### Problem: GPT-5.2 Pro takes too long on the spec
 
-**Причина**: Пути в спеке неточные или файлы не существуют
+**Cause**: Overthinking; it specifies too much detail
 
-**Решение**:
-1. Проверь что reference files действительно существуют
-2. Используй relative paths от project root
-3. Дай Claude список всех files: `find src -name "*.ts" > files.txt`
-4. Включи `ls -la` output в спек
-
----
-
-### Проблема: Review находит слишком много issues
-
-**Причина**: GPT-5.2 Pro слишком строг, или Claude отклонился от спека
-
-**Решение**:
-1. Проверь что Claude читал formal-spec.md (в handoff должны быть ссылки)
-2. Если issues legitimate: улучши спек для следующего раза
-3. Если GPT-5.2 Pro nitpicky: попроси focus on critical/high severity only
-4. Calibrate: дай примеры "что считать critical vs warning"
+**Solution**:
+1. Set a time limit: "You have 60 minutes for the spec"
+2. Ask for a "production-ready spec, not an academic paper"
+3. Say to defer non-critical details
+4. Give a template and say "fill in this template"
 
 ---
 
-## Следующие шаги
+### Problem: Claude cannot find the reference files
 
-1. ✅ Прочитали документ
-2. → Решить: есть ли доступ к GPT-5.2 Pro? (ChatGPT Pro subscription)
-3. → Попробовать на одной фиче:
-   - Пусть GPT-5.2 Pro создаст formal-spec.md
-   - Claude Code реализует по спеку (проверить: сколько вопросов?)
-   - GPT-5.2 Pro сделает review
-4. → Собрать метрики (время, вопросы, качество)
-5. → Решить: оправдана ли стоимость Pro subscription?
-6. → Если да: интегрировать в orchestrator.json
-7. → Если нет: использовать бюджетный вариант (Claude-only)
+**Cause**: Paths in the spec are inaccurate, or the files do not exist
+
+**Solution**:
+1. Check that the reference files actually exist
+2. Use paths relative to the project root
+3. Give Claude a list of all files: `find src -name "*.ts" > files.txt`
+4. Include `ls -la` output in the spec
 
 ---
 
-**Статус**: ✅ Готов к использованию
-**Требует**: ChatGPT Pro subscription ($200/мес) для GPT-5.2 Pro reasoning
-**ROI**: Break-even при 1.25+ фичах в месяц
-**Автономность**: 76% времени без участия пользователя
-**Ключевая выгода**: Claude Code работает автономно благодаря детальному спеку от GPT-5.2 Pro
+### Problem: Review finds too many issues
 
-🚀 **Это финальный элемент вашей автономной архитектуры!**
+**Cause**: GPT-5.2 Pro is too strict, or Claude drifted from the spec
+
+**Solution**:
+1. Check that Claude read formal-spec.md (handoff should contain references)
+2. If the issues are legitimate: improve the spec for next time
+3. If GPT-5.2 Pro is nitpicky: ask it to focus on critical/high severity only
+4. Calibrate: give examples of "what counts as critical vs warning"
+
+---
+
+## Next steps
+
+1. ✅ Read this document
+2. → Decide: do you have access to GPT-5.2 Pro? (ChatGPT Pro subscription)
+3. → Try it on one feature:
+   - Have GPT-5.2 Pro create formal-spec.md
+   - Claude Code implements from the spec (check: how many questions?)
+   - GPT-5.2 Pro does the review
+4. → Collect metrics (time, questions, quality)
+5. → Decide: is the Pro subscription worth the cost?
+6. → If yes: integrate it into orchestrator.json
+7. → If no: use the budget option (Claude-only)
+
+---
+
+**Status**: ✅ Ready to use
+**Requires**: a ChatGPT Pro subscription ($200/mo) for GPT-5.2 Pro reasoning
+**ROI**: Break-even at 1.25+ features per month
+**Autonomy**: 76% of the time with no user involvement
+**Key benefit**: Claude Code works autonomously because of the detailed spec from GPT-5.2 Pro
+
+🚀 **This is the final piece of your autonomous architecture!**

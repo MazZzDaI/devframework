@@ -1,10 +1,10 @@
 # QA Coverage
 
-## Выполнено
+## Done
 - 
 
-## Не выполнено (и почему)
+## Not done (and why)
 - 
 
-## Покрытие по критичным флоу
+## Coverage of critical flows
 - 

@@ -1,21 +1,21 @@
-# Watchdog и эскалация застрявших задач
+# Watchdog and Escalation of Stuck Tasks
 
-## Проблема
+## Problem
 
-Claude Code в автономном режиме может **незаметно застрять**:
+Claude Code in autonomous mode can **get stuck without anyone noticing**:
 
-- Зациклился в анализе архитектуры (читает один и тот же код)
-- Ждёт ответа от несуществующего API
-- Пытается решить неразрешимую проблему
-- Попал в infinite loop размышлений
+- Loops on architecture analysis (reads the same code over and over)
+- Waits for a response from an API that does not exist
+- Tries to solve an unsolvable problem
+- Falls into an infinite loop of reasoning
 
-**Без мониторинга** задача может "висеть" часами, потребляя ресурсы.
+**Without monitoring**, a task can "hang" for hours, consuming resources.
 
-## Концепция Watchdog
+## Watchdog concept
 
-**Watchdog** — фоновый процесс, который мониторит прогресс задачи и детектирует застревание.
+A **watchdog** is a background process that monitors task progress and detects when it is stuck.
 
-### Принцип работы
+### How it works
 
 ```
 Task Start
@@ -37,11 +37,11 @@ Check Progress Indicators:
     [Notify / Retry / Switch agent]
 ```
 
-## Progress Indicators (индикаторы прогресса)
+## Progress Indicators
 
 ### 1. File System Activity
 
-**Метрика**: Timestamp последней модификации файлов в worktree
+**Metric**: Timestamp of the latest file modification in the worktree
 
 ```python
 def check_file_activity(worktree_path, threshold=300):
@@ -66,14 +66,14 @@ def check_file_activity(worktree_path, threshold=300):
     return len(recent_files) > 0, recent_files
 ```
 
-**Плюсы**: Прямой индикатор работы (код изменяется)
-**Минусы**: Агент может читать, не записывая (ложное срабатывание)
+**Pros**: A direct indicator of work (the code is changing)
+**Cons**: The agent may be reading without writing (false positive)
 
 ---
 
 ### 2. Git Commits
 
-**Метрика**: Количество новых коммитов в worktree
+**Metric**: Number of new commits in the worktree
 
 ```python
 def check_git_activity(worktree_path, since_minutes=5):
@@ -89,14 +89,14 @@ def check_git_activity(worktree_path, since_minutes=5):
     return len(commits) > 0, commits
 ```
 
-**Плюсы**: Показывает осмысленный прогресс (готовые изменения)
-**Минусы**: Агент может работать долго до первого коммита
+**Pros**: Shows meaningful progress (finished changes)
+**Cons**: The agent may work for a long time before the first commit
 
 ---
 
 ### 3. Log Growth
 
-**Метрика**: Размер лог-файла задачи растёт
+**Metric**: The task log file is growing
 
 ```python
 class LogGrowthMonitor:
@@ -124,14 +124,14 @@ class LogGrowthMonitor:
             return False, f"Log stagnant (only {growth} bytes in {elapsed:.1f}s)"
 ```
 
-**Плюсы**: Показывает что агент "думает" (выводит в лог)
-**Минусы**: Агент может спамить одно и то же (infinite loop)
+**Pros**: Shows that the agent is "thinking" (writing to the log)
+**Cons**: The agent may spam the same thing (infinite loop)
 
 ---
 
 ### 4. Process Resource Usage
 
-**Метрика**: CPU и memory usage процесса агента
+**Metric**: CPU and memory usage of the agent process
 
 ```python
 import psutil
@@ -165,14 +165,14 @@ class ProcessMonitor:
             return True, f"CPU usage normal ({avg_cpu:.1f}%)"
 ```
 
-**Плюсы**: Детектирует idle (ждёт ответа) и infinite loops (CPU spike)
-**Минусы**: Не показывает осмысленность работы (может жечь CPU впустую)
+**Pros**: Detects idle (waiting for a response) and infinite loops (CPU spike)
+**Cons**: Does not show whether the work is meaningful (can burn CPU for nothing)
 
 ---
 
 ### 5. Tool Usage Patterns
 
-**Метрика**: Какие tools вызывает агент
+**Metric**: Which tools the agent calls
 
 ```python
 class ToolUsageMonitor:
@@ -221,14 +221,14 @@ class ToolUsageMonitor:
         return "healthy", "Tool usage looks normal"
 ```
 
-**Плюсы**: Показывает **качественный** прогресс (не просто активность)
-**Минусы**: Сложнее реализовать (парсинг логов, pattern matching)
+**Pros**: Shows **qualitative** progress (not just activity)
+**Cons**: Harder to implement (log parsing, pattern matching)
 
 ---
 
 ## Composite Progress Indicator
 
-Комбинированная метрика из нескольких индикаторов:
+A combined metric from several indicators:
 
 ```python
 class ProgressWatchdog:
@@ -277,11 +277,11 @@ class ProgressWatchdog:
 
 ## Escalation Strategies
 
-Когда застревание детектировано, что делать?
+When a stall is detected, what should you do?
 
-### Strategy 1: Notify (уведомить)
+### Strategy 1: Notify
 
-Самый мягкий вариант — просто залогировать и продолжить ждать.
+The softest option — just log it and keep waiting.
 
 ```python
 def escalate_notify(task, stuck_info):
@@ -295,13 +295,13 @@ def escalate_notify(task, stuck_info):
     # send_notification(...)
 ```
 
-**Когда использовать**: Для долгих задач (> 2 часа), где 5 мин застоя нормально.
+**When to use**: For long tasks (> 2 hours), where 5 minutes of idle time is normal.
 
 ---
 
-### Strategy 2: Interrupt (прервать)
+### Strategy 2: Interrupt
 
-Попытаться "разбудить" агента через signal или API.
+Try to "wake" the agent through a signal or an API.
 
 ```python
 def escalate_interrupt(task, stuck_info):
@@ -315,13 +315,13 @@ def escalate_interrupt(task, stuck_info):
     # requests.post(f"http://localhost:{task['port']}/interrupt")
 ```
 
-**Когда использовать**: Если агент поддерживает graceful interrupts.
+**When to use**: If the agent supports graceful interrupts.
 
 ---
 
-### Strategy 3: Kill and Retry (убить и перезапустить)
+### Strategy 3: Kill and Retry
 
-Жёстко убить процесс и запустить задачу заново.
+Hard-kill the process and start the task again.
 
 ```python
 def escalate_kill_retry(task, stuck_info):
@@ -345,13 +345,13 @@ def escalate_kill_retry(task, stuck_info):
         mark_task_failed(task)
 ```
 
-**Когда использовать**: Для коротких задач (< 1 час), когда перезапуск дешевле ожидания.
+**When to use**: For short tasks (< 1 hour), when a restart is cheaper than waiting.
 
 ---
 
-### Strategy 4: Escalate to Different Agent (переключить агента)
+### Strategy 4: Escalate to Different Agent
 
-Самая интересная стратегия — передать задачу другому агенту.
+The most interesting strategy — hand the task to another agent.
 
 ```python
 def escalate_switch_agent(task, stuck_info):
@@ -381,13 +381,13 @@ def escalate_switch_agent(task, stuck_info):
     orchestrator.run_task(task)
 ```
 
-**Когда использовать**: Идеально для autonomous mode — Claude застрял, Codex додавит.
+**When to use**: Ideal for autonomous mode — Claude got stuck, Codex will push it through.
 
 ---
 
-### Strategy 5: Simplify Scope (упростить задачу)
+### Strategy 5: Simplify Scope
 
-Если задача слишком сложная — упростить её.
+If the task is too hard, simplify it.
 
 ```python
 def escalate_simplify(task, stuck_info):
@@ -411,13 +411,13 @@ def escalate_simplify(task, stuck_info):
     orchestrator.run_task(task)
 ```
 
-**Когда использовать**: Когда задача слишком амбициозна для autonomous mode.
+**When to use**: When the task is too ambitious for autonomous mode.
 
 ---
 
-## Интеграция в Orchestrator
+## Integration into the Orchestrator
 
-### Конфигурация
+### Configuration
 
 ```json
 {
@@ -445,7 +445,7 @@ def escalate_simplify(task, stuck_info):
 }
 ```
 
-### Реализация
+### Implementation
 
 ```python
 class Orchestrator:
@@ -509,9 +509,9 @@ class Orchestrator:
 
 ---
 
-## Метрики для настройки
+## Metrics for tuning
 
-После внедрения watchdog, собирать статистику:
+After the watchdog is in place, collect statistics:
 
 ```jsonl
 {"task_id": "db-schema", "stuck": false, "duration": 42, "indicators": {"files": true, "commits": true}}
@@ -519,21 +519,21 @@ class Orchestrator:
 {"task_id": "api-impl", "stuck": false, "duration": 67, "indicators": {"log": true, "tools": true}}
 ```
 
-Анализировать:
-- **False positive rate** — сколько задач ошибочно помечены как stuck
-- **Detection latency** — как быстро детектируется застревание
-- **Escalation effectiveness** — помогает ли эскалация завершить задачу
+Analyze:
+- **False positive rate** — how many tasks were wrongly marked as stuck
+- **Detection latency** — how quickly a stall is detected
+- **Escalation effectiveness** — whether escalation helps finish the task
 
-Настраивать:
-- `stuck_threshold_seconds` — когда считать застрявшим
-- `check_interval_seconds` — как часто проверять
-- Набор индикаторов — какие комбинации работают лучше
+Tune:
+- `stuck_threshold_seconds` — when to treat a task as stuck
+- `check_interval_seconds` — how often to check
+- The set of indicators — which combinations work better
 
 ---
 
-## Визуализация прогресса
+## Progress visualization
 
-Опционально: real-time dashboard для мониторинга:
+Optional: a real-time dashboard for monitoring:
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -559,11 +559,11 @@ class Orchestrator:
 └─────────────────────────────────────────────────────┘
 ```
 
-Реализация через curses, blessed, или rich (Python libraries для TUI).
+Implemented with curses, blessed, or rich (Python libraries for a TUI).
 
 ---
 
-**Статус**: Готов к реализации
-**Приоритет**: High (критичен для autonomous mode)
-**Зависимости**: Требует модификации orchestrator.py
-**Следующий шаг**: Начать с простого LogGrowthMonitor, постепенно добавлять индикаторы
+**Status**: Ready to implement
+**Priority**: High (critical for autonomous mode)
+**Dependencies**: Requires changes to orchestrator.py
+**Next step**: Start with a simple LogGrowthMonitor, then add indicators gradually

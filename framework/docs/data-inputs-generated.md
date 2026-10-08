@@ -1,15 +1,15 @@
-# Требуемые данные и секреты (self-host devframework)
+# Required data and secrets (self-host devframework)
 
-## Данные/шаблоны
-- Discovery ответы — `docs/discovery/interview.md`.
-- Data templates (если нужны доменные таблицы) — `docs/data-templates-ru.md`.
-- Дополнительно: Агент сам определяет полный объём/формат необходимых данных и спрашивает по мере нужды; пользователь ожидает, что ему скажут, что предоставить для старта.
+## Data and templates
+- Discovery answers — `docs/discovery/interview.md`.
+- Data templates (if domain tables are needed) — `docs/data-templates.md`.
+- Additionally: The agent itself determines the full volume and format of the required data and asks as the need arises; the user expects to be told what to provide in order to start.
 
-## Секреты / доступы
-- Политика: Разработка идёт без кредов, пока они реально не нужны. При необходимости агент делает стоп‑точку и просит их. Секреты кладём в env‑файл; предоставляются доступы для деплоя в нужные сервисы (секреты, edge‑functions и т.п.), дальше деплой по их правилам. Требование безопасности — критично (подразумевается минимизация/редакция секретов в логах).
-- Интеграции: Пока только Supabase и Stripe; дополнительно может понадобиться отправка алертов по email через Amazon SES. Остальное не добавлять на этом этапе.
-## Базовый список секретов (по умолчанию)
+## Secrets and access
+- Policy: Development proceeds without credentials until they are actually needed. When they are needed, the agent makes a stop point and asks for them. Secrets go in an env file; access is provided for deploying to the required services (secrets, edge functions, and similar), and deployment then follows their rules. The security requirement is critical (minimizing and redacting secrets in logs is implied).
+- Integrations: Only Supabase and Stripe for now; sending email alerts through Amazon SES may also be needed. Do not add anything else at this stage.
+## Baseline secret list (defaults)
 - Supabase: `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_KEY`.
-- Stripe: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` (если webhooks).
-- SES (опционально): `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `SES_SENDER`.
-- Vercel/Netlify: токен доступа + идентификатор проекта.
+- Stripe: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` (if webhooks).
+- SES (optional): `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `SES_SENDER`.
+- Vercel/Netlify: access token + project identifier.

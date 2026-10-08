@@ -4,8 +4,8 @@
 Pick UI components and produce basic layouts.
 
 ## Inputs
-- framework/docs/orchestrator-plan-ru.md (section 3.4)
-- framework/docs/definition-of-done-ru.md
+- framework/docs/orchestrator-plan.md (section 3.4)
+- framework/docs/definition-of-done.md
 
 ## Outputs
 - List of chosen components/templates

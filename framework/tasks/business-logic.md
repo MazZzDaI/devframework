@@ -4,8 +4,8 @@
 Implement core calculation logic and scenarios.
 
 ## Inputs
-- framework/docs/orchestrator-plan-ru.md (section 3.3)
-- framework/docs/definition-of-done-ru.md
+- framework/docs/orchestrator-plan.md (section 3.3)
+- framework/docs/definition-of-done.md
 
 ## Outputs
 - Logic implementation or pseudocode

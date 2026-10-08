@@ -1,220 +1,220 @@
-# Summary: Предложения по автономному режиму Claude Code
+# Summary: Proposals for Autonomous Mode in Claude Code
 
-Дата: 2026-01-26
-Статус: Предложения готовы к рассмотрению
-Не внедрено в основной проект
+Date: 2026-01-26
+Status: Proposals ready for review
+Not implemented in the main project
 
 ---
 
-## 📁 Структура созданной документации
+## 📁 Structure of the documentation
 
 ```
 claude-code/
-├── README.md                              # Обзор проблемы и решений
-├── QUICK-START.md                         # Как начать использовать (3 уровня)
-├── SUMMARY.md                             # Этот файл
-├── COMPARISON.md                          # 24KB - Визуальное сравнение Level 1-5 ⭐
+├── README.md                              # Overview of the problem and the solutions
+├── QUICK-START.md                         # How to start using it (3 levels)
+├── SUMMARY.md                             # This file
+├── COMPARISON.md                          # 24KB - Visual comparison of Levels 1-5 ⭐
 │
-├── 01-autonomous-mode-protocol.md         # 8KB  - Протокол автономного режима
-├── 02-task-template-improvements.md       # 13KB - Улучшения шаблонов задач
-├── 03-orchestrator-modifications.md       # 17KB - Изменения в orchestrator.py
-├── 04-hybrid-pipeline-design.md           # 20KB - Гибридный Claude+Codex workflow
-├── 05-watchdog-escalation.md              # 19KB - Мониторинг и эскалация
-├── 06-gpt52-pro-claude-pipeline.md        # 40KB - GPT-5.2 Pro как архитектор
-├── 07-ai-team-architecture.md             # 43KB - Команда AI агентов 🚀
+├── 01-autonomous-mode-protocol.md         # 8KB  - Autonomous mode protocol
+├── 02-task-template-improvements.md       # 13KB - Task template improvements
+├── 03-orchestrator-modifications.md       # 17KB - Changes to orchestrator.py
+├── 04-hybrid-pipeline-design.md           # 20KB - Hybrid Claude+Codex workflow
+├── 05-watchdog-escalation.md              # 19KB - Monitoring and escalation
+├── 06-gpt52-pro-claude-pipeline.md        # 40KB - GPT-5.2 Pro as architect
+├── 07-ai-team-architecture.md             # 43KB - A team of AI agents 🚀
 │
 └── examples/
-    ├── task-autonomous-example.md         # 10KB - Полный пример задачи
-    ├── orchestrator-config-example.json   # 4KB  - Пример конфигурации
-    └── hybrid-workflow-example.md         # 17KB - Реальный сценарий использования
+    ├── task-autonomous-example.md         # 10KB - Complete task example
+    ├── orchestrator-config-example.json   # 4KB  - Configuration example
+    └── hybrid-workflow-example.md         # 17KB - A real usage scenario
 
-Итого: ~216KB документации
+Total: ~216KB of documentation
 ```
 
 ---
 
-## 🎯 Суть предложений
+## 🎯 The point of the proposals
 
-### Проблема
-**Claude Code** создан как интерактивный инструмент ("Interaction First"), который постоянно задаёт вопросы и требует подтверждений. Ваш **devframework** требует автономного режима ("Delegation First") для многочасовой работы без участия пользователя.
+### Problem
+**Claude Code** was built as an interactive tool ("Interaction First") that constantly asks questions and requires confirmation. Your **devframework** needs an autonomous mode ("Delegation First") for multi-hour work without the user.
 
-### Решение
-Превратить Claude Code в **гибридный инструмент** с двумя режимами:
-- **Autonomous Mode** — для детальных ТЗ, работает часами без вопросов
-- **Interactive Mode** — для совместного проектирования (оставить как есть)
+### Solution
+Turn Claude Code into a **hybrid tool** with two modes:
+- **Autonomous Mode** — for detailed specs; works for hours without questions
+- **Interactive Mode** — for collaborative design (leave it as it is)
 
 ---
 
-## 📚 Что содержат документы
+## 📚 What the documents contain
 
 ### COMPARISON.md ⭐ START HERE
-**Ключевая идея**: Визуальное сравнение всех 5 уровней на одной странице
+**Key idea**: A visual comparison of all 5 levels on one page
 
-**Содержит**:
-- ASCII-диаграммы архитектур (Level 1-5)
-- Detailed comparison table (15 метрик)
-- Timeline comparison (визуальное сравнение времени)
-- Cost-benefit analysis с ROI
-- Decision matrix (какой уровень выбрать)
-- Expert recommendations (для разных типов команд)
+**Contains**:
+- ASCII diagrams of the architectures (Levels 1-5)
+- Detailed comparison table (15 metrics)
+- Timeline comparison (a visual comparison of time)
+- Cost-benefit analysis with ROI
+- Decision matrix (which level to choose)
+- Expert recommendations (for different kinds of teams)
 - Quick selection guide
 - Future vision (Level 6-8)
 
-**Применение**: **Читать первым** для быстрого понимания различий и выбора уровня
+**Use**: **Read this first** to quickly see the differences and pick a level
 
 ---
 
 ### 01-autonomous-mode-protocol.md
-**Ключевая идея**: Метапромпт, который переопределяет default behavior Claude Code
+**Key idea**: A metaprompt that overrides Claude Code's default behavior
 
-**Содержит**:
-- Шаблон протокола для вставки в task definitions
-- 7 критичных правил автономной работы
-- Decision framework для разрешения неоднозначностей
-- Fallback strategies для каждого типа блокера
-- Self-check checklist перед завершением
-- Формат handoff документации
+**Contains**:
+- A protocol template to paste into task definitions
+- 7 critical rules for autonomous work
+- A decision framework for resolving ambiguity
+- Fallback strategies for every kind of blocker
+- A self-check checklist before finishing
+- The handoff documentation format
 
-**Применение**: Копировать в начало каждой задачи (готово к использованию)
+**Use**: Copy it to the top of every task (ready to use)
 
 ---
 
 ### 02-task-template-improvements.md
-**Ключевая идея**: Структура task definition для минимизации вопросов
+**Key idea**: A task-definition structure that minimizes questions
 
-**Содержит**:
-- Анализ проблем существующих tasks
-- Новая структура с секциями:
-  - Decision Framework (что выбирать при развилках)
-  - Fallback Strategies (что делать при блокерах)
-  - Must/Should/Nice-to-Have приоритизация
+**Contains**:
+- An analysis of problems in the existing tasks
+- A new structure with sections:
+  - Decision Framework (what to choose at a fork)
+  - Fallback Strategies (what to do when blocked)
+  - Must/Should/Nice-to-Have prioritization
   - Time budget breakdown
   - Self-check before completion
-- Пример улучшения реальной задачи (было → стало)
-- Метрики качества task definition
+- An example of improving a real task (before → after)
+- Quality metrics for a task definition
 
-**Применение**: Руководство для написания новых задач
+**Use**: A guide for writing new tasks
 
 ---
 
 ### 03-orchestrator-modifications.md
-**Ключевая идея**: Как интегрировать autonomous mode в orchestrator.py
+**Key idea**: How to integrate autonomous mode into orchestrator.py
 
-**Содержит**:
-- 4 уровня изменений (от 0 до 3):
-  - **Уровень 0**: Нет изменений (протокол в tasks)
-  - **Уровень 1**: Минимальные изменения (injection протокола)
-  - **Уровень 2**: Полная поддержка (watchdog + validation)
-  - **Уровень 3**: Гибридный пайплайн (Claude + Codex)
-- Code snippets для каждого уровня
-- Пример конфигурации orchestrator.json
-- Watchdog для мониторинга прогресса
-- Validation autonomous mode compliance
-- Метрики для отслеживания
+**Contains**:
+- 4 levels of change (from 0 to 3):
+  - **Level 0**: No changes (the protocol lives in the tasks)
+  - **Level 1**: Minimal changes (protocol injection)
+  - **Level 2**: Full support (watchdog + validation)
+  - **Level 3**: Hybrid pipeline (Claude + Codex)
+- Code snippets for each level
+- An example orchestrator.json configuration
+- A watchdog for progress monitoring
+- Validation of autonomous mode compliance
+- Metrics to track
 
-**Применение**: Пошаговая инструкция для модификации кода
+**Use**: A step-by-step guide for changing the code
 
 ---
 
 ### 04-hybrid-pipeline-design.md
-**Ключевая идея**: Комбинировать Claude Code и Codex в одном workflow
+**Key idea**: Combine Claude Code and Codex in one workflow
 
-**Содержит**:
-- Сравнение философий (Claude vs Codex)
-- 4 варианта гибридного workflow:
+**Contains**:
+- A comparison of philosophies (Claude vs Codex)
+- 4 hybrid workflow options:
   - **Sequential**: Plan (Claude) → Build (Codex) → Review (Claude)
-  - **Fallback**: Claude сначала, эскалация к Codex если застрял
-  - **Parallel**: Разные агенты на параллельных подзадачах
-  - **Collaborative**: Итеративное взаимодействие (plan-build-review цикл)
-- Контекстная передача между агентами
-- Плюсы/минусы каждого варианта
-- Рекомендации когда использовать каждый
+  - **Fallback**: Claude first, escalate to Codex if it gets stuck
+  - **Parallel**: Different agents on parallel subtasks
+  - **Collaborative**: Iterative interaction (plan-build-review cycle)
+- Context handoff between agents
+- Pros and cons of each option
+- Recommendations for when to use each
 
-**Применение**: Выбор стратегии для конкретного проекта
+**Use**: Choosing a strategy for a specific project
 
 ---
 
 ### 05-watchdog-escalation.md
-**Ключевая идея**: Автоматическое обнаружение застрявших задач
+**Key idea**: Automatic detection of stuck tasks
 
-**Содержит**:
-- 5 типов progress indicators:
+**Contains**:
+- 5 kinds of progress indicators:
   - File system activity
   - Git commits
   - Log growth
   - Process resource usage
   - Tool usage patterns
-- Composite progress indicator (комбинация индикаторов)
+- A composite progress indicator (a combination of indicators)
 - 5 escalation strategies:
-  - Notify (уведомить)
-  - Interrupt (прервать)
-  - Kill and Retry (перезапустить)
-  - Switch Agent (переключить на Codex)
-  - Simplify Scope (упростить задачу)
-- Code для реализации watchdog
-- Интеграция в orchestrator
-- Метрики для настройки
+  - Notify
+  - Interrupt
+  - Kill and Retry
+  - Switch Agent (switch to Codex)
+  - Simplify Scope
+- Code for implementing the watchdog
+- Integration into the orchestrator
+- Metrics for tuning
 
-**Применение**: Production-ready мониторинг для autonomous mode
+**Use**: Production-ready monitoring for autonomous mode
 
 ---
 
 ### 06-gpt52-pro-claude-pipeline.md ⭐ NEW
-**Ключевая идея**: GPT-5.2 Pro как архитектор, Claude Code как исполнитель
+**Key idea**: GPT-5.2 Pro as architect, Claude Code as executor
 
-**Содержит**:
-- Архитектура пайплайна из 4 фаз:
-  - **Phase 1**: GPT-5.2 Pro создаёт formal specification (interactive)
-  - **Phase 2**: Claude Code реализует по спеке (AUTONOMOUS!)
-  - **Phase 3**: GPT-5.2 Pro делает code review & security audit
-  - **Phase 4**: Claude Code исправляет critical issues
-- Шаблон Formal Specification (~20KB) для GPT-5.2 Pro
-  - Детальная структура с 10 разделами
-  - Functional requirements с invariants
-  - Technical architecture с примерами кода
-  - API endpoints спецификация
-  - Test plan с примерами тестов
-  - Acceptance criteria и DoD
-- Интеграция в orchestrator.json (3 агента)
-- Полный пример workflow (система уведомлений, 7 часов)
-- Метрики эффективности и ROI анализ
-  - Сравнение: Claude only vs GPT-5.2 only vs Pipeline
-  - Break-even при 1.25 фичах в месяц
-  - 76% автономности (5.3 из 7 часов без пользователя)
-- 3 альтернативных конфигурации (бюджетная, максимальное качество, ультра-автономный)
+**Contains**:
+- A 4-phase pipeline architecture:
+  - **Phase 1**: GPT-5.2 Pro creates a formal specification (interactive)
+  - **Phase 2**: Claude Code implements from the spec (AUTONOMOUS!)
+  - **Phase 3**: GPT-5.2 Pro does code review and a security audit
+  - **Phase 4**: Claude Code fixes critical issues
+- A Formal Specification template (~20KB) for GPT-5.2 Pro
+  - A detailed structure with 10 sections
+  - Functional requirements with invariants
+  - Technical architecture with code examples
+  - API endpoint specification
+  - A test plan with example tests
+  - Acceptance criteria and DoD
+- Integration into orchestrator.json (3 agents)
+- A full workflow example (notification system, 7 hours)
+- Effectiveness metrics and an ROI analysis
+  - Comparison: Claude only vs GPT-5.2 only vs Pipeline
+  - Break-even at 1.25 features per month
+  - 76% autonomy (5.3 of 7 hours with no user)
+- 3 alternative configurations (budget, maximum quality, ultra-autonomous)
 - Troubleshooting guide
 
-**Почему это работает**:
-- GPT-5.2 Pro устраняет ВСЕ неоднозначности → Claude не нужно задавать вопросы
-- Formal spec настолько детален, что Claude работает автономно часами
-- GPT-5.2 Pro находит логические баги, race conditions, security issues
-- Лучшее сочетание: архитектура (GPT-5.2) + качество кода (Claude)
+**Why this works**:
+- GPT-5.2 Pro removes ALL ambiguity → Claude does not need to ask questions
+- The formal spec is detailed enough that Claude works autonomously for hours
+- GPT-5.2 Pro finds logic bugs, race conditions, and security issues
+- The best combination: architecture (GPT-5.2) + code quality (Claude)
 
-**Требует**: ChatGPT Pro subscription ($200/мес)
+**Requires**: a ChatGPT Pro subscription ($200/mo)
 
-**Применение**: Финальный пазл для максимальной автономности
+**Use**: The last piece for maximum autonomy
 
 ---
 
 ### 07-ai-team-architecture.md 🚀 REVOLUTIONARY
-**Ключевая идея**: Команда AI агентов — GPT-5.2 Pro (Team Lead) + Multiple Claude (Developers)
+**Key idea**: A team of AI agents — GPT-5.2 Pro (Team Lead) + Multiple Claude (Developers)
 
-**Концепция**:
-Вместо одного AI агента → **настоящая dev team** с параллельной работой:
-- **GPT-5.2 Pro** — Tech Lead (декомпозирует задачи, отвечает на вопросы, делает review)
-- **4+ Claude Code** — Developers (работают параллельно над разными задачами)
-- **AI-to-AI Bridge** — координатор (маршрутизирует сообщения между агентами)
+**Concept**:
+Instead of one AI agent → a **real dev team** working in parallel:
+- **GPT-5.2 Pro** — Tech Lead (splits tasks, answers questions, does review)
+- **4+ Claude Code** — Developers (work in parallel on different tasks)
+- **AI-to-AI Bridge** — coordinator (routes messages between agents)
 
-**Содержит**:
-1. **Архитектура AI-to-AI Bridge**
+**Contains**:
+1. **AI-to-AI Bridge architecture**
    - WebSocket-based coordinator
    - Message routing protocol (JSON)
-   - Session management для всех агентов
-2. **Протокол коммуникации**
-   - 5 типов сообщений (question, answer, task, status, review)
+   - Session management for every agent
+2. **Communication protocol**
+   - 5 message types (question, answer, task, status, review)
    - Structured message format
    - Request-response flow
-3. **Bridge Implementation** (Python code ~500 строк)
+3. **Bridge Implementation** (Python code, ~500 lines)
    - BridgeCoordinator class
    - AgentConnection management
    - Message routing logic
@@ -222,12 +222,12 @@ claude-code/
 4. **Agent Adapters**
    - GPT52ProAdapter - connects GPT-5.2 Pro to Bridge
    - ClaudeCodeAdapter - intercepts AskUserQuestion, routes to Bridge
-5. **Интеграция с orchestrator.py**
+5. **Integration with orchestrator.py**
    - New `--ai-team` mode
    - Auto-spawns Bridge + GPT-5.2 + N×Claude
-6. **Полный example workflow** (2.5 часа vs 8 часов)
-   - Timeline с временными метками
-   - Real conversation logs между агентами
+6. **Full example workflow** (2.5 hours vs 8 hours)
+   - A timeline with timestamps
+   - Real conversation logs between agents
    - Parallel execution visualization
 7. **Advanced features**
    - Dynamic task reassignment
@@ -239,311 +239,311 @@ claude-code/
    - Cloud (AWS/GCP containers)
    - Docker Compose configuration
 
-**Революционные преимущества**:
-- **3-4× ускорение** через реальный параллелизм (4 Claude работают одновременно)
-- **100% автономия** — user involvement только в начале и конце
-- **Natural workflow** — Claude работает как обычно, не нужен autonomous protocol!
-- **Масштабируемость** — 10 Claude = 10× параллелизм
-- **AI Team Lead** — GPT-5.2 Pro отвечает на вопросы Claude мгновенно
+**Revolutionary advantages**:
+- **3-4× speedup** through real parallelism (4 Claudes work at the same time)
+- **100% autonomy** — user involvement only at the start and the end
+- **Natural workflow** — Claude works as usual; no autonomous protocol needed!
+- **Scalability** — 10 Claudes = 10× parallelism
+- **AI Team Lead** — GPT-5.2 Pro answers Claude's questions instantly
 
-**Метрики**:
+**Metrics**:
 ```
-Single Claude: 8 часов
-GPT-5.2 → Claude: 7 часов (0 вопросов)
-AI Team (GPT-5.2 + 4 Claude): 2.5 часа (4× параллелизм) ⚡
+Single Claude: 8 hours
+GPT-5.2 → Claude: 7 hours (0 questions)
+AI Team (GPT-5.2 + 4 Claude): 2.5 hours (4× parallelism) ⚡
 ```
 
-**Как работает**:
-1. User даёт задачу GPT-5.2 Pro
-2. GPT-5.2 декомпозирует на 4 подзадачи
-3. Назначает каждому Claude через Bridge
-4. Claude 1-4 работают параллельно
-5. Когда Claude нужен ответ → спрашивает через Bridge → GPT-5.2 отвечает
-6. GPT-5.2 координирует зависимости между задачами
-7. Финальный review всех результатов от GPT-5.2
-8. User получает готовый результат через 2.5 часа
+**How it works**:
+1. The user gives the task to GPT-5.2 Pro
+2. GPT-5.2 splits it into 4 subtasks
+3. Assigns each one to a Claude through the Bridge
+4. Claude 1-4 work in parallel
+5. When a Claude needs an answer → it asks through the Bridge → GPT-5.2 answers
+6. GPT-5.2 coordinates dependencies between tasks
+7. GPT-5.2 does a final review of every result
+8. The user gets a finished result in 2.5 hours
 
-**Требует**:
-- ChatGPT Pro ($200/мес) для GPT-5.2 Pro
-- 4+ Claude API keys (или один с высоким rate limit)
-- WebSocket поддержка
+**Requires**:
+- ChatGPT Pro ($200/mo) for GPT-5.2 Pro
+- 4+ Claude API keys (or one with a high rate limit)
+- WebSocket support
 
-**Сложность**: High (async Python, WebSocket, multi-process coordination)
+**Complexity**: High (async Python, WebSocket, multi-process coordination)
 
 **ROI**:
-- 3-4× speedup = экономия 5-6 часов на задаче
-- При $100/час = $500-600 экономии
-- Break-even за 1 неделю при 2-3 задачах
+- 3-4× speedup = 5-6 hours saved per task
+- At $100/hour = $500-600 saved
+- Break-even in 1 week at 2-3 tasks
 
 **Innovation level**: 🚀🚀🚀 **Industry-first**
-Первый фреймворк с multi-agent AI team architecture
+The first framework with a multi-agent AI team architecture
 
-**Применение**: Будущее AI-powered development — от solo agent к AI team
+**Use**: The future of AI-powered development — from a solo agent to an AI team
 
 ---
 
-## 📖 Примеры (examples/)
+## 📖 Examples (examples/)
 
 ### task-autonomous-example.md
-**Полный пример задачи** "Implement User Profile" с:
-- Метапромптом автономного режима
-- Детальными requirements (Must/Should/Nice-to-Have)
-- Decision framework для каждого выбора
-- Fallback strategies для каждого блокера
+A **complete task example**, "Implement User Profile", with:
+- An autonomous-mode metaprompt
+- Detailed requirements (Must/Should/Nice-to-Have)
+- A decision framework for every choice
+- Fallback strategies for every blocker
 - Time budget breakdown
 - Self-check checklist
 - Handoff template
 
-**Применение**: Скопировать и адаптировать под свою задачу
+**Use**: Copy it and adapt it to your task
 
 ---
 
 ### orchestrator-config-example.json
-**Пример конфигурации** с:
-- Определениями runners (claude-code, codex, aider)
+A **configuration example** with:
+- Runner definitions (claude-code, codex, aider)
 - Autonomous mode settings
-- 5 задачами с разными настройками:
-  - db-schema: Claude autonomous с watchdog
+- 5 tasks with different settings:
+  - db-schema: Claude autonomous with a watchdog
   - business-logic: Codex autonomous
-  - ui-components: Claude autonomous с эскалацией
+  - ui-components: Claude autonomous with escalation
   - review: Claude interactive
   - framework-qa: Claude autonomous
-- Watchdog конфигурация
+- Watchdog configuration
 - Validation settings
-- Reporting настройки
+- Reporting settings
 
-**Применение**: Стартовая точка для своей конфигурации
+**Use**: A starting point for your own configuration
 
 ---
 
 ### hybrid-workflow-example.md
-**Реальный сценарий**: Реализация системы уведомлений
+**Real scenario**: Implementing a notification system
 
-**Показывает**:
-- Phase 1: Claude планирует архитектуру (interactive, 45 мин)
-  - Задаёт вопросы пользователю о выборе технологий
-  - Создаёт детальный план для Codex
-- Phase 2: Codex реализует по плану (autonomous, 4.5 часа)
-  - 5 подзадач: DB → API → Email → UI → Real-time
-  - Работает без вопросов
-- Phase 3: Claude делает code review (interactive, 1 час)
-  - Находит и исправляет проблемы
-  - Генерирует review report
+**Shows**:
+- Phase 1: Claude plans the architecture (interactive, 45 min)
+  - Asks the user about technology choices
+  - Creates a detailed plan for Codex
+- Phase 2: Codex implements from the plan (autonomous, 4.5 hours)
+  - 5 subtasks: DB → API → Email → UI → Real-time
+  - Works without questions
+- Phase 3: Claude does a code review (interactive, 1 hour)
+  - Finds and fixes problems
+  - Generates a review report
 
-**Результат**: 6 часов vs 9 (только Claude) или 6.5 (только Codex)
+**Result**: 6 hours vs 9 (Claude only) or 6.5 (Codex only)
 
-**Применение**: Шаблон для сложных multi-phase проектов
-
----
-
-## 🚀 Как использовать
-
-### Быстрый старт (5 минут)
-1. Открыть `QUICK-START.md`
-2. Выбрать Уровень 1 (метапромпт в задаче)
-3. Скопировать пример из `examples/task-autonomous-example.md`
-4. Адаптировать под свою задачу
-5. Запустить и проверить результат
-
-### Полная интеграция (1-2 дня)
-1. Изучить `01-autonomous-mode-protocol.md`
-2. Прочитать `02-task-template-improvements.md`
-3. Следовать инструкциям в `03-orchestrator-modifications.md` (Уровень 1-2)
-4. Тестировать на 5-10 задачах
-5. Собирать метрики и оптимизировать
-
-### Production deployment (неделя)
-1. Реализовать всё из "Полной интеграции"
-2. Добавить watchdog из `05-watchdog-escalation.md`
-3. Настроить hybrid workflow из `04-hybrid-pipeline-design.md`
-4. Собрать статистику за неделю
-5. Оптимизировать на основе данных
+**Use**: A template for complex multi-phase projects
 
 ---
 
-## 📊 Ожидаемые результаты
+## 🚀 How to use it
 
-### Метрики успеха
+### Quick start (5 minutes)
+1. Open `QUICK-START.md`
+2. Choose Level 1 (a metaprompt in the task)
+3. Copy the example from `examples/task-autonomous-example.md`
+4. Adapt it to your task
+5. Run it and check the result
 
-| Метрика | Текущее (Interactive) | Целевое (Autonomous) |
-|---------|----------------------|----------------------|
-| Вопросов к пользователю | Много (10-50 на задачу) | < 5% задач используют AskUserQuestion |
-| Привязка пользователя | Постоянная | Только на review |
-| Автономность | 20-30% | 80-90% |
-| Скорость выполнения | 100% (baseline) | 120-150% (за счёт параллелизма) |
-| Качество кода | 95% | 85-90% (trade-off за автономность) |
+### Full integration (1-2 days)
+1. Study `01-autonomous-mode-protocol.md`
+2. Read `02-task-template-improvements.md`
+3. Follow the instructions in `03-orchestrator-modifications.md` (Levels 1-2)
+4. Test it on 5-10 tasks
+5. Collect metrics and optimize
 
-### Сценарии использования
-
-**Подходит для autonomous mode:**
-- Реализация по детальному ТЗ
-- Типовые CRUD операции
-- Миграция legacy кода
-- Рефакторинг по паттернам
-- Написание тестов
-
-**Не подходит (оставить interactive):**
-- Исследовательские задачи
-- Архитектурные решения без ТЗ
-- Нестандартные проблемы
-- Критичные security задачи
-- Когда нужна креативность
+### Production deployment (a week)
+1. Implement everything from "Full integration"
+2. Add the watchdog from `05-watchdog-escalation.md`
+3. Set up the hybrid workflow from `04-hybrid-pipeline-design.md`
+4. Collect a week of statistics
+5. Optimize from the data
 
 ---
 
-## 🎓 Философия
+## 📊 Expected results
 
-### Ключевой инсайт
+### Success metrics
 
-> Claude Code не нужно "ломать" — нужно дать ему **фреймворк для уверенности**.
+| Metric | Current (Interactive) | Target (Autonomous) |
+|--------|----------------------|---------------------|
+| Questions to the user | Many (10-50 per task) | < 5% of tasks use AskUserQuestion |
+| User tie-up | Constant | Only at review |
+| Autonomy | 20-30% | 80-90% |
+| Execution speed | 100% (baseline) | 120-150% (from parallelism) |
+| Code quality | 95% | 85-90% (the trade-off for autonomy) |
 
-Autonomous mode работает не потому что мы заставляем Claude не спрашивать, а потому что:
-1. Даём детальный контекст (он знает что делать)
-2. Предоставляем decision framework (он знает как выбирать)
-3. Описываем fallback strategies (он знает что делать при блокерах)
-4. Устанавливаем time budget (он знает когда остановиться)
-5. Требуем документацию (он фиксирует все решения)
+### When to use it
 
-### Гибридный подход > Один инструмент
+**A good fit for autonomous mode:**
+- Implementation from a detailed spec
+- Typical CRUD operations
+- Legacy code migration
+- Refactoring to existing patterns
+- Writing tests
 
-Вместо "Claude ИЛИ Codex" → комбинация сильных сторон:
-
-**Базовый вариант** (без GPT-5.2 Pro):
-- Claude для планирования и review
-- Codex для реализации
-- Автоматическая эскалация при застревании
-
-**Оптимальный вариант** (с GPT-5.2 Pro) ⭐:
-- **GPT-5.2 Pro** для формализации ТЗ и архитектуры (устраняет неоднозначности)
-- **Claude Code** для реализации (работает автономно благодаря детальному спеку)
-- **GPT-5.2 Pro** для code review и security audit
-- 76% автономности, Claude не задаёт вопросы во время реализации
+**A poor fit (leave it interactive):**
+- Exploratory tasks
+- Architectural decisions with no spec
+- Unusual problems
+- Critical security tasks
+- When you need creativity
 
 ---
 
-## ✅ Чеклист внедрения
+## 🎓 Philosophy
 
-### Фаза 1: Прототип (день 1)
-- [ ] Прочитать README.md и QUICK-START.md
-- [ ] Изучить 01-autonomous-mode-protocol.md
-- [ ] Взять одну простую задачу
-- [ ] Добавить метапромпт (Уровень 0)
-- [ ] Запустить и проверить метрики:
+### Key insight
+
+> You do not need to "break" Claude Code — you need to give it a **framework for confidence**.
+
+Autonomous mode works because we give Claude what it needs, and it stops needing to ask:
+1. We give detailed context (it knows what to do)
+2. We provide a decision framework (it knows how to choose)
+3. We describe fallback strategies (it knows what to do when blocked)
+4. We set a time budget (it knows when to stop)
+5. We require documentation (it records every decision)
+
+### A hybrid approach beats a single tool
+
+Combine the strengths of both:
+
+**Basic option** (without GPT-5.2 Pro):
+- Claude for planning and review
+- Codex for implementation
+- Automatic escalation when stuck
+
+**Optimal option** (with GPT-5.2 Pro) ⭐:
+- **GPT-5.2 Pro** to formalize the spec and the architecture (removes ambiguity)
+- **Claude Code** for implementation (works autonomously because of the detailed spec)
+- **GPT-5.2 Pro** for code review and a security audit
+- 76% autonomy; Claude does not ask questions during implementation
+
+---
+
+## ✅ Adoption checklist
+
+### Phase 1: Prototype (day 1)
+- [ ] Read README.md and QUICK-START.md
+- [ ] Study 01-autonomous-mode-protocol.md
+- [ ] Take one simple task
+- [ ] Add the metaprompt (Level 0)
+- [ ] Run it and check the metrics:
   - [ ] AskUserQuestion calls = 0?
-  - [ ] Задача завершена?
-  - [ ] Handoff документация есть?
-  - [ ] Качество кода приемлемо?
+  - [ ] Task finished?
+  - [ ] Handoff documentation present?
+  - [ ] Code quality acceptable?
 
-### Фаза 2: Интеграция (дни 2-3)
-- [ ] Изучить 02-task-template-improvements.md
-- [ ] Изучить 03-orchestrator-modifications.md (Уровень 1)
-- [ ] Модифицировать orchestrator.py
-- [ ] Обновить orchestrator.json
-- [ ] Запустить 5 задач через orchestrator
-- [ ] Собрать статистику (autonomous compliance rate, time accuracy)
+### Phase 2: Integration (days 2-3)
+- [ ] Study 02-task-template-improvements.md
+- [ ] Study 03-orchestrator-modifications.md (Level 1)
+- [ ] Modify orchestrator.py
+- [ ] Update orchestrator.json
+- [ ] Run 5 tasks through the orchestrator
+- [ ] Collect statistics (autonomous compliance rate, time accuracy)
 
-### Фаза 3: Оптимизация (неделя 1)
-- [ ] Изучить 04-hybrid-pipeline-design.md
-- [ ] Изучить 05-watchdog-escalation.md
-- [ ] Реализовать watchdog (Уровень 2)
-- [ ] Настроить hybrid workflow для сложных задач
-- [ ] Собрать метрики за неделю
-- [ ] Оптимизировать на основе данных
+### Phase 3: Optimization (week 1)
+- [ ] Study 04-hybrid-pipeline-design.md
+- [ ] Study 05-watchdog-escalation.md
+- [ ] Implement the watchdog (Level 2)
+- [ ] Set up a hybrid workflow for complex tasks
+- [ ] Collect a week of metrics
+- [ ] Optimize from the data
 
-### Фаза 4: Production (ongoing)
-- [ ] Документировать best practices для вашего проекта
-- [ ] Обучить команду (если есть)
-- [ ] Настроить metrics dashboard (опционально)
-- [ ] Итеративно улучшать task templates
-- [ ] Обновлять протоколы на основе опыта
-
----
-
-## 🐛 Известные ограничения
-
-### Что не решено в текущих предложениях
-
-1. **IDE интеграция** — всё через CLI, нет VS Code extension
-2. **Визуальный UI** — нет dashboard для мониторинга (только логи)
-3. **Machine Learning** — нет автоматического подбора time budgets
-4. **Shared context** — агенты не видят работу друг друга real-time
-5. **Rollback механизм** — нет автоматического отката при фейлах
-
-### Возможные улучшения в будущем
-
-- Real-time dashboard с progress indicators
-- ML модель для предсказания time budgets
-- Автоматическое определение autonomous vs interactive
-- Интеграция с Claude API для custom system prompts
-- Shared memory между агентами (collaborative mode)
+### Phase 4: Production (ongoing)
+- [ ] Document best practices for your project
+- [ ] Train the team (if there is one)
+- [ ] Set up a metrics dashboard (optional)
+- [ ] Improve task templates iteratively
+- [ ] Update the protocols from experience
 
 ---
 
-## 📞 Следующие шаги
+## 🐛 Known limitations
 
-### Для быстрого старта (5 минут):
-1. **Открыть `COMPARISON.md`** ⭐ — визуально сравнить все уровни
-2. Выбрать свой уровень по budget/requirements
-3. Перейти к соответствующему документу (01-07)
+### What the current proposals do not solve
 
-### Для полного понимания (2 часа):
-1. Прочитать `COMPARISON.md` — понять разницу
-2. Прочитать `SUMMARY.md` — полный overview
-3. Изучить свой выбранный уровень детально (01-07)
+1. **IDE integration** — everything goes through the CLI; there is no VS Code extension
+2. **Visual UI** — there is no monitoring dashboard (logs only)
+3. **Machine learning** — there is no automatic selection of time budgets
+4. **Shared context** — agents do not see each other's work in real time
+5. **Rollback mechanism** — there is no automatic rollback on failure
 
-### Для серьёзного внедрения (1-2 недели):
-1. Прочитать `COMPARISON.md` — выбрать уровень
-2. Прочитать все 7 документов (01-07) — глубокое понимание
-3. Изучить examples/
-4. Решить: есть ли доступ к GPT-5.2 Pro? (ChatGPT Pro)
-5. Выбрать уровень интеграции (1-5)
-6. Внедрять итеративно (Level 1 → 2 → ... → 5)
-7. Собирать метрики и оптимизировать
+### Possible future improvements
 
-### Для экспериментов:
-1. Попробовать разные варианты hybrid workflow
-2. Сравнить Claude vs Codex vs Hybrid на ваших задачах
-3. Делиться результатами для улучшения подхода
+- A real-time dashboard with progress indicators
+- An ML model for predicting time budgets
+- Automatic choice of autonomous vs interactive
+- Integration with the Claude API for custom system prompts
+- Shared memory between agents (collaborative mode)
 
 ---
 
-## 📝 Обратная связь
+## 📞 Next steps
 
-Эти предложения — starting point, не final solution. Важно:
-- Адаптировать под ваш конкретный проект
-- Экспериментировать с формулировками
-- Собирать метрики и итеративно улучшать
-- Документировать что работает, что нет
+### For a quick start (5 minutes):
+1. **Open `COMPARISON.md`** ⭐ — visually compare every level
+2. Choose your level by budget and requirements
+3. Go to the matching document (01-07)
 
-**Философия**: Autonomous mode — это не "set and forget", а итеративная настройка.
+### For a full understanding (2 hours):
+1. Read `COMPARISON.md` — understand the difference
+2. Read `SUMMARY.md` — the full overview
+3. Study your chosen level in detail (01-07)
+
+### For a serious rollout (1-2 weeks):
+1. Read `COMPARISON.md` — pick a level
+2. Read all 7 documents (01-07) — a deep understanding
+3. Study examples/
+4. Decide: do you have access to GPT-5.2 Pro? (ChatGPT Pro)
+5. Choose an integration level (1-5)
+6. Adopt it iteratively (Level 1 → 2 → ... → 5)
+7. Collect metrics and optimize
+
+### For experiments:
+1. Try different hybrid workflow options
+2. Compare Claude vs Codex vs Hybrid on your tasks
+3. Share the results so the approach can improve
 
 ---
 
-## 🎯 Evolution Path (как развивались предложения)
+## 📝 Feedback
+
+These proposals are a starting point, not a final solution. What matters:
+- Adapt them to your specific project
+- Experiment with the wording
+- Collect metrics and improve iteratively
+- Document what works and what does not
+
+**Philosophy**: Autonomous mode is not "set and forget". It is iterative tuning.
+
+---
+
+## 🎯 Evolution Path (how the proposals developed)
 
 ```
 Level 1: Autonomous Protocol
-└─> Метапромпт заставляет Claude не задавать вопросы
-    Problem: Неоднозначности остаются, Claude застревает
+└─> A metaprompt makes Claude stop asking questions
+    Problem: Ambiguities remain, and Claude gets stuck
 
 Level 2: Task Template Improvements
-└─> Детальные ТЗ с decision framework
-    Problem: Сложно предусмотреть все вопросы заранее
+└─> Detailed specs with a decision framework
+    Problem: It is hard to anticipate every question in advance
 
 Level 3: Hybrid Workflows (Claude + Codex)
-└─> Комбинация агентов, эскалация при застревании
-    Problem: Последовательное выполнение, медленно
+└─> A combination of agents, with escalation when stuck
+    Problem: Sequential execution, and it is slow
 
 Level 4: GPT-5.2 Pro Formal Spec
-└─> GPT-5.2 создаёт детальный спек → Claude реализует
-    Problem: Статичный документ, нет real-time clarification
+└─> GPT-5.2 creates a detailed spec → Claude implements it
+    Problem: A static document, with no real-time clarification
 
 Level 5: AI Team Architecture 🚀
 └─> GPT-5.2 (Team Lead) + Multiple Claude (Developers)
-    ✅ Real-time Q&A через Bridge
-    ✅ Параллельная работа (3-4× ускорение)
-    ✅ 100% автономия
-    ✅ Claude работает естественно
+    ✅ Real-time Q&A through the Bridge
+    ✅ Parallel work (3-4× speedup)
+    ✅ 100% autonomy
+    ✅ Claude works naturally
     = OPTIMAL SOLUTION
 ```
 
@@ -579,11 +579,11 @@ Alternative: Level 1-3 (Claude only approaches)
 
 ---
 
-**Статус**: ✅ Документация готова (7 документов, 192KB)
-**Следующий шаг**: Решение о внедрении (Level 1-5?)
-**Время на прочтение всего**: ~4-5 часов
-**Время на внедрение Level 1**: ~1 час
-**Время на внедрение Level 5**: ~1-2 недели (но 3× ROI!)
+**Status**: ✅ Documentation is ready (7 documents, 192KB)
+**Next step**: Decide on adoption (Level 1-5?)
+**Time to read everything**: ~4-5 hours
+**Time to adopt Level 1**: ~1 hour
+**Time to adopt Level 5**: ~1-2 weeks (but 3× ROI!)
 
 ---
 
@@ -601,4 +601,4 @@ Alternative: Level 1-3 (Claude only approaches)
 
 🎉 **You now have a complete roadmap from interactive mode to AI team!**
 
-Удачи! 🚀
+Good luck! 🚀

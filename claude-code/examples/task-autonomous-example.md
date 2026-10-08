@@ -1,10 +1,10 @@
-# Пример задачи с автономным режимом
+# Example task with autonomous mode
 
-Это полный пример того, как должна выглядеть task definition для автономного выполнения Claude Code.
+This is a complete example of what a task definition should look like for autonomous execution by Claude Code.
 
 ---
 
-**Метаданные задачи**
+**Task metadata**
 
 ```yaml
 task_id: implement-user-profile

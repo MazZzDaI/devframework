@@ -1,7 +1,7 @@
 # Task: Framework Review (post-run)
 
 ## Goal
-Проанализировать работу фреймворка и сформировать баг‑репорт на основании логов.
+Analyze how the framework ran and produce a bug report from the logs.
 
 ## Inputs
 - `framework/logs/framework-run.jsonl`
@@ -17,9 +17,9 @@
 - `framework/framework-review/framework-fix-plan.md`
 
 ## Rules
-- Запускать только между прогонами (нет `framework/logs/framework-run.lock`).
-- Код не изменять, только отчёты.
+- Run only between runs (no `framework/logs/framework-run.lock`).
+- Do not change code, only reports.
 
 ## Done When
-- Анализ и баг‑репорт заполнены.
-- Есть план исправлений.
+- The analysis and bug report are filled in.
+- There is a fix plan.

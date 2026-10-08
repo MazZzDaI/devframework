@@ -1,42 +1,42 @@
-# Handoff для независимого ревью
+# Handoff for independent review
 
-## Объект
+## Subject
 - Commit: 
 - Branch: 
-- Дата/время сборки: 
+- Build date/time: 
 
-## Краткое описание изменений
+## Summary of changes
 - 
 
-## Область охвата (scope)
+## Scope
 - 
 
-## Вне scope
+## Out of scope
 - 
 
-## Архитектурные решения/допущения
+## Architectural decisions / assumptions
 - 
 
-## Данные/фикстуры/моки
+## Data / fixtures / mocks
 - 
 
-## Команды для запуска
-- Сборка/линтер:
+## Commands to run
+- Build/lint:
   - 
-- Тесты:
+- Tests:
   - 
 
-## Окружение
+## Environment
 - OS:
 - Runtime:
 - DB/Services:
 
-## Известные ограничения/риски
+## Known limitations / risks
 - 
 
-## Фокус ревью (куда смотреть в первую очередь)
+## Review focus (where to look first)
 - 
 
-## Артефакты
-- Логи/отчёты:
-- Скриншоты:
+## Artifacts
+- Logs/reports:
+- Screenshots:

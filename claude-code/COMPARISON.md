@@ -1,6 +1,6 @@
 # Quick Comparison: 5 Levels of Autonomous Development
 
-**One-page visual guide** для выбора правильного подхода.
+**One-page visual guide** for choosing the right approach.
 
 ---
 
@@ -17,15 +17,15 @@
 ┌─────────────────────────────────┐
 │      Claude Code                │
 │   + Autonomous Protocol         │
-│   (метапромпт в задаче)         │
+│   (metaprompt in the task)      │
 │                                 │
-│   Правила:                      │
+│   Rules:                        │
 │   ❌ NO AskUserQuestion         │
 │   ✅ Choose conservative        │
 │   ✅ Document decisions         │
 └─────────────────────────────────┘
      │
-     ↓ (иногда застревает при неоднозначности)
+     ↓ (sometimes gets stuck on ambiguity)
      │
 ┌─────────────────────────────────┐
 │    Implementation               │
@@ -34,9 +34,9 @@
 └─────────────────────────────────┘
 ```
 
-**Плюсы**: Простая реализация (просто добавить метапромпт)
-**Минусы**: Claude застревает если ТЗ неоднозначное
-**Автономия**: 60% (Claude старается, но иногда блокируется)
+**Pros**: Simple to implement (just add a metaprompt)
+**Cons**: Claude gets stuck if the spec is ambiguous
+**Autonomy**: 60% (Claude tries, but sometimes blocks)
 
 ---
 
@@ -58,7 +58,7 @@
 │  ✅ Reference Files             │
 └────┬────────────────────────────┘
      │
-     ↓ (меньше неоднозначностей)
+     ↓ (fewer ambiguities)
      │
 ┌─────────────────────────────────┐
 │      Claude Code                │
@@ -73,9 +73,9 @@
 └─────────────────────────────────┘
 ```
 
-**Плюсы**: Меньше вопросов благодаря детальному ТЗ
-**Минусы**: Нужно писать детальные задачи (время на подготовку)
-**Автономия**: 70% (Claude редко застревает)
+**Pros**: Fewer questions thanks to a detailed spec
+**Cons**: You have to write detailed tasks (prep time)
+**Autonomy**: 70% (Claude rarely gets stuck)
 
 ---
 
@@ -112,9 +112,9 @@
 └─────────────────────────────────┘
 ```
 
-**Плюсы**: Лучшее из двух миров (Claude quality + Codex speed)
-**Минусы**: Последовательное выполнение, нет параллелизма
-**Автономия**: 80% (fallback при застревании)
+**Pros**: Best of both worlds (Claude quality + Codex speed)
+**Cons**: Sequential execution, no parallelism
+**Autonomy**: 80% (fallback when stuck)
 
 ---
 
@@ -131,13 +131,13 @@
 │   GPT-5.2 Pro Reasoning         │
 │   (Architect - Interactive)     │
 │                                 │
-│   Спрашивает пользователя:      │
-│   ❓ Какая БД?                  │
-│   ❓ REST или GraphQL?          │
-│   ❓ Real-time или polling?     │
+│   Asks the user:                │
+│   ❓ Which database?            │
+│   ❓ REST or GraphQL?           │
+│   ❓ Real-time or polling?      │
 └────┬────────────────────────────┘
      │
-     ↓ (создаёт детальный спек 40KB)
+     ↓ (creates a detailed 40KB spec)
      │
 ┌─────────────────────────────────┐
 │   Formal Specification          │
@@ -153,7 +153,7 @@
 │   (Executor - AUTONOMOUS!)      │
 │                                 │
 │   Reads spec → implements       │
-│   No questions (все в спеке)    │
+│   No questions (all in the spec)│
 └────┬────────────────────────────┘
      │
      ↓
@@ -170,9 +170,9 @@
 └─────────────────────────────────┘
 ```
 
-**Плюсы**: Claude полностью автономен во время реализации
-**Минусы**: Нужен ChatGPT Pro ($200/мес), нет параллелизма
-**Автономия**: 95% (пользователь только при создании спека)
+**Pros**: Claude is fully autonomous during implementation
+**Cons**: Requires ChatGPT Pro ($200/mo), no parallelism
+**Autonomy**: 95% (the user is involved only while the spec is created)
 
 ---
 
@@ -243,9 +243,9 @@
      └────────────────────┘
 ```
 
-**Плюсы**: 3-4× ускорение, 100% автономия, масштабируемость
-**Минусы**: Сложная реализация (WebSocket, async)
-**Автономия**: 100% (пользователь только start + end)
+**Pros**: 3-4× speedup, 100% autonomy, scalability
+**Cons**: Complex implementation (WebSocket, async)
+**Autonomy**: 100% (the user is involved only at start + end)
 
 ---
 

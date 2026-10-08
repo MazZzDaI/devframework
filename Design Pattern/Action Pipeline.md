@@ -1,93 +1,93 @@
-Я понял задачу. Нам нужен не «устав проекта», а **исполняемый алгоритм (State Machine)** для AI-архитектора. Это жесткая последовательность шагов, где каждый этап — это либо сбор данных через интервью, либо валидация входящего документа, либо генерация части спецификации.
+I understand the task. What we need is not a project charter, but an **executable algorithm (state machine)** for an AI architect. It is a strict sequence of steps in which each stage is either data collection through an interview, validation of an incoming document, or generation of part of the specification.
 
-Вот структура пайплайна, переработанная в **Алгоритм Сбора Спецификаций и Запуска (ASAP - Agentic Specification & Action Pipeline)**.
-
----
-
-## Пайплайн проектирования и автономной разработки (ASAP)
-
-### Этап 1: Инициализация и формирование User Flow (Discovery Engine)
-
-**Действие:** Диалоговый опрос по методологии JTBD.
-
-* **Вход:** Краткая идея проекта от пользователя.
-* **Процесс:** Система задает уточняющие вопросы для построения графа «Квестов» (Key Milestones).
-* **Выход:** Визуализированный User Flow в формате Mermaid/Graphviz.
-* **Условие перехода:** Утверждение пользователем структуры «Квестов».
-
-### Этап 2: Сегментация сценариев (Logic Branching)
-
-**Действие:** Классификация действий на «Циклы» и «Разовые операции».
-
-* **Процесс:** Для каждого узла Flow определяется тип:
-1. **Main Operational Cycle:** Регулярное действие (например, «создать пост»).
-2. **Service Scenario:** Настройка, конфигурация, разовое действие.
-
-
-* **Выход:** Таблица сценариев с приоритетами разработки.
-
-### Этап 3: Декомпозиция сцен и Машина состояний (Scene Architect)
-
-**Действие:** Пошаговое проектирование каждого экрана/интерфейса.
-
-* **Процесс (Цикл по каждой сцене):**
-1. **UI-интервью:** Какие элементы ввода/вывода нужны?
-2. **Data-анализ:** Список переменных, их типы (String, Int, JSON) и текущие состояния (Loading, Success, Error).
-3. **Logic Mapping:** С какой подсистемой (модулем бэкенда) идет связь? Что именно она возвращает?
-
-
-* **Выход:** Набор JSON-схем для каждой сцены.
-
-### Этап 4: Сборка Мастер-Спецификации (The Source)
-
-**Действие:** Компиляция всех ответов в формализованный документ.
-
-* **Процесс:** Сборка YAML/JSON файла, содержащего:
-* Тезаурус (единые термины).
-* Схемы данных и API-контракты.
-* Требования к интерфейсам.
-
-
-* **Выход:** **Master_Spec.json** (техническое задание, пригодное для парсинга кодом).
-
-### Этап 5: Пре-валидация и Security Check (The Gatekeeper)
-
-**Действие:** Автоматическая проверка спецификации на готовность к деплою.
-
-* **Процесс:** Агент-валидатор прогоняет Master_Spec через чек-лист:
-* Есть ли тупиковые состояния в FSM?
-* Описаны ли все интерфейсы обмена с внешними базами/платежками?
-* Пройден ли аудит безопасности?
-
-
-* **Условие перехода:** `Validation_Score > 95%`.
-
-### Этап 6: Оркестрация и Параллельная разработка (The Swarm)
-
-**Действие:** Декомпозиция на атомарные задачи для роя агентов.
-
-* **Процесс:**
-1. Разделение спецификации на независимые модули (фронт, бэк, интеграции).
-2. Запуск независимых агентов в терминалах.
-3. Установка «Чат-бриджей» между агентами для синхронизации контекста в реальном времени.
-
-
-* **Выход:** Сгенерированный код модулей.
-
-### Этап 7: Эмуляция и Тестирование (The Sandbox)
-
-**Действие:** Автоматическая проверка работоспособности созданных элементов.
-
-* **Процесс:** Запуск эмуляторов, прогон синтетических данных через созданные сцены.
-* **Выход:** Логи ошибок и отчет о покрытии тестами.
-* **Условие завершения:** Успешная демонстрация (MVP готов).
+Here is the pipeline structure, reworked into the **Agentic Specification & Action Pipeline (ASAP)**.
 
 ---
 
-### Технические требования к реализации пайплайна:
+## Design and autonomous development pipeline (ASAP)
 
-1. **Интерфейс:** Терминальный чат или веб-визард.
-2. **Память:** Внедрение **Vector DB** или **Long-term Memory Framework** для хранения контекста между сессиями (чтобы не переспрашивать то, что уже решено).
-3. **Оркестратор:** Использование систем типа LangGraph или собственных Python-скриптов для управления переходами между этапами (1-7).
+### Stage 1: Initialization and User Flow (Discovery Engine)
 
-**Как вам такой «алгоритмичный» вид? Если это то, что нужно, я могу детализировать структуру JSON-файла из Этапа 3 или составить список контрольных вопросов для Этапа 1.**
+**Action:** A dialogue interview using the JTBD methodology.
+
+* **Input:** A short project idea from the user.
+* **Process:** The system asks clarifying questions in order to build a graph of Quests (Key Milestones).
+* **Output:** A visualized User Flow in Mermaid/Graphviz format.
+* **Transition condition:** The user approves the Quest structure.
+
+### Stage 2: Scenario segmentation (Logic Branching)
+
+**Action:** Classify actions into cycles and one-off operations.
+
+* **Process:** For each Flow node, determine the type:
+1. **Main Operational Cycle:** A regular action (for example, "create a post").
+2. **Service Scenario:** Setup, configuration, or a one-off action.
+
+
+* **Output:** A scenario table with development priorities.
+
+### Stage 3: Scene decomposition and state machine (Scene Architect)
+
+**Action:** Step-by-step design of each screen or interface.
+
+* **Process (a cycle for each scene):**
+1. **UI interview:** Which input and output elements are needed?
+2. **Data analysis:** A list of variables, their types (String, Int, JSON), and their current states (Loading, Success, Error).
+3. **Logic Mapping:** Which subsystem (backend module) does it talk to? What exactly does that subsystem return?
+
+
+* **Output:** A set of JSON schemas for each scene.
+
+### Stage 4: Assembling the master specification (The Source)
+
+**Action:** Compile all answers into a formalized document.
+
+* **Process:** Assemble a YAML/JSON file that contains:
+* A thesaurus (shared terms).
+* Data schemas and API contracts.
+* Interface requirements.
+
+
+* **Output:** **Master_Spec.json** (a technical specification that code can parse).
+
+### Stage 5: Pre-validation and security check (The Gatekeeper)
+
+**Action:** Automatically check that the specification is ready to deploy.
+
+* **Process:** A validator agent runs Master_Spec through a checklist:
+* Are there dead-end states in the FSM?
+* Are all exchange interfaces with external databases and payment systems described?
+* Has the security audit been passed?
+
+
+* **Transition condition:** `Validation_Score > 95%`.
+
+### Stage 6: Orchestration and parallel development (The Swarm)
+
+**Action:** Decompose the work into atomic tasks for the agent swarm.
+
+* **Process:**
+1. Split the specification into independent modules (frontend, backend, integrations).
+2. Launch independent agents in terminals.
+3. Set up chat bridges between agents so they can sync context in real time.
+
+
+* **Output:** Generated module code.
+
+### Stage 7: Emulation and testing (The Sandbox)
+
+**Action:** Automatically check that the created elements work.
+
+* **Process:** Start the emulators and run synthetic data through the created scenes.
+* **Output:** Error logs and a test-coverage report.
+* **Completion condition:** A successful demonstration (the MVP is ready).
+
+---
+
+### Technical requirements for implementing the pipeline:
+
+1. **Interface:** A terminal chat or a web wizard.
+2. **Memory:** Introduce a **Vector DB** or a **Long-term Memory Framework** to store context between sessions, so the system does not ask again about decisions that have already been made.
+3. **Orchestrator:** Use systems such as LangGraph, or custom Python scripts, to manage transitions between stages 1–7.
+
+**How does this algorithmic shape look? If this is what you need, I can detail the JSON file structure from Stage 3, or draft the checklist of control questions for Stage 1.**

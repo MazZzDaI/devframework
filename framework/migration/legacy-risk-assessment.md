@@ -1,17 +1,17 @@
 # Legacy Risk Assessment
 
-## Риски
-- Отсутствие runner CLI / PyYAML / прав записи ломает пайплайн (зависание/падение задач).
-- Утечка секретов в логах/бандлах из-за неполной редакции.
-- Коллизии веток/worktree при повторных запусках и автогенерации `task/*`.
-- Недостоверные артефакты из-за отсутствия реальных данных/кода и тестов.
+## Risks
+- A missing runner CLI, PyYAML, or write permission breaks the pipeline (tasks hang or fail).
+- Secrets leak into logs or bundles because redaction is incomplete.
+- Branch and worktree collisions on repeat runs and on auto-generated `task/*` names.
+- Artifacts are unreliable because real data, code, and tests are missing.
 
-## Зоны повышенной осторожности
-- Запуски на машинах без git или в не-git директории.
-- Публикация отчётов в приватные репо без проверки редактирования секретов.
-- Авто-`--update` инсталлером в присутствии кастомных правок в `framework/`.
+## Areas that need extra care
+- Runs on machines without git, or in a directory that is not a git repo.
+- Publishing reports to private repos without checking that secrets were redacted.
+- An automatic `--update` by the installer while `framework/` has custom edits.
 
-## Стоп‑факторы
-- Нет `git init` в хосте или нет прав на запись в `framework/logs`.
-- Конфликтующие существующие worktree/ветки `task/*` и `legacy-migration-*`.
-- Отсутствуют runner CLI и нет no-op fallback в конфиге.
+## Stop factors
+- The host has no `git init`, or there is no write access to `framework/logs`.
+- Existing worktrees or branches named `task/*` and `legacy-migration-*` conflict.
+- The runner CLI is missing and the config has no no-op fallback.

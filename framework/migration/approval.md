@@ -1,11 +1,11 @@
 # Approval
 
-## Решение
+## Decision
 - [ ] Approved
 - [ ] Rejected
 
-## Комментарии
+## Comments
 - 
 
-## Подпись / дата
+## Signature / date
 - 
