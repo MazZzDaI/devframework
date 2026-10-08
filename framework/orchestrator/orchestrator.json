@@ -3,7 +3,7 @@
   "logs_dir": "framework/logs",
   "reporting": {
     "enabled": false,
-    "repo": "alexeykrol/devframework",
+    "repo": "MazZzDaI/devframework",
     "mode": "pr",
     "host_id": "unknown-host",
     "phases": [
@@ -17,17 +17,11 @@
     "include_task_logs": false
   },
   "runners": {
-    "codex": {
-      "command": "codex exec - < \"{prompt}\""
+    "cursor": {
+      "command": "bash framework/tools/cursor-runner.sh \"{prompt}\""
     },
-    "codex-interactive": {
-      "command": "codex"
-    },
-    "claude": {
-      "command": "claude-code --prompt {prompt}"
-    },
-    "aider": {
-      "command": "aider --message-file {prompt}"
+    "cursor-interactive": {
+      "command": "agent"
     }
   },
   "tasks": [
@@ -36,7 +30,7 @@
       "branch": "task/discovery",
       "worktree": "_worktrees/{phase}/{task}",
       "prompt": "framework/tasks/discovery.md",
-      "runner": "codex-interactive",
+      "runner": "cursor-interactive",
       "interactive": true,
       "log": "framework/logs/discovery.transcript.log",
       "pause_marker": "framework/logs/discovery.pause",
@@ -47,7 +41,7 @@
       "branch": "task/db-schema",
       "worktree": "_worktrees/{phase}/{task}",
       "prompt": "framework/tasks/db-schema.md",
-      "runner": "codex",
+      "runner": "cursor",
       "log": "framework/logs/db-schema.log"
     },
     {
@@ -55,7 +49,7 @@
       "branch": "task/business-logic",
       "worktree": "_worktrees/{phase}/{task}",
       "prompt": "framework/tasks/business-logic.md",
-      "runner": "codex",
+      "runner": "cursor",
       "log": "framework/logs/business-logic.log"
     },
     {
@@ -63,7 +57,7 @@
       "branch": "task/ui",
       "worktree": "_worktrees/{phase}/{task}",
       "prompt": "framework/tasks/ui.md",
-      "runner": "codex",
+      "runner": "cursor",
       "log": "framework/logs/ui.log"
     },
     {
@@ -71,7 +65,7 @@
       "branch": "task/test-plan",
       "worktree": "_worktrees/{phase}/{task}",
       "prompt": "framework/tasks/test-plan.md",
-      "runner": "codex",
+      "runner": "cursor",
       "log": "framework/logs/test-plan.log"
     },
     {
@@ -79,7 +73,7 @@
       "branch": "task/review-prep",
       "worktree": "_worktrees/{phase}/{task}",
       "prompt": "framework/tasks/review-prep.md",
-      "runner": "codex",
+      "runner": "cursor",
       "depends_on": [
         "db-schema",
         "business-logic",
@@ -92,7 +86,7 @@
       "branch": "task/review",
       "worktree": "_worktrees/{phase}/{task}",
       "prompt": "framework/tasks/review.md",
-      "runner": "codex",
+      "runner": "cursor",
       "depends_on": [
         "test-plan",
         "review-prep"
@@ -105,7 +99,7 @@
       "branch": "task/framework-review",
       "worktree": "_worktrees/{phase}/{task}",
       "prompt": "framework/tasks/framework-review.md",
-      "runner": "codex",
+      "runner": "cursor",
       "log": "framework/logs/framework-review.log"
     },
     {
@@ -115,7 +109,7 @@
       "branch": "task/framework-fix",
       "worktree": "_worktrees/{phase}/{task}",
       "prompt": "framework/tasks/framework-fix.md",
-      "runner": "codex",
+      "runner": "cursor",
       "depends_on": [
         "framework-review"
       ],
@@ -127,7 +121,7 @@
       "branch": "task/legacy-audit",
       "worktree": "_worktrees/{phase}/{task}",
       "prompt": "framework/tasks/legacy-audit.md",
-      "runner": "codex",
+      "runner": "cursor",
       "log": "framework/logs/legacy-audit.log"
     },
     {
@@ -136,7 +130,7 @@
       "branch": "task/legacy-tech-spec",
       "worktree": "_worktrees/{phase}/{task}",
       "prompt": "framework/tasks/legacy-tech-spec.md",
-      "runner": "codex",
+      "runner": "cursor",
       "depends_on": [
         "legacy-audit"
       ],
@@ -148,7 +142,7 @@
       "branch": "task/legacy-gap",
       "worktree": "_worktrees/{phase}/{task}",
       "prompt": "framework/tasks/legacy-gap.md",
-      "runner": "codex",
+      "runner": "cursor",
       "depends_on": [
         "legacy-tech-spec"
       ],
@@ -160,7 +154,7 @@
       "branch": "task/legacy-migration-plan",
       "worktree": "_worktrees/{phase}/{task}",
       "prompt": "framework/tasks/legacy-migration-plan.md",
-      "runner": "codex",
+      "runner": "cursor",
       "depends_on": [
         "legacy-gap"
       ],
@@ -173,7 +167,7 @@
       "branch": "legacy-migration-{run_id}",
       "worktree": "_worktrees/{phase}/{task}",
       "prompt": "framework/tasks/legacy-apply.md",
-      "runner": "codex",
+      "runner": "cursor",
       "depends_on": [
         "legacy-migration-plan"
       ],

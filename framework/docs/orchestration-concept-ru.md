@@ -58,7 +58,7 @@ Python удобнее для:
 ## 5) Как агент запускается
 В YAML‑конфиге для каждой задачи есть `command`, например:
 ```
-command: "codex run --prompt framework/tasks/db-schema.md"
+command: "bash framework/tools/cursor-runner.sh framework/tasks/db-schema.md"
 ```
 Команда может быть любой, главное — чтобы завершалась кодом 0 при успехе.
 

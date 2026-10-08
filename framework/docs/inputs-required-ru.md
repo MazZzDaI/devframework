@@ -24,5 +24,5 @@
   - Vercel/Netlify: токен доступа + идентификатор проекта.
 
 ## 4) Инструменты
-- Доступные runner CLI: `codex` / `claude` / `aider` (или заменить в `orchestrator.json`).
+- Cursor CLI `agent` на PATH (`curl https://cursor.com/install -fsS | bash`), вход через `agent login` или `CURSOR_API_KEY`. Модель по умолчанию — Grok `grok-4.7` (`FRAMEWORK_CURSOR_MODEL`).
 - Git‑репозиторий и права на запись в `framework/logs`.

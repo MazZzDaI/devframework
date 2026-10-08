@@ -6,7 +6,7 @@
 
 ## Архитектура / Модули
 - Оркестратор (`framework/orchestrator/orchestrator.py`) читает конфиг (`orchestrator.json|yaml`), создаёт worktree/ветки per task, логирует события в `framework/logs/framework-run.jsonl`, ставит lock для main‑фазы, формирует `docs/orchestrator-run-summary.md`, опционально публикует отчёт через `tools/publish-report.py`.
-- Задачи описаны в `framework/tasks/*.md`, фазы main/post/legacy, runner’ы зовут внешние CLI (`codex`, `claude`, `aider`); пути worktree заранее заданы в конфиге.
+- Задачи описаны в `framework/tasks/*.md`, фазы main/post/legacy, runner зовёт Cursor CLI `agent` на модели Grok; пути worktree заранее заданы в конфиге.
 - Папки: `framework/migration` (шаблоны snapshot/tech-spec/gap/risk/plan/approval/rollback + runbook), `framework/review` (независимое ревью и тест‑план), `framework/framework-review` (post‑run QA самого фреймворка), `framework/tools` (export/publish отчётов), `install-fr.sh` (установка/обновление и автозапуск оркестратора).
 
 ## Данные / БД

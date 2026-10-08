@@ -5,21 +5,21 @@
 
 ## Функциональные требования (из кода)
 - Читает конфиг `framework/orchestrator/orchestrator.json|yaml`, нормализует задачи, фазы (`main`, `legacy`, `post`) и зависимости.
-- Для каждой задачи создаёт ветку и git worktree по заданному пути, выполняет внешнюю команду runner’а (по умолчанию `codex exec - < "{prompt}"`), пишет stdout/stderr в персональный лог.
+- Для каждой задачи создаёт ветку и git worktree по заданному пути, выполняет внешнюю команду runner’а (по умолчанию `bash framework/tools/cursor-runner.sh "{prompt}"`, Cursor Agent на Grok), пишет stdout/stderr в персональный лог.
 - Ведёт события в `framework/logs/framework-run.jsonl`, ставит lock для основной фазы, пишет сводку в `framework/docs/orchestrator-run-summary.md`.
 - Поддерживает опцию `--include-manual` (включает задачи с `manual: true`) и dry-run.
 - Инсталлер `install-fr.sh` доставляет/обновляет `framework/` из локального `framework.zip` или GitHub, делает бэкап при `--update`, автоопределяет фазу (legacy, если в корне есть чужие файлы).
 - Инструменты `framework/tools/export-report.py` и `publish-report.py` собирают артефакты/логи в zip и могут отправлять PR/Issue в GitHub при наличии `GITHUB_TOKEN`.
 
 ## Нефункциональные требования
-- Требуются `python3`, `git`, доступные runner CLI (codex/claude/aider) и при YAML-конфиге — PyYAML.
+- Требуются `python3`, `git`, Cursor CLI `agent` (модель Grok) и при YAML-конфиге — PyYAML.
 - Работает локально, без сетевых вызовов в оркестраторе (кроме publish-report, который пушит в GitHub).
 - Логирование файловое, без ротации; ожидается запись в `framework/logs` с правами на запись.
 - Без встроенных тестов; надежность опирается на корректность окружения и runner’ов.
 
 ## Интеграции
 - Git (worktree, ветки, статус).
-- Внешние агенты CLI: `codex`, `claude`, `aider` (путь указывается в конфиге).
+- Внешний агент CLI: Cursor `agent` с моделью Grok (команда задаётся в `runners`).
 - GitHub API через `publish-report.py` (curl/subprocess).
 - Опционально `curl` для загрузки zip в инсталлере.
 

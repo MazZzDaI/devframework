@@ -263,12 +263,60 @@ def select_tasks(tasks, phase: str, include_manual: bool):
     return selected
 
 
+CURSOR_AGENT_BINARIES = ("agent", "cursor-agent")
+DEFAULT_CURSOR_MODEL = "grok-4.7"
+DEFAULT_RUNNER = "cursor"
+
+
+def cursor_model() -> str:
+    return (
+        os.getenv("FRAMEWORK_CURSOR_MODEL")
+        or os.getenv("CURSOR_MODEL")
+        or DEFAULT_CURSOR_MODEL
+    )
+
+
+def which_cursor_agent() -> Optional[str]:
+    for name in CURSOR_AGENT_BINARIES:
+        found = shutil.which(name)
+        if found:
+            return found
+    return None
+
+
+def command_uses_cursor(command: str) -> bool:
+    try:
+        parts = shlex.split(command, posix=True)
+    except ValueError:
+        return False
+    if not parts:
+        return False
+    if parts[0] in CURSOR_AGENT_BINARIES:
+        return True
+    joined = " ".join(parts)
+    return "cursor-runner.sh" in joined
+
+
+def inject_cursor_model(command: str) -> str:
+    """Pin Grok on direct `agent` invocations. The headless wrapper reads the env itself."""
+    try:
+        parts = shlex.split(command, posix=True)
+    except ValueError:
+        return command
+    if not parts or parts[0] not in CURSOR_AGENT_BINARIES:
+        return command
+    if "--model" in parts or any(part.startswith("--model=") for part in parts):
+        return command
+    parts[1:1] = ["--model", cursor_model()]
+    return shlex.join(parts)
+
+
 def build_command(runners, task, prompt_path: Path):
-    runner_name = task.get("runner", "codex")
+    runner_name = task.get("runner", DEFAULT_RUNNER)
     if runner_name not in runners:
         raise RuntimeError(f"Runner '{runner_name}' not found in config")
     template = runners[runner_name]["command"]
-    return template.format(prompt=str(prompt_path))
+    return inject_cursor_model(template.format(prompt=str(prompt_path)))
 
 
 def preflight(project_root: Path, logs_dir: Path, runners: dict, tasks: list, phase: str):
@@ -291,7 +339,7 @@ def preflight(project_root: Path, logs_dir: Path, runners: dict, tasks: list, ph
     for task in tasks:
         if task.get("phase", "main") != phase:
             continue
-        required_runners.add(task.get("runner", "codex"))
+        required_runners.add(task.get("runner", DEFAULT_RUNNER))
 
     for name in sorted(required_runners):
         cfg = runners.get(name)
@@ -307,6 +355,11 @@ def preflight(project_root: Path, logs_dir: Path, runners: dict, tasks: list, ph
         except ValueError:
             errors.append(f"Runner '{name}' command cannot be parsed: {cmd}")
             continue
+        if command_uses_cursor(cmd) and which_cursor_agent() is None:
+            errors.append(
+                f"Runner '{name}' needs the Cursor CLI (agent). "
+                "Install: curl https://cursor.com/install -fsS | bash"
+            )
         if first in {"bash", "sh", "zsh"}:
             continue
         if shutil.which(first) is None:
@@ -322,7 +375,7 @@ def preflight(project_root: Path, logs_dir: Path, runners: dict, tasks: list, ph
             continue
         if task.get("interactive") and not sys.stdin.isatty():
             errors.append(f"Interactive task '{task['name']}' requires a TTY")
-        runner_name = task.get("runner", "codex")
+        runner_name = task.get("runner", DEFAULT_RUNNER)
         if runner_name not in runners:
             errors.append(f"Task '{task['name']}' uses unknown runner '{runner_name}'")
         worktree_value = format_template(
@@ -392,19 +445,6 @@ def preflight(project_root: Path, logs_dir: Path, runners: dict, tasks: list, ph
         raise RuntimeError("Preflight failed:\n- " + "\n- ".join(errors))
 
 
-def choose_codex_home(project_root: Path) -> str:
-    if os.getenv("CODEX_HOME"):
-        return os.environ["CODEX_HOME"]
-    global_home = Path.home() / ".codex"
-    try:
-        global_home.mkdir(parents=True, exist_ok=True)
-        if os.access(global_home, os.W_OK):
-            return str(global_home)
-    except Exception:
-        pass
-    return str(resolve_path("framework/.codex", project_root))
-
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default="framework/orchestrator/orchestrator.json")
@@ -426,10 +466,6 @@ def main():
         raise RuntimeError(f"project_root does not exist: {project_root}")
     if not is_git_repo(project_root):
         raise RuntimeError(f"project_root is not a git repository: {project_root}")
-
-    # Prefer global Codex home to avoid repeated logins; fallback to project.
-    if "CODEX_HOME" not in os.environ:
-        os.environ["CODEX_HOME"] = choose_codex_home(project_root)
 
     runners = cfg.get("runners", {})
     if bool_from_env(os.getenv("FRAMEWORK_RUNNER_NOOP")):
@@ -592,6 +628,7 @@ def main():
                     if interactive:
                         print(f"[START] {task['name']} (interactive) -> {log_path}")
                         cmd_name = ""
+                        parts = []
                         if isinstance(command, str):
                             parts = shlex.split(command)
                             if parts:
@@ -601,7 +638,7 @@ def main():
                         interactive_pref = os.environ.get("FRAMEWORK_INTERACTIVE", "").strip().lower()
                         script_path = shutil.which("script")
                         use_attach = (
-                            cmd_name == "codex"
+                            cmd_name in CURSOR_AGENT_BINARIES
                             and sys.stdin.isatty()
                             and interactive_pref != "pty"
                             and script_path is not None
@@ -610,13 +647,17 @@ def main():
                             print(
                                 "[INTERACTIVE] Discovery started. Interactive session attached to this terminal."
                             )
+                            model_args = ["--model", cursor_model()]
+                            if "--model" in parts:
+                                model_index = parts.index("--model")
+                                model_args = parts[model_index:model_index + 2]
                             if resume_interactive:
-                                attach_cmd = ["codex", "resume", "--last"]
+                                attach_cmd = [cmd_name, *model_args, "--continue"]
                             else:
                                 prompt_text = prompt_path.read_text(
                                     encoding="utf-8", errors="ignore"
                                 ).rstrip()
-                                attach_cmd = ["codex", prompt_text]
+                                attach_cmd = [cmd_name, *model_args, prompt_text]
                             cmd = [script_path, "-q"]
                             if resume_interactive:
                                 cmd.append("-a")
@@ -638,7 +679,7 @@ def main():
                                 cmd += ["--pause-marker", str(pause_marker)]
                             if resume_interactive:
                                 cmd.append("--append")
-                            if cmd_name == "codex":
+                            if cmd_name in CURSOR_AGENT_BINARIES:
                                 cmd += ["--prompt-mode", "arg"]
                             cmd += ["--", command]
                             proc = subprocess.Popen(cmd, cwd=worktree)

@@ -1,5 +1,7 @@
 # Claude Code: Автономный режим для devframework
 
+> Архив upstream-версии. Этот форк запускает **Cursor Agent на Grok**, а не Claude Code и не Codex. Рабочий протокол — `AGENTS.md`, правило — `.cursor/rules/devframework.mdc`, раннер — `framework/tools/cursor-runner.sh`. Текст ниже сохранён как исторические заметки.
+
 ## Проблема
 
 **Claude Code** создан как "Interaction First" инструмент — напарник в потоке (Pair Programming). Его философия: постоянно уточнять, спрашивать, останавливаться при сомнениях.

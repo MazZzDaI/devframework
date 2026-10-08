@@ -11,7 +11,7 @@
 ## Минимальные изменения (safe‑path)
 - Не менять внешнее CLI API оркестратора; добавить только preflight и расширенную редакцию секретов.
 - Положить sample CSV/док‑заглушки вместо реальных данных.
-- Включить runner fallback (настроить `runners.codex.command` по умолчанию на no-op при отсутствии CLI) через конфиг/ENV, не патча оркестратор жёстко.
+- Включить runner fallback (при отсутствии CLI запускать с `FRAMEWORK_RUNNER_NOOP=1`) через ENV, не патча оркестратор жёстко.
 
 ## Валидация
 - `python3 framework/orchestrator/orchestrator.py --config framework/orchestrator/orchestrator.json --phase legacy --dry-run` (проверка зависимостей/префлайта).

@@ -1,12 +1,12 @@
 # Devframework
-![Version](https://img.shields.io/badge/version-2026.01.30.4-blue)
+![Version](https://img.shields.io/badge/version-2026.10.08.1-blue)
 Local scaffold for orchestrating parallel tasks with git worktrees.
 
 ## Что это такое и для чего
 
 ### Проблема
 
-Когда вы работаете с AI-ассистентами (Claude Code, Codex, Aider) над разработкой проекта, возникают сложности:
+Когда вы работаете с Cursor Agent (модель Grok) над разработкой проекта, возникают сложности:
 
 1. **Одна задача за раз** — AI может работать только над одной задачей, пока вы ждёте. Если нужно сделать дизайн БД, бизнес-логику, UI и review — это займёт 8+ часов последовательной работы.
 
@@ -61,7 +61,7 @@ Local scaffold for orchestrating parallel tasks with git worktrees.
 | **Orchestrator** | "Диспетчер" — Python-скрипт, который читает конфиг с задачами и запускает AI-агентов параллельно |
 | **Git Worktree** | "Изолированная копия" — отдельная рабочая директория с той же историей Git, позволяет работать в разных ветках одновременно |
 | **Task** | "Задача" — .md файл с описанием того, что должен сделать AI (например, "Спроектировать схему БД") |
-| **Runner** | "Исполнитель" — какой AI будет выполнять задачу (claude-code, codex, aider) |
+| **Runner** | "Исполнитель" — Cursor Agent на модели Grok (`cursor` для задач, `cursor-interactive` для интервью) |
 | **Phase** | "Этап" — main (разработка), review (проверка), post (улучшение фреймворка), legacy (миграция старого проекта) |
 | **Handoff** | "Передача контекста" — документ, в котором AI описывает что сделал и почему, для следующего AI |
 
@@ -91,43 +91,37 @@ devframework/
 │   ├── review/                   # Результаты code review
 │   ├── migration/                # Анализ и миграция legacy-кода
 │   └── logs/                     # Логи выполнения
-├── claude-code/                  # 🆕 Документация по автономной работе
-│   ├── 01-autonomous-mode-protocol.md    # Как заставить Claude работать без вопросов
-│   ├── 06-gpt52-pro-claude-pipeline.md   # GPT-5.2 Pro как архитектор + Claude как исполнитель
-│   ├── 07-ai-team-architecture.md        # Революционная идея: AI-команда с Team Lead
-│   └── COMPARISON.md             # Сравнение 5 уровней автономности (60%-100%)
+├── .cursor/rules/                # Правило Cursor: следовать AGENTS.md, оставаться на Grok
+├── AGENTS.md                     # Протокол, который Cursor читает сам
 ├── install-fr.sh               # Установщик для новых проектов
 └── README.md                     # Этот файл
 ```
 
-### Новое: claude-code/ — Документация по автономной работе AI
+Папка `claude-code/` — архив заметок upstream-версии (Codex / Claude Code). Рабочий агент этого форка — Cursor + Grok.
 
-**Проблема**: Claude Code по умолчанию "Interaction First" — постоянно задаёт вопросы.
-**Решение**: В папке `claude-code/` собраны **7 документов** с решениями, как сделать Claude (и других AI) автономными.
+### Cursor + Grok
 
-**5 уровней эволюции автономности:**
+DevFramework запускает [Cursor Agent CLI](https://cursor.com/docs/cli/using) (`agent`) с моделью **Grok 4.7**.
 
-| Уровень | Автономность | Описание | Сложность внедрения |
-|---------|--------------|----------|---------------------|
-| **Level 1** | 60% | Метапромпт в task definition (без изменений в коде) | 1 час |
-| **Level 2** | 70% | Улучшенные шаблоны задач с Decision Framework | 2-4 часа |
-| **Level 3** | 80% | Гибридный пайплайн Claude + Codex с auto-fallback | 1-2 дня |
-| **Level 4** | 95% | GPT-5.2 Pro создаёт формальные спеки → Claude исполняет | 3-5 дней |
-| **Level 5** | 100% | AI-команда: GPT-5.2 Team Lead + 4 Claude-разработчика через Bridge | 1-2 недели |
+- Интерактивное интервью: `./cursor`, затем «start».
+- Параллельные задачи: `agent -p --force --trust --model grok-4.7` через `framework/tools/cursor-runner.sh`.
+- Контекст проекта: `AGENTS.md` и `.cursor/rules/devframework.mdc` (Cursor подхватывает оба).
+- Другая модель Grok: `FRAMEWORK_CURSOR_MODEL=grok-4.5` (или `grok-4.6`).
 
-**Читать в таком порядке:**
+Установка CLI и вход:
 
-1. **claude-code/QUICK-START.md** — быстрый старт (3 команды, запуск за 10 минут)
-2. **claude-code/01-autonomous-mode-protocol.md** — как отключить режим "задавать вопросы"
-3. **claude-code/COMPARISON.md** — визуальное сравнение 5 уровней с диаграммами
-4. **claude-code/06-gpt52-pro-claude-pipeline.md** — продвинутый уровень (GPT-5.2 + Claude)
-5. **claude-code/07-ai-team-architecture.md** — революционная архитектура AI-команды
+```bash
+curl https://cursor.com/install -fsS | bash
+agent login
+```
+
+Для оркестратора без TTY достаточно `CURSOR_API_KEY`.
 
 ### Быстрый старт за 3 шага
 
 **1. Клонируйте репозиторий:**
 ```bash
-git clone https://github.com/alexeykrol/devframework.git
+git clone https://github.com/MazZzDaI/devframework.git
 cd devframework
 ```
 
@@ -149,16 +143,9 @@ Orchestrator автоматически:
 - Соберёт результаты и создаст review
  - После миграции (legacy) автоматически перейдёт к интервью (discovery)
 
-### Связь с Codex и другими AI
+### Агент
 
-Devframework изначально создавался для работы с **OpenAI Codex** (автономный AI "Delegation First"), но теперь поддерживает:
-
-- **Claude Code** (Anthropic) — через автономные протоколы из `claude-code/`
-- **Codex** (OpenAI) — нативная поддержка через AGENTS.md
-- **Aider** — через стандартный CLI интерфейс
-- **GPT-5.2 Pro** (OpenAI Reasoning) — как архитектор/Team Lead
-
-Все AI управляются единым оркестратором и работают через изолированные Git worktrees.
+Поддерживаемый исполнитель — **Cursor Agent на Grok**. Оркестратор поднимает его в изолированных Git worktrees. Модель по умолчанию — `grok-4.7`; переопределение — `FRAMEWORK_CURSOR_MODEL`.
 
 ---
 
@@ -184,8 +171,8 @@ Devframework изначально создавался для работы с **
 1) Copy `install-fr.sh` (or `install-fr-<version>.sh`) into the host project root.
 2) Run (self-contained installer; installs into `./framework` and writes `AGENTS.md`):
    `./install-fr.sh`
-3) Start Codex in the project root and say **"start"** to begin the protocol:
-   `./codex`
+3) Start Cursor Agent in the project root and say **"start"** to begin the protocol:
+   `./cursor`
 
 Tip: release assets include both:
 - `install-fr.sh` (latest)
@@ -204,7 +191,8 @@ Tip: release assets include both:
   ```
 - Network access to GitHub to check and download the latest release.
 - (Optional) `curl` installed; if missing, Python will download the zip instead.
-- Codex stores auth in `~/.codex` when writable; otherwise it falls back to `framework/.codex`.
+- Cursor CLI `agent` on `PATH`, signed in with `agent login` or `CURSOR_API_KEY`.
+- Default model is Grok 4.7 (`FRAMEWORK_CURSOR_MODEL` overrides it). Headless tasks also pass `--force --trust`.
 - If `./framework` already exists, the launcher auto-updates when the latest release differs.
   Use `--update` to force a refresh or when using a local zip.
 
@@ -213,7 +201,7 @@ Options:
 - Force update (creates a backup first): `./install-fr.sh --update`
 - Run orchestrator immediately (legacy/main/post): `./install-fr.sh --run --phase legacy|main|post`
 - Override repo/ref:
-  `FRAMEWORK_REPO=alexeykrol/devframework FRAMEWORK_REF=main ./install-fr.sh`
+  `FRAMEWORK_REPO=MazZzDaI/devframework FRAMEWORK_REF=main ./install-fr.sh`
   (REF can be a tag, e.g. `v2026.01.24`)
 
 Auto-detection (when running the orchestrator manually):
@@ -231,7 +219,7 @@ Auto-detection (when running the orchestrator manually):
 
 ### A) New project (clean host)
 1) `./install-fr.sh`
-2) Run `./codex` and say **"start"** to begin discovery.
+2) Run `./cursor` and say **"start"** to begin discovery.
 3) Discovery interview → ТЗ/план/тест‑план.
    - Pause command: type `/pause` to stop and resume later.
 4) User reviews outputs and confirms start of development.
@@ -244,9 +232,9 @@ Auto-detection (when running the orchestrator manually):
 
 ### B) Legacy project (migration + safety)
 1) `./install-fr.sh`
-2) Run `./codex` and say **"start"**:
+2) Run `./cursor` and say **"start"**:
    - Legacy analysis runs first (read-only).
-   - Затем discovery интервью в Codex.
+   - Затем discovery интервью в Cursor Agent (Grok).
    - Pause command: type `/pause` to stop and resume later.
 3) Review migration artifacts:
    - `framework/migration/legacy-snapshot.md`
@@ -281,7 +269,7 @@ Auto-detection (when running the orchestrator manually):
 ### D) Auto‑report publishing (no manual steps)
 1) Set env before running the launcher:
    - `FRAMEWORK_REPORTING_ENABLED=1`
-   - `FRAMEWORK_REPORTING_REPO=alexeykrol/devframework`
+   - `FRAMEWORK_REPORTING_REPO=MazZzDaI/devframework`
    - `FRAMEWORK_REPORTING_MODE=pr|issue|both`
    - `FRAMEWORK_REPORTING_HOST_ID=<host>`
    - `FRAMEWORK_REPORTING_PHASES=legacy,main,post`
@@ -295,11 +283,11 @@ Auto-detection (when running the orchestrator manually):
 ## Minimal quick start (one‑liners)
 New project:
 ```
-FRAMEWORK_REPORTING_ENABLED=1 FRAMEWORK_REPORTING_REPO=alexeykrol/devframework FRAMEWORK_REPORTING_MODE=pr FRAMEWORK_REPORTING_HOST_ID=$(basename "$PWD") GITHUB_TOKEN=... ./install-fr.sh
+FRAMEWORK_REPORTING_ENABLED=1 FRAMEWORK_REPORTING_REPO=MazZzDaI/devframework FRAMEWORK_REPORTING_MODE=pr FRAMEWORK_REPORTING_HOST_ID=$(basename "$PWD") GITHUB_TOKEN=... ./install-fr.sh
 ```
 Legacy project:
 ```
-FRAMEWORK_REPORTING_ENABLED=1 FRAMEWORK_REPORTING_REPO=alexeykrol/devframework FRAMEWORK_REPORTING_MODE=pr FRAMEWORK_REPORTING_HOST_ID=$(basename "$PWD") GITHUB_TOKEN=... ./install-fr.sh --phase legacy
+FRAMEWORK_REPORTING_ENABLED=1 FRAMEWORK_REPORTING_REPO=MazZzDaI/devframework FRAMEWORK_REPORTING_MODE=pr FRAMEWORK_REPORTING_HOST_ID=$(basename "$PWD") GITHUB_TOKEN=... ./install-fr.sh --phase legacy
 ```
 
 ## Build release zip (maintainers)
@@ -314,12 +302,12 @@ Use `--version <value>` to update `framework/VERSION`.
    `python3 framework/tools/export-report.py --include-migration`
 2) Publish to central repo (creates PR by default):
    `export GITHUB_TOKEN=...`
-   `python3 framework/tools/publish-report.py --repo alexeykrol/devframework --run-id <RUN_ID> --host-id <HOST_ID>`
+   `python3 framework/tools/publish-report.py --repo MazZzDaI/devframework --run-id <RUN_ID> --host-id <HOST_ID>`
 
 Auto-publish from orchestrator (no manual command):
 - Set `reporting` in `framework/orchestrator/orchestrator.json` or via env vars:
   - `FRAMEWORK_REPORTING_ENABLED=1`
-  - `FRAMEWORK_REPORTING_REPO=alexeykrol/devframework`
+  - `FRAMEWORK_REPORTING_REPO=MazZzDaI/devframework`
   - `FRAMEWORK_REPORTING_MODE=pr|issue|both`
   - `FRAMEWORK_REPORTING_HOST_ID=<host>`
   - `FRAMEWORK_REPORTING_PHASES=legacy,main,post`
@@ -377,176 +365,40 @@ Notes:
    `python3 framework/orchestrator/orchestrator.py --phase legacy --include-manual`
    (branch name: `legacy-migration-<run_id>`)
 
-## AGENTS.md behavior (Codex)
-1) When AGENTS.md is read
-   Codex builds the instruction chain at session start (one time per launch; in TUI this is one session).
-   It reads AGENTS.md before work begins and applies it for the whole session.
-   Source: `developers.openai.com/codex/guides/agents-md/`
-2) What /init does
-   /init only creates AGENTS.md. Reading happens only on the next launch/session.
-   If you create or change the file during an active session, you must start a new session for it to apply.
-   Source: `developers.openai.com/codex/guides/agents-md/`
-3) Where instructions are loaded from
-   - Global: first `~/.codex/AGENTS.override.md` if it exists, otherwise `~/.codex/AGENTS.md`.
-   - Project: from repo root to current folder, in each directory it looks for `AGENTS.override.md`,
-     then `AGENTS.md`, then fallback names.
-   - Merge order: files are combined top‑down; closer to the current folder has higher priority.
-   - Limit: reading is capped by `project_doc_max_bytes`.
-   This is all constructed at session start.
-   Source: `developers.openai.com/codex/guides/agents-md/`
-4) How to verify instructions were applied
-   In the docs they suggest starting Codex and asking it to “show which instructions are active”
-   or “summarize instructions” — it should list files in priority order.
-   Source: `developers.openai.com/codex/guides/agents-md/`
+## AGENTS.md and Cursor rules
 
-Summary: there is no explicit “read” command — it is automatic on session start. /init ≠ “read”.
-/init = “create template”; reading happens on the next launch.
+Cursor Agent (editor and CLI) loads project instructions at session start:
 
-## AGENTS.md config (Codex)
-Where to edit
-- Codex config file: `~/.codex/config.toml` (or `$CODEX_HOME/config.toml` if `CODEX_HOME` is set).
-  Source: `developers.openai.com/codex/local-config`
+- `AGENTS.md` at the repo root
+- `CLAUDE.md` if present (not used by this fork)
+- `.cursor/rules/*.mdc`
 
-Keys to add
-- `project_doc_fallback_filenames` — list of alternative filenames Codex will look for if AGENTS.md is missing.
-- (optional) `project_doc_max_bytes` — cap on total bytes read from instructions.
-  Source: `developers.openai.com/codex/guides/agents-md/`
+The installer writes a managed `AGENTS.md` from `framework/AGENTS.template.md` and copies `framework/cursor/rules/devframework.mdc` to `.cursor/rules/`. Files marked `DEVFRAMEWORK:MANAGED` are refreshed on the next install. A hand-edited file without that marker is left alone.
 
-Example (top-level, not inside sections)
-```\n# ~/.codex/config.toml\nproject_doc_fallback_filenames = [\"TEAM_GUIDE.md\", \".agents.md\"]\nproject_doc_max_bytes = 65536\n```
+`AGENTS.md` holds the start protocol: legacy detection, one-question discovery, artifact generation, and the gate before `--phase main`. Keep it short. Task details stay in `framework/tasks/` and `framework/docs/`.
 
-Important
-- After changing `config.toml`, restart Codex / open a new session for settings to apply.
-  Source: `developers.openai.com/codex/guides/agents-md/`
+Say **start** in `./cursor` to run that protocol. There is no separate init command: a new `agent` session picks up the files automatically.
 
-## AGENTS.md usage pattern (Codex)
-Important clarifications
-- Codex automatically reads only `AGENTS.md` (and `AGENTS.override.md`) at the start of a new session.
-  This is the entry instruction file, not a “launch script”.
-- This file should hold persistent project context: goals, constraints, commands, process,
-  key links, and a short snapshot.
-- The size is limited by `project_doc_max_bytes`, so keep AGENTS.md compact and push details
-  into separate files (for example, `SNAPSHOT.md`) and explicitly instruct the agent to read them.
+## Model
 
-Practical pattern
-1) In `AGENTS.md` — short memory: what the project is, what is done, what to do next, rules/commands.
-2) In `SNAPSHOT.md` — the full status and details.
-3) In `AGENTS.md` — add a line: “Always read `SNAPSHOT.md` first.”
+| Surface | How Grok is selected |
+|---|---|
+| `./cursor` | `agent --model "$FRAMEWORK_CURSOR_MODEL"` (default `grok-4.7`) |
+| Headless tasks | `framework/tools/cursor-runner.sh` passes the same model with `-p --force --trust` |
+| Interactive discovery | orchestrator attaches `agent --model …` and, on resume, `agent --continue` |
 
-Important limitation
-Codex does not read `SNAPSHOT.md` automatically — only `AGENTS.md`/`AGENTS.override.md` are auto‑loaded.
-If you need the snapshot to be always included, you must either:
-- embed key parts of the snapshot into `AGENTS.md`, or
-- temporarily rename `SNAPSHOT.md` to `AGENTS.md`, or
-- start a new session and manually say “read `SNAPSHOT.md`”.
+Override the model for a run:
 
-## Skills (Codex)
-Short version
-- Custom skills: yes. Explicit invocation uses `$skill-name`; `/skills` helps list/select skills.
-- Skills are not invoked as `/my-skill` — slash commands are a separate mechanism.
-- Implicit invocation: Codex can choose a skill if the task matches its description.
-
-Details
-- Explicit invocation: run `/skills` or type `$skill-name`.
-- Implicit invocation: automatic when the user request matches the skill description.
-- Storage: repo-scoped `.codex/skills/<skill-name>/SKILL.md`; user-scoped `~/.codex/skills/<skill-name>/SKILL.md`.
-- Create a skill: manually (folder + `SKILL.md`) or use `$skill-creator`.
-- Slash-command style belongs to deprecated custom prompts (use `/prompts:<name>`), not skills (avoid `/my-skill`).
-
-Sources:
-- `developers.openai.com/codex/skills/`
-- `developers.openai.com/codex/skills/create-skill/`
-- `developers.openai.com/codex/cli/slash-commands`
-- `developers.openai.com/codex/custom-prompts`
-
-## Skills auto-trigger (Codex)
-How auto-trigger works
-1) On session start, Codex loads only each skill’s `name` and `description` (not the body).
-2) When a user request matches the meaning of `name`/`description`, Codex can auto-activate the skill.
-3) The body is loaded only after activation, so the description is the primary trigger signal.
-
-How to write descriptions that trigger
-- Use an explicit “when/когда” clause.
-- Keep the scope narrow and concrete to avoid overlap with other skills.
-- If skills overlap, refine the description with more context and expected output.
-
-Recommended template
-`description: <what it does> — use when the user asks for <explicit trigger>`
-
-Example
-`description: Draft a conventional commit message when the user asks for help writing a commit message.`
-
-Practical checklist
-- SKILL.md has valid one‑line `name` and `description`.
-- Description includes an explicit “when/когда”.
-- No overlapping skill with the same intent.
-- Codex was restarted after creating/updating the skill.
-- Test request repeats the trigger wording from the description.
-
-If auto-trigger does not work
-- Verify the skill path (`.codex/skills/...` or `~/.codex/skills/...`).
-- Restart Codex (skills are loaded only at session start).
-- Check YAML validity (single-line `name`/`description`).
-- Shorten/clarify the description and remove overlaps.
-
-### Если хочешь, могу
-1) предложить формулировки `description` под будущие skills,
-2) сделать пример skill в `.codex/skills/...` с auto‑trigger,
-3) дать матрицу триггер‑фраз для стабильного срабатывания.
-
-Ниже — подробное объяснение с этими тремя частями.
-
-### 1) Формулировки `description`, чтобы автотриггер срабатывал
-- Явно указывай “когда/when”: “используй, когда пользователь просит …”.
-- Делай описание узким и конкретным (иначе навыки будут пересекаться).
-- Держи `name` и `description` одной строкой.
-- Тестируй авто‑триггер запросом, который повторяет слова из `description`.
-
-Примеры формулировок:
-- `description: Составь техническое задание, когда пользователь просит ТЗ, спецификацию или список требований.`
-- `description: Сформируй план тестирования, когда пользователь просит тест‑план или QA план.`
-- `description: Обнови snapshot‑статус, когда пользователь просит зафиксировать текущее состояние проекта.`
-- `description: Сгенерируй deep‑research промпт, когда пользователь просит промпт для сбора данных.`
-- `description: Подготовь код‑ревью отчёт, когда пользователь просит review или QA отчёт.`
-
-### 2) Пример структуры skill и SKILL.md
-Минимальная структура:
-```
-.codex/skills/build-tech-spec/
-├── SKILL.md
-├── references/   # опционально
-├── assets/       # опционально
-└── scripts/      # опционально
+```bash
+FRAMEWORK_CURSOR_MODEL=grok-4.5 ./cursor
 ```
 
-Пример `SKILL.md`:
-```
----
-name: build-tech-spec
-description: Составь техническое задание, когда пользователь просит ТЗ или спецификацию.
----
-Собери требования из диалога и оформи ТЗ по разделам:
-1) Обзор
-2) Функциональные требования
-3) Нефункциональные требования
-4) Интеграции
-5) Данные/схемы
-6) Тестирование
-7) Риски и допущения
-```
+`grok-4.6` and `grok-4.5` are the other Grok models in the Cursor catalog. Check the account list with `agent models`.
 
-Важно:
-- После добавления/изменения skills нужен перезапуск Codex, чтобы они загрузились.
-- Автотриггер использует только `name`/`description`; тело подгружается после активации.
+Headless sandbox defaults to `disabled` so agents can write the worktree. Set `FRAMEWORK_CURSOR_SANDBOX=enabled` to turn it back on.
 
-### 3) Матрица триггер‑фраз (пример)
-| Сценарий | Ключевые триггеры в `description` | Пример запроса пользователя |
-|---|---|---|
-| ТЗ / спецификация | “ТЗ”, “техническое задание”, “спецификация” | “Сделай ТЗ на это приложение” |
-| Список входных данных | “входные данные”, “таблицы”, “креды” | “Дай список данных и кредов” |
-| Deep‑research промпт | “deep research”, “сбор данных”, “промпт” | “Сделай промпт для агентов на сбор данных” |
-| Snapshot / статус | “snapshot”, “статус”, “зафиксируй текущее” | “Зафиксируй текущий статус в snapshot” |
-| План тестирования / QA | “тест‑план”, “QA”, “проверки” | “Сделай тест‑план для проверки проекта” |
-| Код‑ревью отчёт | “код‑ревью”, “review”, “bugs” | “Сделай код‑ревью отчёт” |
-| Архитектурная схема | “архитектура”, “схема”, “диаграмма” | “Сформируй архитектурную схему” |
-| Экспорт данных | “экспорт”, “zip”, “выгрузка” | “Сделай инструкцию по экспорту данных” |
+## Rules
+
+`.cursor/rules/devframework.mdc` is `alwaysApply: true`. It tells Grok to follow `AGENTS.md`, ask one discovery question at a time, and stay on the selected Grok model.
+
+Cursor skills (`.cursor/skills` or user skills) are separate from this protocol. The rule does not replace them; it only pins the DevFramework start behavior.

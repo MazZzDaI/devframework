@@ -83,6 +83,26 @@ class OrchestratorTests(unittest.TestCase):
             self.assertIn("Log path collision", msg)
             self.assertIn("Log path is a directory", msg)
 
+    def test_inject_cursor_model_pins_grok(self):
+        command = orchestrator.inject_cursor_model("agent")
+        self.assertEqual(command, f"agent --model {orchestrator.DEFAULT_CURSOR_MODEL}")
+        custom = orchestrator.inject_cursor_model("agent --model grok-4.5")
+        self.assertEqual(custom, "agent --model grok-4.5")
+        wrapped = orchestrator.inject_cursor_model(
+            'bash framework/tools/cursor-runner.sh "/tmp/task.md"'
+        )
+        self.assertIn("cursor-runner.sh", wrapped)
+        self.assertNotIn("--model", wrapped)
+
+    def test_command_uses_cursor(self):
+        self.assertTrue(orchestrator.command_uses_cursor("agent --model grok-4.7"))
+        self.assertTrue(
+            orchestrator.command_uses_cursor(
+                'bash framework/tools/cursor-runner.sh "/tmp/p.md"'
+            )
+        )
+        self.assertFalse(orchestrator.command_uses_cursor("python3 -c \"print('ok')\""))
+
 
 if __name__ == "__main__":
     unittest.main()

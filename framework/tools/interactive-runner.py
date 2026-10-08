@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import errno
 import fcntl
 import os
 import select
@@ -100,19 +101,28 @@ def run_interactive(
 
     try:
         while True:
-            if proc.poll() is not None:
-                break
+            exited = proc.poll() is not None
             read_fds = [master_fd]
-            if stdin_is_tty:
+            if stdin_is_tty and not exited:
                 read_fds.append(stdin_fd)
-            ready, _, _ = select.select(read_fds, [], [], 0.25)
+            ready, _, _ = select.select(read_fds, [], [], 0 if exited else 0.25)
             if master_fd in ready:
-                data = os.read(master_fd, 4096)
-                if not data:
+                try:
+                    data = os.read(master_fd, 4096)
+                except OSError as exc:
+                    # Linux returns EIO when the pty slave closes.
+                    if exc.errno == errno.EIO:
+                        data = b""
+                    else:
+                        raise
+                if data:
+                    os.write(stdout_fd, data)
+                    log_f.write(data)
+                    log_f.flush()
+                elif exited:
                     break
-                os.write(stdout_fd, data)
-                log_f.write(data)
-                log_f.flush()
+            elif exited:
+                break
             if stdin_is_tty and stdin_fd in ready:
                 data = os.read(stdin_fd, 4096)
                 if not data:

@@ -91,6 +91,8 @@ def determine_mode(default_phase: str | None) -> list[str]:
         "install-fr.sh",
         "AGENTS.md",
         "AGENTS.override.md",
+        ".cursor",
+        "cursor",
         ".git",
         ".gitignore",
         ".DS_Store",
